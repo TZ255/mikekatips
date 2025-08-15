@@ -1,0 +1,167 @@
+<!-- Variables -->
+<% title = 'Add New Prediction - Admin' %>
+<% description = 'Admin panel for adding new predictions' %>
+<% keywords = 'admin, prediction, add' %>
+<% page = 'admin' %>
+<% currentPage = 'add-prediction' %>
+
+<main>
+    <%- include('./extras/admin-nav') %>
+
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="bi bi-plus-circle"></i>
+                            Add New Prediction
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <%- include('../0-partials/flashMessages') %>
+
+                        <form action="/admin/predictions/add" method="POST">
+                            <!-- Basic Info -->
+                            <div class="row mb-4">
+                                <div class="col-md-8">
+                                    <label for="title" class="form-label fw-semibold">Title *</label>
+                                    <input type="text" class="form-control form-control-lg" id="title" name="title" required>
+                                    <small class="text-muted">Will auto-generate slug</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="status" class="form-label fw-semibold">Status</label>
+                                    <select class="form-select" id="status" name="status">
+                                        <option value="published">Published</option>
+                                        <option value="draft">Draft</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Snippet -->
+                            <div class="mb-4">
+                                <label for="snippet_text" class="form-label fw-semibold">Snippet Text *</label>
+                                <textarea class="form-control" id="snippet_text" name="snippet_text" rows="3" maxlength="200" required placeholder="Short description (max 200 characters)"></textarea>
+                                <div class="form-text">
+                                    <span id="snippet-count">0</span>/200 characters
+                                </div>
+                            </div>
+
+                            <!-- Match Details -->
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <label for="league" class="form-label fw-semibold">League *</label>
+                                    <input type="text" class="form-control" id="league" name="league" required placeholder="e.g. Premier League">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="date" class="form-label fw-semibold">Match Date *</label>
+                                    <input type="date" class="form-control" id="date" name="date" required>
+                                    <small class="text-muted">Format: yyyy-mm-dd</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="time" class="form-label fw-semibold">Time *</label>
+                                    <input type="time" class="form-control" id="time" name="time" required>
+                                    <small class="text-muted">Format: HH:mm</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="odds" class="form-label fw-semibold">Odds *</label>
+                                    <input type="text" class="form-control" id="odds" name="odds" required placeholder="e.g. 1.95">
+                                </div>
+                            </div>
+
+                            <!-- Affiliate Betting Site -->
+                            <div class="mb-4">
+                                <label for="affiliate" class="form-label fw-semibold">Recommended Betting Site</label>
+                                <select class="form-select" id="affiliate" name="affiliate">
+                                    <option value="betway">Betway</option>
+                                    <option value="gsb">GSB</option>
+                                    <option value="leonbet">LeonBet</option>
+                                    <option value="betwinner">BetWinner</option>
+                                    <option value="1xbet">1xBet</option>
+                                    <option value="melbet">MelBet</option>
+                                </select>
+                                <small class="text-muted">Select the recommended betting site for this prediction</small>
+                            </div>
+
+                            <!-- Article Body -->
+                            <div class="mb-4">
+                                <label for="body" class="form-label fw-semibold">Article Body (HTML) *</label>
+                                <textarea class="form-control" id="body" name="body" rows="10" required placeholder="Write your prediction analysis here. You can use basic HTML tags like <h2>, <p>, <strong>, <ul>, <li>, etc."></textarea>
+                                <small class="text-muted">
+                                    Basic HTML allowed: h1, h2, h3, h4, p, strong, em, ul, ol, li, blockquote, br
+                                </small>
+                            </div>
+
+                            <!-- SEO Section -->
+                            <div class="card bg-light mb-4">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-search me-2"></i>
+                                        SEO Settings
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label fw-semibold">Meta Description *</label>
+                                        <textarea class="form-control" id="description" name="description" rows="2" maxlength="160" required placeholder="SEO description (max 160 characters)"></textarea>
+                                        <div class="form-text">
+                                            <span id="desc-count">0</span>/160 characters
+                                        </div>
+                                    </div>
+                                    <div class="mb-0">
+                                        <label for="keywords" class="form-label fw-semibold">Keywords *</label>
+                                        <input type="text" class="form-control" id="keywords" name="keywords" required placeholder="prediction, football, betting, analysis">
+                                        <small class="text-muted">Comma-separated keywords</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Buttons -->
+                            <div class="d-flex gap-3">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-check-circle me-2"></i>
+                                    Create Prediction
+                                </button>
+                                <a href="/admin/predictions" class="btn btn-outline-secondary btn-lg">
+                                    <i class="bi bi-x-circle me-2"></i>
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Snippet text counter
+    const snippetText = document.getElementById('snippet_text');
+    const snippetCount = document.getElementById('snippet-count');
+    
+    snippetText.addEventListener('input', function() {
+        snippetCount.textContent = this.value.length;
+        if (this.value.length > 180) {
+            snippetCount.style.color = 'red';
+        } else {
+            snippetCount.style.color = '';
+        }
+    });
+
+    // Description counter
+    const description = document.getElementById('description');
+    const descCount = document.getElementById('desc-count');
+    
+    description.addEventListener('input', function() {
+        descCount.textContent = this.value.length;
+        if (this.value.length > 150) {
+            descCount.style.color = 'red';
+        } else {
+            descCount.style.color = '';
+        }
+    });
+
+    // Auto-focus title field
+    document.getElementById('title').focus();
+</script>

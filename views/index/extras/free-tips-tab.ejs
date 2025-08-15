@@ -1,0 +1,97 @@
+<!-- Free Tips Tab -->
+<div class="tab-pane fade show active" id="free-tips" role="tabpanel">
+    <% if ((freeTips && freeTips.length > 0) || (predictions && predictions.length > 0)) { %>
+    <div class="row g-3">
+        <!-- Free Tips -->
+        <% if (freeTips && freeTips.length > 0) { %>
+            <% freeTips.forEach(tip => { %>
+            <div class="col-md-6 col-xl-4">
+                <div class="card h-100 shadow-sm border-light">
+                    <div class="card-header bg-light border-bottom text-center py-2">
+                        <small class="fw-semibold text-muted">
+                            <i class="bi bi-gift me-1"></i>
+                            Free Tip
+                        </small>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-clock me-2 text-muted"></i>
+                            <span class="fw-semibold text-dark"><%= tip.time %></span>
+                        </div>
+                        
+                        <div class="card-title fw-bold text-dark mb-2">
+                            <%= tip.match %>
+                        </div>
+                        
+                        <p class="card-text text-muted small mb-3">
+                            <i class="bi bi-trophy me-1"></i>
+                            <%= tip.league %>
+                        </p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-secondary text-white px-3 py-2">
+                                <%= tip.tip %>
+                            </span>
+                            <span class="fw-bold text-dark fs-5">
+                                <%= tip.odds %>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+        <% } %>
+        
+        <!-- Predictions -->
+        <% if (predictions && predictions.length > 0) { %>
+            <% predictions.forEach(prediction => { %>
+            <div class="col-md-6 col-xl-4">
+                <a href="/prediction/<%= prediction.slug %>" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm border-light prediction-card">
+                        <div class="card-header bg-primary bg-opacity-10 border-bottom text-center py-2">
+                            <small class="fw-semibold text-primary">
+                                <i class="bi bi-graph-up-arrow me-1"></i>
+                                Free Prediction
+                            </small>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="bi bi-clock me-2 text-muted"></i>
+                                <span class="fw-semibold text-dark"><%= prediction.time %></span>
+                            </div>
+                            
+                            <div class="card-title fw-bold text-dark mb-2">
+                                <%= prediction.title.length > 50 ? prediction.title.substring(0, 50) + '...' : prediction.title %>
+                            </div>
+                            
+                            <p class="card-text text-muted small mb-3">
+                                <i class="bi bi-trophy me-1"></i>
+                                <%= prediction.league %>
+                            </p>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary text-white px-3 py-2">
+                                    <i class="bi bi-eye me-1"></i>
+                                    Angalia
+                                </span>
+                                <span class="fw-bold text-primary fs-5">
+                                    <%= prediction.odds %>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <% }); %>
+        <% } %>
+    </div>
+    <% } else { %>
+    <div class="text-center py-5">
+        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
+            <i class="bi bi-info-circle text-muted" style="font-size: 3rem;"></i>
+        </div>
+        <h4 class="text-dark fw-semibold mb-3">Hakuna tips za bure kwa siku hii</h4>
+        <p class="text-secondary">Rudi baadaye au angalia tips za kulipwa</p>
+    </div>
+    <% } %>
+</div>

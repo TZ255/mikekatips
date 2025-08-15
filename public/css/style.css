@@ -1,0 +1,68 @@
+/* Custom CSS for MikekaTips - Minimal overrides for Bootstrap 5.3 */
+
+/* Custom color variables */
+:root {
+  --bs-primary: #0d6efd;
+  --bs-success: #198754;
+  --bs-warning: #ffc107;
+  --bs-danger: #dc3545;
+}
+
+/* Custom styling for tip cards hover effect */
+.card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Premium content styling */
+.premium-locked {
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-locked::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 1;
+}
+
+/* Custom navbar brand styling */
+.navbar-brand {
+  font-size: 1.5rem !important;
+}
+
+/* Sticky navbar offset */
+body {
+  padding-top: 0;
+}
+
+/* Custom alert positioning */
+.position-fixed {
+  z-index: 1060;
+}
+
+/* Footer styling */
+.footer {
+  margin-top: auto;
+}
+
+/* Custom spacing for mobile */
+@media (max-width: 768px) {
+  .display-5 {
+    font-size: 2rem;
+  }
+  
+  .btn-group .btn {
+    font-size: 0.875rem;
+  }
+}

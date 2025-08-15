@@ -1,0 +1,55 @@
+<!-- Date Navigation -->
+<div class="bg-white py-3 border-bottom border-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-auto">
+                <div class="btn-group w-100 shadow-sm tgt-Navbtns" role="group" id="tgt-Navbtns">
+                    <!-- Previous Date Button -->
+                    <% if (hasPrevTips) { %>
+                        <a href="/date/<%= prevDate %>" class="btn btn-outline-primary px-3 py-2 flex-fill"
+                            up-follow up-preview="link-spinner" style="width: 100px;">
+                            <i class="bi bi-chevron-left"></i>
+                            <span class="ms-1">
+                                <%= prevDateDisplay %>
+                            </span>
+                        </a>
+                    <% } else { %>
+                        <button class="btn btn-outline-secondary px-3 py-2 flex-fill" disabled style="width: 100px;">
+                            <i class="bi bi-chevron-left"></i>
+                            <span class="ms-1">
+                                <%= prevDateDisplay %>
+                            </span>
+                        </button>
+                    <% } %>
+                    
+                    <!-- Current Date Button -->
+                    <button class="btn btn-primary px-3 py-2 flex-fill disabled" id="dateButton">
+                        <i class="bi bi-calendar-event"></i>
+                        <!-- Desktop: Show full date -->
+                        <span class="d-none d-sm-inline ms-1"><%= currentDateFull %></span>
+                        <!-- Mobile: Show short date -->
+                        <span class="d-sm-none ms-1"><%= currentDateDisplay.split('/')[0] %>/<%= currentDateDisplay.split('/')[1] %></span>
+                    </button>
+                    
+                    <!-- Next Date Button -->
+                    <% if (hasNextTips) { %>
+                        <a href="/date/<%= nextDate %>" class="btn btn-outline-primary px-3 py-2 flex-fill"
+                            up-follow up-preview="link-spinner" style="width: 100px;">
+                            <span class="me-1">
+                                <%= nextDateDisplay %>
+                            </span>
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    <% } else { %>
+                        <button class="btn btn-outline-secondary px-3 py-2 flex-fill" disabled style="width: 100px;">
+                            <span class="me-1">
+                                <%= nextDateDisplay %>
+                            </span>
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

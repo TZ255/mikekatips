@@ -1,0 +1,32 @@
+<!-- Flash Messages Partial -->
+<% if (messages.error) { %>
+    <div class="alert-reqflash alert alert-danger alert-dismissible fade show mb-3" role="alert" style="background-color: #f8d7da; border-color: #f5c6cb; color: #721c24;">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <%= messages.error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %>
+
+<% if (messages.success) { %>
+    <div class="alert-reqflash alert alert-success alert-dismissible fade show mb-3" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <%= messages.success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %>
+
+<% if (messages.warning) { %>
+    <div class="alert-reqflash alert alert-warning alert-dismissible fade show mb-3" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        <%= messages.warning %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %>
+
+<% if (messages.info) { %>
+    <div class="alert-reqflash alert alert-info alert-dismissible fade show mb-3" role="alert">
+        <i class="bi bi-info-circle-fill me-2"></i>
+        <%= messages.info %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %>

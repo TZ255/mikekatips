@@ -1,0 +1,114 @@
+<!-- Variables -->
+<% title = title %>
+<% description = description %>
+<% keywords = keywords %>
+<% page = 'prediction' %>
+
+<main>
+    <!-- Breadcrumb -->
+    <div class="bg-light py-3 border-bottom">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="/" class="text-decoration-none">
+                            <i class="bi bi-house-fill"></i> Nyumbani
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/prediction" class="text-decoration-none">Predictions</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <%= prediction.title.length > 50 ? prediction.title.substring(0, 50) + '...' : prediction.title %>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <!-- Article Header -->
+                <div class="text-center mb-5">
+                    <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+                        <span class="badge bg-success px-3 py-2 fs-6">
+                            <i class="bi bi-trophy-fill me-1"></i>
+                            <%= prediction.league %>
+                        </span>
+                        <span class="badge bg-primary px-3 py-2 fs-6">
+                            <i class="bi bi-calendar-event me-1"></i>
+                            <span class="d-none d-sm-inline">
+                                <%= new Date(prediction.date).toLocaleDateString('sw-TZ', { 
+                                    weekday: 'long',
+                                    day: '2-digit', 
+                                    month: 'long',
+                                    year: 'numeric'
+                                }) %>
+                            </span>
+                            <span class="d-sm-none">
+                                <%= new Date(prediction.date).toLocaleDateString('sw-TZ', { 
+                                    day: '2-digit', 
+                                    month: 'short',
+                                    year: '2-digit'
+                                }) %>
+                            </span>
+                        </span>
+                        <span class="badge bg-info px-3 py-2 fs-6">
+                            <i class="bi bi-clock me-1"></i>
+                            <%= prediction.time %>
+                        </span>
+                    </div>
+
+                    <h1 class="display-5 fw-bold text-dark mb-4">
+                        <%= prediction.title %>
+                    </h1>
+
+                    <p class="lead text-muted fs-5 mb-4">
+                        <%= prediction.snippet_text %>
+                    </p>
+
+                    <!-- Odds & Affiliate -->
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="card border-warning bg-warning bg-opacity-10 p-4 rounded-4">
+                                <div class="text-center">
+                                    <h6 class="text-muted mb-2">Recommended Odds</h6>
+                                    <div class="display-4 fw-bold text-warning mb-3">
+                                        <%= prediction.odds %>
+                                    </div>
+                                    <div class="mb-3">
+                                        <span class="badge bg-light text-dark px-3 py-2 fs-6">
+                                            <%= prediction.affiliate.toUpperCase() %>
+                                        </span>
+                                    </div>
+                                    <button class="btn btn-warning btn-lg px-4 py-2 rounded-pill fw-semibold">
+                                        BET NOW
+                                        <i class="bi bi-cursor-fill ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Article Content -->
+                <div class="article-content">
+                    <%- prediction.body %>
+                </div>
+
+                <!-- Back to Predictions -->
+                <div class="text-center mt-5 pt-4 border-top">
+                    <a href="/prediction" class="btn btn-outline-primary btn-lg px-4 py-2 rounded-pill">
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Rudi kwa Predictions
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Article Content Styles -->
+<%- include('extras/article-style') %>

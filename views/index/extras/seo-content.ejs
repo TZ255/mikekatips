@@ -1,0 +1,432 @@
+<div class="row mt-5 g-4">
+    <!-- Premium Card if no user or user exist and not paid show card... otherwise hide -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm overflow-hidden premium-card">
+            <div class="position-absolute top-0 end-0 z-3">
+                <div class="bg-danger text-white px-3 py-1 rounded-bottom-start fw-bold small">
+                    <i class="bi bi-star-fill me-1"></i>
+                    PREMIUM
+                </div>
+            </div>
+
+            <div class="premium-bg">
+                <div class="card-header border-0 bg-transparent text-center py-4">
+                    <div class="mb-3">
+                        <i class="bi bi-crown-fill display-6 text-warning"></i>
+                    </div>
+                    <h5 class="card-title mb-2 fw-bold text-dark" style="font-size: 1.5rem;">
+                        Premium Tips
+                    </h5>
+                    <div class="badge bg-success px-3 py-2 rounded-pill">
+                        <i class="bi bi-lightning-fill me-1"></i>
+                        Ushindi wa 80%+
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <p class="text-dark text-center mb-4 lh-lg fw-medium">
+                        Jiunge na wataalamu na upate tips zenye nafasi ya juu kabisa ya ushindi
+                    </p>
+
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-3 flex-shrink-0"></i>
+                            <span class="text-dark">Tips 5+ kila siku</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-3 flex-shrink-0"></i>
+                            <span class="text-dark">Kiwango cha ushindi 80%+</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-3 flex-shrink-0"></i>
+                            <span class="text-dark">Msaada wa 24/7</span>
+                        </li>
+                        <li class="mb-4 d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-3 flex-shrink-0"></i>
+                            <span class="text-dark">Uchambuzi wa kina</span>
+                        </li>
+                    </ul>
+
+                    <button class="btn w-100 fw-bold py-3 rounded-pill text-dark premium-btn"
+                        onclick="showPremiumTips()">
+                        <i class="bi bi-crown-fill me-2"></i>
+                        FUNGUA PREMIUM
+                        <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+
+                    <div class="row mt-3 text-center">
+                        <div class="col-4">
+                            <div class="text-success fw-bold">900+</div>
+                            <small class="text-secondary">Wateja</small>
+                        </div>
+                        <div class="col-4">
+                            <div class="text-warning fw-bold">★ 4.8</div>
+                            <small class="text-secondary">Rating</small>
+                        </div>
+                        <div class="col-4">
+                            <div class="text-primary fw-bold">80%+</div>
+                            <small class="text-secondary">Ushindi</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEO Content -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-2 p-md-5">
+                <h2 class="h2 text-dark fw-bold mb-4">
+                    <i class="bi bi-question-circle-fill text-primary me-3"></i>
+                    Tips za Soka ni Nini?
+                </h2>
+                <p class="text-secondary lh-lg mb-4">Tips za soka ni mapendekezo ya kitaalamu kutoka kwa wachambuzi wa
+                    mpira wa miguu wenye uzoefu mkubwa katika kutathmini mechi na kutabiri matokeo. Hapa
+                    MikekaTips.co.tz tunakuletea tips zenye ubora wa juu zinazokusaidia kufanya maamuzi sahihi
+                    kabla ya kuweka dau lako.</p>
+
+                <h3 class="h3 text-dark fw-bold mt-5 mb-4">
+                    <i class="bi bi-star-fill text-warning me-3"></i>
+                    Kwa Nini Utegemee MikekaTips?
+                </h3>
+                <ul class="list-unstyled">
+                    <li class="mb-3 d-flex align-items-start">
+                        <i class="bi bi-check-circle-fill text-success me-3 mt-1 flex-shrink-0"></i>
+                        <span class="text-secondary">Wataalamu wenye uzoefu wa muda mrefu katika betting</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-start">
+                        <i class="bi bi-check-circle-fill text-success me-3 mt-1 flex-shrink-0"></i>
+                        <span class="text-secondary">Uchambuzi wa kina wa timu, wachezaji na takwimu</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-start">
+                        <i class="bi bi-check-circle-fill text-success me-3 mt-1 flex-shrink-0"></i>
+                        <span class="text-secondary">Tips za bure kila siku pamoja na za kulipia</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-start">
+                        <i class="bi bi-check-circle-fill text-success me-3 mt-1 flex-shrink-0"></i>
+                        <span class="text-secondary">Asilimia kubwa ya ushindi kwenye dau</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-start">
+                        <i class="bi bi-check-circle-fill text-success me-3 mt-1 flex-shrink-0"></i>
+                        <span class="text-secondary">Huduma rafiki na ya haraka kwa wateja</span>
+                    </li>
+                </ul>
+
+                <h3 class="h3 text-dark fw-bold mt-5 mb-4">
+                    <i class="bi bi-lightbulb-fill text-info me-3"></i>
+                    Jinsi ya Kuweka Dau kwa Mafanikio
+                </h3>
+                <ul class="list-group mb-4">
+                    <li class="list-group-item text-secondary">Tumia kiasi cha fedha ambacho uko tayari kupoteza bila
+                        kuathirika.</li>
+                    <li class="list-group-item text-secondary">Fanya utafiti wa kina kuhusu timu, wachezaji na takwimu.
+                    </li>
+                    <li class="list-group-item text-secondary">Epuka kuweka dau kwa hisia; tumia mantiki na taarifa
+                        sahihi.</li>
+                </ul>
+
+                <p class="text-secondary lh-lg">
+                    MikekaTips inakupa uchambuzi wa kitaalamu wa mechi kubwa duniani kote. Timu yetu ya wachambuzi
+                    inazingatia takwimu za zamani, form ya wachezaji, hali ya uwanja na vigezo vingine muhimu ili kukupa
+                    tips zenye uhakika zaidi.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Additional SEO Content Section -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h2 text-dark fw-bold mb-4">
+                    <i class="bi bi-trophy-fill text-warning me-2"></i>
+                    Jinsi ya Kutumia Tips Zetu kwenye Majukwaa Maarufu ya Kubet
+                </h2>
+
+                <div class="row g-4">
+                    <!-- Betpawa -->
+                    <div class="col-md-6">
+                        <div class="border-start border-primary border-4 ps-3 mb-4">
+                            <h3 class="h5 text-primary fw-bold mb-2">
+                                <i class="bi bi-star-fill me-2"></i>
+                                Codes za Betpawa
+                            </h3>
+                            <p class="text-secondary mb-3">
+                                Jukwaa maarufu zaidi Tanzania lenye mfumo bora wa tips. Tafuta mechi kwa kutumia majina
+                                ya timu, nenda kwenye sehemu ya Soka, chagua masoko tuliyopendekeza kisha weka dau lako.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Betway -->
+                    <div class="col-md-6">
+                        <div class="border-start border-success border-4 ps-3 mb-4">
+                            <h3 class="h5 text-success fw-bold mb-2">
+                                <i class="bi bi-gem me-2"></i>
+                                Codes za Betway
+                            </h3>
+                            <p class="text-secondary mb-3">
+                                Inafaa zaidi kwa ligi za kimataifa. Ingia kwenye sehemu ya Michezo, chagua Soka, tafuta
+                                mechi kwa tarehe na majina ya timu, kisha linganisha odds na mapendekezo yetu.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Sportpesa -->
+                    <div class="col-md-6">
+                        <div class="border-start border-warning border-4 ps-3 mb-4">
+                            <h3 class="h5 text-warning fw-bold mb-2">
+                                <i class="bi bi-lightning-fill me-2"></i>
+                                Codes za Sportpesa
+                            </h3>
+                            <p class="text-secondary mb-3">
+                                Odds nzuri na masoko ya ushindani. Chunguza sehemu ya Soka, tumia kipengele cha kutafuta
+                                mechi maalum, angalia masoko mbalimbali na tumia chaguo la mikeka ya pamoja
+                                (accumulator).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- M-Bet -->
+                    <div class="col-md-6">
+                        <div class="border-start border-info border-4 ps-3 mb-4">
+                            <h3 class="h5 text-info fw-bold mb-2">
+                                <i class="bi bi-phone-fill me-2"></i>
+                                Codes za M-Bet
+                            </h3>
+                            <p class="text-secondary mb-3">
+                                Bora zaidi kwa kubet kupitia simu. Pakua app, nenda kwenye betting ya Soka, tafuta mechi
+                                kwa taarifa za ratiba, kisha tumia kipengele cha quick bet kwa urahisi.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Premier Bet -->
+                    <div class="col-md-6">
+                        <div class="border-start border-danger border-4 ps-3 mb-4">
+                            <h3 class="h5 text-danger fw-bold mb-2">
+                                <i class="bi bi-award-fill me-2"></i>
+                                Codes za Premier Bet
+                            </h3>
+                            <p class="text-secondary mb-3">
+                                Huduma za kisasa zenye takwimu za kina. Ingia kwenye sehemu kamili ya michezo, tumia
+                                vichujio vya kutafuta mechi kwa usahihi, kisha chunguza masoko makubwa ikiwemo Asian
+                                Handicap.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Betpawa -->
+                    <div class="col-md-6">
+                        <div class="border-start border-primary border-4 ps-3 mb-4">
+                            <h3 class="h5 text-primary fw-bold mb-2">
+                                <i class="bi bi-star-fill me-2"></i>
+                                Codes za Meridianbet
+                            </h3>
+                            <p class="text-secondary mb-3">
+                                Moja ya jukwaa kongwe Tanzania lenye machaguo na ofa nyingi sana. Ingia sehemu ya michezo, bonyeza kitufe cha kutafuta na tafuta mechi kwa kutumia majina
+                                ya timu, fungua mechi husika na chagua masoko tuliyopendekeza kisha weka dau lako.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-light p-4 rounded-3 mt-4">
+                    <h3 class="h5 text-dark fw-bold mb-3">
+                        <i class="bi bi-lightbulb-fill text-warning me-2"></i>
+                        Mkakati wa Jumla wa Kubet
+                    </h3>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <span class="text-secondary">Hakikisha taarifa za mechi ili kupata odds bora</span>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <span class="text-secondary">Tumia uchambuzi wa kina kufanya maamuzi</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <span class="text-secondary">Linganisha odds kwenye majukwaa tofauti</span>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <span class="text-secondary">Kubet kwa uwajibikaji kila wakati</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Betting Markets Explanation Section -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h2 text-dark fw-bold mb-4">
+                    <i class="bi bi-bullseye text-primary me-2"></i>
+                    Kuelewa Tips Zetu za Masoko ya Kubet
+                </h2>
+
+                <p class="text-secondary lh-lg mb-4">
+                    Tunatoa aina mbalimbali za tips za kubet ili kuongeza nafasi zako za kushinda. Hapa chini ni maana
+                    ya kila soko la kubet:
+                </p>
+
+                <!-- Main Markets Grid -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="p-3 border-start border-primary border-4 bg-light rounded">
+                            <h4 class="h6 text-primary fw-bold mb-2">
+                                <i class="bi bi-trophy me-2"></i>Ushindi wa Moja kwa Moja (1X2)
+                            </h4>
+                            <ul class="list-unstyled text-secondary mb-0">
+                                <li><span class="badge bg-success me-1">1</span> Timu ya nyumbani kushinda</li>
+                                <li><span class="badge bg-warning me-1">X</span> Sare / Droo</li>
+                                <li><span class="badge bg-primary me-1">2</span> Timu ya ugenini kushinda</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3 border-start border-success border-4 bg-light rounded">
+                            <h4 class="h6 text-success fw-bold mb-2">
+                                <i class="bi bi-bar-chart me-2"></i>Over/Under 1.5
+                            </h4>
+                            <ul class="list-unstyled text-secondary mb-0">
+                                <li><strong>Over:</strong> magoli zaidi ya 1 (mfano 2-0, 1-1)</li>
+                                <li><strong>Under:</strong> magoli chini ya mawili (mfano 0-0, 1-0)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3 border-start border-warning border-4 bg-light rounded">
+                            <h4 class="h6 text-warning fw-bold mb-2">
+                                <i class="bi bi-graph-up me-2"></i>Over/Under 2.5
+                            </h4>
+                            <ul class="list-unstyled text-secondary mb-0">
+                                <li><strong>Over:</strong> magoli zaidi ya mawili (mfano 2-1, 3-0)</li>
+                                <li><strong>Under:</strong> magoli chini ya matatu (mfano 1-1, 2-0)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3 border-start border-info border-4 bg-light rounded">
+                            <h4 class="h6 text-info fw-bold mb-2">
+                                <i class="bi bi-graph-up-arrow me-2"></i>Over/Under 3.5
+                            </h4>
+                            <ul class="list-unstyled text-secondary mb-0">
+                                <li><strong>Over:</strong> magoli juu ya matatu (mfano 3-1, 2-2)</li>
+                                <li><strong>Under:</strong> magoli chini ya manne (mfano 2-1, 2-0)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3 border-start border-danger border-4 bg-light rounded">
+                            <h4 class="h6 text-danger fw-bold mb-2">
+                                <i class="bi bi-bullseye me-2"></i>Both teams to score (BTTS)
+                            </h4>
+                            <ul class="list-unstyled text-secondary mb-0">
+                                <li><span class="badge bg-success">Yes/GG</span> Timu zote kufungana (mfano 1-1, 2-1)</li>
+                                <li><span class="badge bg-danger">No/NG</span> Timu moja au zote hazifungani (mfano 0-0, 1-0)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3 border-start border-secondary border-4 bg-light rounded">
+                            <h4 class="h6 text-secondary fw-bold mb-2">
+                                <i class="bi bi-shield-check me-2"></i>Double Chance
+                            </h4>
+                            <ul class="list-unstyled text-secondary mb-0">
+                                <li><span class="badge bg-primary">1X</span> Nyumbani au Sare</li>
+                                <li><span class="badge bg-success">12</span> Nyumbani au Ugenini</li>
+                                <li><span class="badge bg-warning">X2</span> Sare au Ugenini</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Markets -->
+                <div class="row g-3 mb-4">
+                    <div class="col-lg-6">
+                        <div class="p-3 border border-primary rounded bg-light">
+                            <h4 class="h6 text-primary fw-bold mb-2">
+                                <i class="bi bi-balance me-2"></i>Bet ya Handicap
+                            </h4>
+                            <ul class="list-unstyled text-secondary mb-0">
+                                <li><span class="badge bg-info">-1</span> Timu lazima ishinde kwa magoli 2+</li>
+                                <li><span class="badge bg-info">+1</span> Timu inapewa bao moja mapema</li>
+                                <li><span class="badge bg-info">0</span> Sare, hakuna dau (stake inarudishwa)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="p-3 border border-warning rounded bg-light">
+                            <h4 class="h6 text-warning fw-bold mb-2">
+                                <i class="bi bi-target me-2"></i>Shinda correct score
+                            </h4>
+                            <ul class="list-unstyled text-secondary mb-0">
+                                <li><span class="badge bg-success">1-0</span> Weka chaguo hili kwenye mechi za kujilinda</li>
+                                <li><span class="badge bg-warning">2-1</span> Kwenye mechi za ushindani</li>
+                                <li><span class="badge bg-primary">0-0</span> Mechi zenye magoli machache</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Quick Tips -->
+                <div class="bg-light p-3 rounded">
+                    <h4 class="h6 text-dark fw-bold mb-2">
+                        <i class="bi bi-lightbulb-fill text-warning me-2"></i>
+                        Vidokezo vya Haraka vya Mkakati
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled small mb-0">
+                                <li class="mb-1">
+                                    <i class="bi bi-check-circle-fill text-success me-1"></i>
+                                    Unganisha masoko kwa accumulator
+                                </li>
+                                <li class="mb-1">
+                                    <i class="bi bi-check-circle-fill text-success me-1"></i>
+                                    BTTS + Zaidi/Chini kwa odds bora
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled small mb-0">
+                                <li class="mb-1">
+                                    <i class="bi bi-check-circle-fill text-success me-1"></i>
+                                    Double Chance = chaguo salama zaidi
+                                </li>
+                                <li class="mb-1">
+                                    <i class="bi bi-check-circle-fill text-success me-1"></i>
+                                    Handicap kwa timu ndogo zenye ushindani mkubwa
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

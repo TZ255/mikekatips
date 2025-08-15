@@ -1,0 +1,98 @@
+<!-- Variables -->
+<% title = title %>
+<% description = description %>
+<% keywords = keywords %>
+<% page = 'prediction' %>
+
+<main>
+    <!-- Hero Section -->
+    <div class="bg-gradient-primary py-5">
+        <div class="container text-center text-white">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="bi bi-graph-up-arrow me-3"></i>
+                Utabiri wa Mechi za Leo na Uchambuzi
+            </h1>
+            <p class="lead fs-5">Pata uchambuzi wa kina wa mechi za leo kutoka kwa wataalamu wetu</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <!-- Flash Messages -->
+        <%- include('../0-partials/flashMessages') %>
+
+        <% if (predictions && predictions.length > 0) { %>
+            <div class="row g-4">
+                <% predictions.forEach(prediction => { %>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative" style="cursor: pointer;" onclick="window.location.href='/prediction/<%= prediction.slug %>'">
+                            <!-- League Badge -->
+                            <div class="position-absolute top-0 start-0 m-3">
+                                <span class="badge bg-success px-3 py-2 rounded-pill">
+                                    <%= prediction.league %>
+                                </span>
+                            </div>
+                            
+                            <!-- Date Badge -->
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge bg-dark px-3 py-2 rounded-pill">
+                                    <%= new Date(prediction.date).toLocaleDateString('sw-TZ', { 
+                                        day: '2-digit', 
+                                        month: 'short' 
+                                    }) %> <%= prediction.time %>
+                                </span>
+                            </div>
+
+                            <!-- Icon Header -->
+                            <div class="text-center py-4 bg-gradient-primary">
+                                <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle" style="width: 80px; height: 80px;">
+                                    <i class="bi bi-graph-up-arrow display-6 text-primary"></i>
+                                </div>
+                            </div>
+
+                            <div class="card-body p-4 d-flex flex-column">
+                                <!-- Title -->
+                                <h5 class="card-title fw-bold text-dark mb-3">
+                                    <%= prediction.title %>
+                                </h5>
+                                
+                                <!-- Snippet -->
+                                <p class="card-text text-muted mb-4 flex-grow-1">
+                                    <%= prediction.snippet_text %>
+                                </p>
+                                
+                                <!-- Footer -->
+                                <div class="d-flex justify-content-between align-items-center mt-auto p-3 border rounded-3 bg-light bg-opacity-50">
+                                    <!-- Odds -->
+                                    <div class="text-center">
+                                        <small class="text-muted d-block">Odds:</small>
+                                        <span class="fw-bold text-primary fs-4"><%= prediction.odds %></span>
+                                    </div>
+                                    
+                                    <!-- View Button -->
+                                    <div class="d-flex align-items-center">
+                                        <button class="btn btn-primary btn-sm px-3 py-2 rounded-pill fw-semibold">
+                                            <i class="bi bi-eye me-1"></i>
+                                            Angalia utabiri
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <!-- No Predictions -->
+            <div class="text-center py-5">
+                <i class="bi bi-graph-up-arrow display-1 text-muted opacity-50"></i>
+                <h3 class="text-muted mt-4">Hakuna predictions kwa sasa</h3>
+                <p class="text-muted">Rudi baadaye kuona predictions mpya</p>
+                <a href="/" class="btn btn-primary mt-3">
+                    <i class="bi bi-house-fill me-2"></i>
+                    Rudi Nyumbani
+                </a>
+            </div>
+        <% } %>
+    </div>
+</main>

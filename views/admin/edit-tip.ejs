@@ -1,0 +1,88 @@
+<!-- Variables -->
+<% title = title || 'Edit Tip - Admin' %>
+<% description = 'Edit betting tip details' %>
+<% keywords = 'admin, edit tip, betting tips' %>
+<% page = 'admin' %>
+<% currentPage = 'tips' %>
+
+<main>
+    <%- include('./extras/admin-nav') %>
+
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="bi bi-pencil"></i>
+                            Edit Tip
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="/admin/tips/edit/<%= tip._id %>">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="match" class="form-label">Match</label>
+                                    <input type="text" class="form-control" id="match" name="match" value="<%= tip.match %>" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="league" class="form-label">League</label>
+                                    <input type="text" class="form-control" id="league" name="league" value="<%= tip.league %>" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="tip" class="form-label">Tip</label>
+                                    <input type="text" class="form-control" id="tip" name="tip" value="<%= tip.tip %>" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="odds" class="form-label">Odds</label>
+                                    <input type="text" class="form-control" id="odds" name="odds" value="<%= tip.odds %>" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="date" class="form-label">Date</label>
+                                    <input type="date" class="form-control" id="date" name="date" value="<%= tip.date %>" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="time" class="form-label">Time</label>
+                                    <input type="time" class="form-control" id="time" name="time" value="<%= tip.time %>" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="isPremium" class="form-label">Type</label>
+                                    <select class="form-select" id="isPremium" name="isPremium" required>
+                                        <option value="false" <%= !tip.isPremium ? 'selected' : '' %>>Free Tip</option>
+                                        <option value="true" <%= tip.isPremium ? 'selected' : '' %>>Premium Tip</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-select" id="status" name="status">
+                                        <option value="" <%= !tip.status ? 'selected' : '' %>>Pending</option>
+                                        <option value="won" <%= tip.status === 'won' ? 'selected' : '' %>>Won</option>
+                                        <option value="lost" <%= tip.status === 'lost' ? 'selected' : '' %>>Lost</option>
+                                        <option value="cancelled" <%= tip.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <a href="/admin/tips" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left"></i>
+                                    Back to Tips
+                                </a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-check-circle"></i>
+                                    Update Tip
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

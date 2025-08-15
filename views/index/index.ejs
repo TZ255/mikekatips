@@ -1,0 +1,56 @@
+<!-- Variables -->
+<% title = `Tips za ${swahiliDay} ${currentDateDisplay} | MikekaTips` %>
+<% description = `Pata tips za soka zinazoshinda za ${swahiliDay}. Tips za bure, VIP na Premium. Shinda mikeka ya ${swahiliDay} kwa kutumia tips zetu za bure` %>
+<% keywords = `betting tips ${swahiliDay.toLowerCase()}, soka, michezo, tanzania, tips za soka, mkeka wa leo, mikeka ya bure, codes za betpawa, mechi za ${currentDateDisplay}` %>
+<% page = "index" %>
+
+<main>
+    <%- include('./extras/date-nav') %>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <!-- Hero Section -->
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold text-dark mb-3">
+                Tips za <%= swahiliDay %>
+            </h1>
+            <p class="lead text-secondary fs-5">Pata tips na mikeka inayoshinda kila siku kutoka kwa wataalamu. Utabiri wa mechi za <%= swahiliDay.toLowerCase() %> <%= currentDateDisplay %></p>
+        </div>
+
+        <!-- Bootstrap Nav Tabs -->
+        <ul class="nav nav-pills nav-justified mb-5 p-1 bg-light rounded-pill mx-auto" id="tipsTabs" role="tablist"
+            style="max-width: 800px;">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active fw-semibold rounded-pill px-4 py-3" id="free-tab" data-bs-toggle="tab"
+                    data-bs-target="#free-tips" type="button" role="tab">
+                    <i class="bi bi-gift-fill me-2"></i>
+                    FREE
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-semibold rounded-pill px-4 py-3" id="premium-tab" data-bs-toggle="tab"
+                    data-bs-target="#premium-tips" type="button" role="tab">
+                    <i class="bi bi-coin me-2"></i>
+                    PREMIUM
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content tgt-tabContent" id="tipsTabContent">
+            <%- include('./extras/free-tips-tab') %>
+            <%- include('./extras/premium-tips-tab') %>
+        </div>
+
+        <!-- SEO Content -->
+        <%- include('./extras/seo-content') %>
+    </div>
+</main>
+
+<!-- Additonal Scripts -->
+<script>
+    up.preview('link-spinner', function (preview) {
+        let link = preview.origin
+        preview.swapContent(link, '<div class="spinner-border spinner-border-sm text-light" role="status"><span class="visually-hidden">Loading...</span></div>')
+    })
+</script>
