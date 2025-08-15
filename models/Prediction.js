@@ -70,7 +70,7 @@ predictionSchema.pre('save', function(next) {
       .trim('-'); // Remove leading/trailing hyphens
     
     // Add date for uniqueness (format: title-yyyy-mm-dd)
-    this.slug = baseSlug + '-' + this.date;
+    this.slug = baseSlug
   }
   next();
 });
