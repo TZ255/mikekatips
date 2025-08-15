@@ -30,26 +30,41 @@ app.use(expressLayouts);
 app.set('layout', path.join(__dirname, 'views/0-layouts/main'));
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://mikekatips.fly.dev', 'https://mikekatips.co.tz'] 
+    : 'http://localhost:3000',
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
 
+// Trust proxy for Fly.io
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Session configuration
 app.use(session({
   secret: process.env.SESSION_SECRET,
+  name: 'mikekatips.session',
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI,
     collectionName: 'sessions',
-    ttl: 24 * 60 * 60 // 24 hours in seconds
+    ttl: 24 * 60 * 60, // 24 hours in seconds
+    touchAfter: 24 * 3600 // lazy session update
   }),
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'production', // HTTPS only in production
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax'
   }
 }));
 

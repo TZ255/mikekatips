@@ -49,7 +49,7 @@ router.post('/auth/verify', async (req, res) => {
       });
     }
 
-    // Store user in session
+    // Store user in session with explicit save
     req.session.user = {
       id: user._id,
       uid: user.uid,
@@ -60,17 +60,26 @@ router.post('/auth/verify', async (req, res) => {
       expiresAt: user.expiresAt
     };
 
-    res.json({ 
-      success: true, 
-      message: 'Login successful',
-      user: {
-        id: user._id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        isPaid: user.isPaid
+    // Explicitly save session
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.status(500).json({ success: false, message: 'Session save failed' });
       }
+      
+      res.json({ 
+        success: true, 
+        message: 'Login successful',
+        user: {
+          id: user._id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          isPaid: user.isPaid
+        }
+      });
     });
+
   } catch (error) {
     console.error('Login error:', error);
     res.status(401).json({ success: false, message: 'Authentication failed' });
@@ -81,7 +90,8 @@ router.post('/auth/verify', async (req, res) => {
 router.post('/auth/logout', (req, res) => {
   req.flash('success', 'Umetoka kikamilifu');
   req.session.destroy((err) => {
-    res.clearCookie('connect.sid');
+    res.clearCookie('mikekatips.session');
+    res.clearCookie('connect.sid'); // fallback for old sessions
     if (err) {
       console.error('Session destroy error:', err);
       req.flash('error', 'Hitilafu katika kutoka');
@@ -94,7 +104,8 @@ router.post('/auth/logout', (req, res) => {
 router.get('/auth/logout', (req, res) => {
   req.flash('success', 'Umetoka kikamilifu');
   req.session.destroy((err) => {
-    res.clearCookie('connect.sid');
+    res.clearCookie('mikekatips.session');
+    res.clearCookie('connect.sid'); // fallback for old sessions
     if (err) {
       console.error('Session destroy error:', err);
       req.flash('error', 'Hitilafu katika kutoka');
