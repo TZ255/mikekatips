@@ -71,11 +71,11 @@ router.get('/', freshUserInfo, async (req, res) => {
     // Generate navigation data
     const navData = await generateDateNavigation(currentDate);
     
-    // Fetch free tips
+    // Fetch free tips (limit to first 10)
     const freeTips = await Tip.find({
       date: dateStr,
       isPremium: false
-    }).sort({ time: 1 });
+    }).sort({ time: 1 }).limit(10);
     
     // Fetch premium tips
     const premiumTips = await Tip.find({
@@ -96,6 +96,7 @@ router.get('/', freshUserInfo, async (req, res) => {
       freeTips,
       premiumTips,
       predictions,
+      currentDate: dateStr,
       ...navData
     });
   } catch (error) {
@@ -113,11 +114,11 @@ router.get('/date/:date', freshUserInfo, async (req, res) => {
     // Generate navigation data
     const navData = await generateDateNavigation(currentDate);
     
-    // Fetch free tips
+    // Fetch free tips (limit to first 10)
     const freeTips = await Tip.find({
       date: dateStr,
       isPremium: false
-    }).sort({ time: 1 });
+    }).sort({ time: 1 }).limit(10);
     
     // Fetch premium tips
     const premiumTips = await Tip.find({
@@ -135,6 +136,7 @@ router.get('/date/:date', freshUserInfo, async (req, res) => {
       freeTips,
       premiumTips,
       predictions,
+      currentDate: dateStr,
       ...navData
     });
   } catch (error) {

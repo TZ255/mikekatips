@@ -10,8 +10,8 @@ const BaruakaziPaymentBinModel = require('../models/PaymentBin');
 const router = express.Router();
 
 // Payment page
-router.get('/payment/index', authMiddleware, (req, res) => {
-  res.render('payment');
+router.get('/payment', authMiddleware, (req, res) => {
+  res.render('payment/index');
 });
 
 

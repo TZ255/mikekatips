@@ -16,6 +16,7 @@ const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 const paymentRoutes = require('./routes/payment');
 const predictionRoutes = require('./routes/prediction');
+const htmxRoutes = require('./routes/htmx');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -84,6 +85,7 @@ app.use(indexRoutes);
 app.use(paymentRoutes);
 app.use(authRoutes);
 app.use(predictionRoutes);
+app.use(htmxRoutes);
 app.use(adminRoutes);
 
 // 404 handler
