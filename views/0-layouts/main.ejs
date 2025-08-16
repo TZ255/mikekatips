@@ -46,9 +46,12 @@
     <script src="/js/htmx.min.js"></script>
 
     <!-- Additionals heads -->
-    <% if (typeof page !== 'undefined' && page === 'index') { %>
+    <% if (typeof page !== 'undefined' && ['index', 'index-date'].includes(page)) { %>
     <meta property="article:modified_time" content="<%= modifiedDate %>" />
     <%- include('../index/extras/style') %>
+    <% } %>
+
+    <% if (typeof page !== 'undefined' && page === 'index') { %>
     <%- include('../index/extras/schema-markup') %>
     <%- include('../index/extras/faq-schema') %>
     <% } %>

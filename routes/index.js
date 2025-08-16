@@ -103,6 +103,7 @@ router.get('/', freshUserInfo, async (req, res) => {
     console.log(modifiedDate)
     
     res.render('index', {
+      page: 'index',
       freeTips,
       premiumTips,
       predictions,
@@ -150,6 +151,7 @@ router.get('/date/:date', freshUserInfo, async (req, res) => {
       : currentDate.startOf('day').format(); // Past date: use that specific day's start
     
     res.render('index', {
+      page: 'index-date',
       freeTips,
       premiumTips,
       predictions,
