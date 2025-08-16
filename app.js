@@ -57,6 +57,7 @@ app.use((req, res, next) => {
 });
 
 // View engine
+console.log('🎨 Setting up view engine...');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(expressLayouts);
@@ -86,6 +87,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Session configuration
+console.log('🔐 Setting up sessions...');
 app.use(session({
   secret: process.env.SESSION_SECRET,
   name: 'mikekatips.session',
@@ -117,6 +119,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
+console.log('🛣️ Setting up routes...');
 app.use(indexRoutes);
 app.use(paymentRoutes);
 app.use(authRoutes);
