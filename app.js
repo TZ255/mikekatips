@@ -12,7 +12,16 @@ const connectDB = require('./config/database');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const timezone = require("dayjs/plugin/timezone");
-const { notifyGoogle } = require('./utils/googleIndexing');
+// Load Google Indexing conditionally
+let notifyGoogle;
+try {
+  const indexing = require('./utils/googleIndexing');
+  notifyGoogle = indexing.notifyGoogle;
+  console.log('✅ Google Indexing loaded successfully');
+} catch (error) {
+  console.warn('⚠️ Google Indexing failed to load:', error.message);
+  notifyGoogle = async () => ({ success: false, error: 'Google Indexing not available' });
+}
 
 // Extend dayjs
 dayjs.extend(utc);
