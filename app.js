@@ -40,11 +40,16 @@ const paymentRoutes = require('./routes/payment');
 const predictionRoutes = require('./routes/prediction');
 const htmxRoutes = require('./routes/htmx');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const app = express()
 
 // Connect to database
 connectDB();
+
+// Health check endpoint (before any middleware)
+app.get('/check/health', (req, res) => {
+  console.log('🏥 Health check requested');
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
 
 app.use((req, res, next) => {
   console.log(`➡️ ${req.method} ${req.url}`);
@@ -156,6 +161,7 @@ app.use((err, req, res, next) => {
 //   }
 // }, 60000); // Check every minute (60 seconds)
 
+const PORT = process.env.PORT || 3000
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`⏰ Daily indexing scheduler started for ${TZ} timezone`);
