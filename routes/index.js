@@ -163,14 +163,18 @@ router.get('/date/:date', freshUserInfo, async (req, res) => {
   }
 });
 
-router.get('/API/testing', async (req, res)=> {
-try {
-  res.end()
-} catch (error) {
-  console.log(error.message)
-}
-})
+// Privacy Policy
+router.get('/privacy-policy', (req, res) => {
+  res.render('privacy-policy', {
+    title: 'Sera ya Faragha - MikekaTips.co.tz'
+  });
+});
 
-
+// Terms of Service
+router.get('/terms-of-service', (req, res) => {
+  res.render('terms-of-service', {
+    title: 'Masharti ya Huduma - MikekaTips.co.tz'
+  });
+});
 
 module.exports = router;
