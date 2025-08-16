@@ -14,13 +14,11 @@ process.on('uncaughtException', (err) => {
   console.error('Error name:', err.name);
   console.error('Error message:', err.message);
   console.error('Stack trace:', err.stack);
-  process.exit(1);
 });
 
 process.on('unhandledRejection', (err) => {
   console.error('💥 UNHANDLED PROMISE REJECTION! Shutting down...');
   console.error('Error:', err);
-  process.exit(1);
 });
 
 const connectDB = require('./config/database');
@@ -57,7 +55,7 @@ app.set('layout', path.join(__dirname, 'views/0-layouts/main'));
 // Middleware
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://mikekatips.fly.dev', 'https://mikekatips.co.tz'] 
+    ? ['https://mikekatips.fly.dev', 'https://mikekatips.co.tz', 'https://mikekatips-production.up.railway.app/'] 
     : 'http://localhost:3000',
   credentials: true,
   optionsSuccessStatus: 200
@@ -65,7 +63,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {fallthrough: true}));
 app.use(fileUpload());
 
 // Trust proxy for Fly.io
