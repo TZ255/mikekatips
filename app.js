@@ -60,6 +60,7 @@ app.use((req, res, next) => {
 console.log('🎨 Setting up view engine...');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+console.log('📐 Setting up express layouts...');
 app.use(expressLayouts);
 app.set('layout', path.join(__dirname, 'views/0-layouts/main'));
 
@@ -78,7 +79,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public'), {fallthrough: true}));
+// Add logging for static files
+app.use('/public', express.static(path.join(__dirname, 'public')));
+console.log('📁 Static files middleware set up');
 app.use(fileUpload());
 
 // Trust proxy for Fly.io

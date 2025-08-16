@@ -14,6 +14,7 @@ const authMiddleware = (req, res, next) => {
 
 // Middleware to check if user has paid subscription
 const freshUserInfo = async (req, res, next) => {
+  console.log('🔄 freshUserInfo middleware hit');
   try {
     const sessionUser = req.session.user;
 

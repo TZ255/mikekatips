@@ -66,6 +66,7 @@ async function generateDateNavigation(currentDate) {
 
 // Home page
 router.get('/', freshUserInfo, async (req, res) => {
+  console.log('🏠 Homepage route hit');
   try {
     const currentDate = dayjs().tz(TZ, false);
     const dateStr = currentDate.format('YYYY-MM-DD');
