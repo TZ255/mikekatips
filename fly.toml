@@ -21,3 +21,4 @@ primary_region = 'jnb'
   cpu_kind = 'shared'
   cpus = 1
   memory_mb = 256
+  swap_size_mb = 1024
