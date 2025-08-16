@@ -1,0 +1,15 @@
+User-agent: *
+
+# Disallow non-SEO relevant or sensitive pages
+Disallow: /privacy-policy
+Disallow: /terms-of-service
+Disallow: /payment
+Disallow: /payment/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /auth
+Disallow: /auth/
+Disallow: /api
+Disallow: /api/
+
+# Everything else is allowed by default
