@@ -1,7 +1,8 @@
 const express = require('express');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
-const timezone = require("dayjs/plugin/timezone")
+const timezone = require("dayjs/plugin/timezone");
+const isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
 const Tip = require('../models/Tip');
 const Prediction = require('../models/Prediction');
 const { freshUserInfo } = require('../middleware/auth');
@@ -13,6 +14,7 @@ const router = express.Router();
 //extending dayjs
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.extend(isSameOrAfter);
 const TZ = 'Africa/Nairobi'
 
 // Swahili day names
@@ -92,11 +94,20 @@ router.get('/', freshUserInfo, async (req, res) => {
     //add leo to the swahiliday
     navData.swahiliDay = `Leo, ${navData.swahiliDay}`
     
+    // Generate modified date for SEO
+    const today = dayjs().tz(TZ);
+    const modifiedDate = currentDate.isSameOrAfter(today, 'day')
+      ? today.startOf('day').format() // Today or future: use today's start
+      : currentDate.startOf('day').format(); // Past date: use that specific day's start
+
+    console.log(modifiedDate)
+    
     res.render('index', {
       freeTips,
       premiumTips,
       predictions,
       currentDate: dateStr,
+      modifiedDate,
       ...navData
     });
   } catch (error) {
@@ -132,11 +143,18 @@ router.get('/date/:date', freshUserInfo, async (req, res) => {
       status: 'published' 
     });
     
+    // Generate modified date for SEO
+    const today = dayjs().tz(TZ);
+    const modifiedDate = currentDate.isSameOrAfter(today, 'day') 
+      ? today.startOf('day').format() // Today or future: use today's start
+      : currentDate.startOf('day').format(); // Past date: use that specific day's start
+    
     res.render('index', {
       freeTips,
       premiumTips,
       predictions,
       currentDate: dateStr,
+      modifiedDate,
       ...navData
     });
   } catch (error) {

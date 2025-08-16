@@ -47,6 +47,7 @@
 
     <!-- Additionals heads -->
     <% if (typeof page !== 'undefined' && page === 'index') { %>
+    <meta property="article:modified_time" content="<%= modifiedDate %>" />
     <%- include('../index/extras/style') %>
     <%- include('../index/extras/schema-markup') %>
     <%- include('../index/extras/faq-schema') %>
