@@ -45,6 +45,11 @@ const app = express()
 // Connect to database
 connectDB();
 
+// Health check endpoint
+app.get('/check/health', (req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
 // View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
