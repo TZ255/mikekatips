@@ -8,6 +8,21 @@ const expressLayouts = require('express-ejs-layouts');
 const path = require('path');
 require('dotenv').config();
 
+// Global error handling
+process.on('uncaughtException', (err) => {
+  console.error('💥 UNCAUGHT EXCEPTION! Shutting down...');
+  console.error('Error name:', err.name);
+  console.error('Error message:', err.message);
+  console.error('Stack trace:', err.stack);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error('💥 UNHANDLED PROMISE REJECTION! Shutting down...');
+  console.error('Error:', err);
+  process.exit(1);
+});
+
 const connectDB = require('./config/database');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
