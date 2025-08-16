@@ -10,7 +10,7 @@ require('dotenv').config();
 
 // Global error handling
 process.on('uncaughtException', (err) => {
-  console.error('💥 UNCAUGHT EXCEPTION! Shutting down...');
+  console.error('💥 UNCAUGHT EXCEPTION!...');
   console.error('Error name:', err.name);
   console.error('Error message:', err.message);
   console.error('Stack trace:', err.stack);
