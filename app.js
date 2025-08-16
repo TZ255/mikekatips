@@ -60,7 +60,11 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200
 };
-app.use(cors(corsOptions));
+// CORS: allow all temporarily
+app.use(cors({
+  origin: true,          // reflect the request origin
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public'), {fallthrough: true}));
