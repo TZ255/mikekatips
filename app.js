@@ -138,7 +138,7 @@ setInterval(() => {
   const minute = currentTime.minute();
   
   // If it's exactly 00:00 EAT
-  if (hour === 0 && minute === 0) {
+  if (hour === 0 && minute === 0 && process.env.NODE_ENV == 'production') {
     console.log('🕛 Midnight detected - Notifying Google for new day content');
     
     notifyGoogle('https://mikekatips.co.tz')

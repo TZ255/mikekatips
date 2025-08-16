@@ -103,6 +103,7 @@ router.get('/', freshUserInfo, async (req, res) => {
     console.log(modifiedDate)
     
     res.render('index', {
+      page_url: `https://mikekatips.co.tz`,
       page: 'index',
       freeTips,
       premiumTips,
@@ -151,6 +152,7 @@ router.get('/date/:date', freshUserInfo, async (req, res) => {
       : currentDate.startOf('day').format(); // Past date: use that specific day's start
     
     res.render('index', {
+      page_url: `https://mikekatips.co.tz/date/${dateStr}`,
       page: 'index-date',
       freeTips,
       premiumTips,
