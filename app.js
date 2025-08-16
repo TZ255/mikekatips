@@ -131,27 +131,27 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Daily indexing schedule - Check every minute for 00:00 EAT
-setInterval(() => {
-  const currentTime = dayjs().tz(TZ);
-  const hour = currentTime.hour();
-  const minute = currentTime.minute();
+// // Daily indexing schedule - Check every minute for 00:00 EAT
+// setInterval(() => {
+//   const currentTime = dayjs().tz(TZ);
+//   const hour = currentTime.hour();
+//   const minute = currentTime.minute();
   
-  // If it's exactly 00:00 EAT
-  if (hour === 0 && minute === 0) {
-    console.log('🕛 Midnight detected - Notifying Google for new day content');
+//   // If it's exactly 00:00 EAT
+//   if (hour === 0 && minute === 0) {
+//     console.log('🕛 Midnight detected - Notifying Google for new day content');
     
-    notifyGoogle('https://mikekatips.co.tz')
-      .then(() => {
-        console.log('✅ Successfully notified Google about homepage update');
-      })
-      .catch(error => {
-        console.error('❌ Failed to notify Google:', error.message);
-      });
-  }
-}, 60000); // Check every minute (60 seconds)
+//     notifyGoogle('https://mikekatips.co.tz')
+//       .then(() => {
+//         console.log('✅ Successfully notified Google about homepage update');
+//       })
+//       .catch(error => {
+//         console.error('❌ Failed to notify Google:', error.message);
+//       });
+//   }
+// }, 60000); // Check every minute (60 seconds)
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`⏰ Daily indexing scheduler started for ${TZ} timezone`);
 });
