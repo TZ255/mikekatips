@@ -86,38 +86,16 @@
         <% } %>
 
         <!-- Load More Button -->
-        <div class="col-12 text-center mt-4" id="load-more-container">
-            <button type="button" class="btn btn-outline-primary btn-lg px-4" id="load-more-btn"
-                hx-post="/load-more-tips/<%= currentDate %>" 
-                hx-target="#load-more-container" 
-                hx-swap="outerHTML">
-                <span id="loading-content" class="htmx-indicator">
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Inapakia...
-                </span>
-                <span class="btn-content">
-                    <i class="bi bi-plus-circle me-2"></i>
-                    Onyesha tips zaidi
-                </span>
-            </button>
+        <div class="col-12 text-center mt-4 w-100 d-flex justify-content-center" id="load-more-container">
+            <div id="load-more-btn"
+                hx-post="/load-more-tips/<%= currentDate %>" hx-target="#load-more-container" hx-trigger="revealed" hx-swap="outerHTML">
+                <div class="text-center" style="width: 4rem; height: 4rem;">
+                    <div class="spinner-border text-dark" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <style>
-            /* disabling the htmx indicator */
-            .htmx-indicator {
-                display: none;
-            }
-
-            /* showing the htmx-indicator (during request htmx will add the class htmx-request to the btn) */
-            #load-more-btn.htmx-request .htmx-indicator {
-                display: inline-block;
-            }
-
-            /* hiding the onyesha more tips span */
-            #load-more-btn.htmx-request .btn-content {
-                display: none;
-            }
-        </style>
     </div>
     <% } %>
 

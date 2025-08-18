@@ -99,8 +99,6 @@ router.get('/', freshUserInfo, async (req, res) => {
     const modifiedDate = currentDate.isSameOrAfter(today, 'day')
       ? today.startOf('day').format() // Today or future: use today's start
       : currentDate.startOf('day').format(); // Past date: use that specific day's start
-
-    console.log(modifiedDate)
     
     res.render('index', {
       page_url: `https://mikekatips.co.tz`,
