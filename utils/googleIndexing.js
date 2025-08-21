@@ -113,7 +113,43 @@ async function notifyMultipleUrls(urls, type = 'URL_UPDATED') {
   return results;
 }
 
+// BING INDEXING API
+const submitToIndexNow = async (urlList) => {
+  try {
+    const response = await axios.post(
+      "https://api.indexnow.org/IndexNow",
+      {
+        host: "mikekatips.co.tz",
+        key: "ca3c11def14944febd5ae1cd77de5149",
+        keyLocation: "https://mikekatips.co.tz/indexnow_key.txt",
+        urlList,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      }
+    );
+
+    if (response.status !== 200) {
+      throw new Error(`IndexNow API returned status ${response.status}`);
+    }
+
+    return {success: true}
+  } catch (error) {
+    if (error.response) {
+      console.error("Error:", error.response.status, error.response.data);
+      return {success: false, error: error.response.data};
+    } else {
+      console.error("Error:", error.message);
+      return {success: false, error: error.message};
+    }
+  }
+}
+
+
 module.exports = { 
   notifyGoogle, 
-  notifyMultipleUrls 
+  notifyMultipleUrls,
+  submitToIndexNow
 };

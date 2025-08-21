@@ -4,7 +4,7 @@ const Tip = require('../models/Tip');
 const Prediction = require('../models/Prediction');
 const { authMiddleware, adminMiddleware } = require('../middleware/auth');
 const { processTipsForDate } = require('../utils/tipsProcessor');
-const { notifyMultipleUrls } = require('../utils/googleIndexing');
+const { notifyMultipleUrls, submitToIndexNow } = require('../utils/googleIndexing');
 
 const router = express.Router();
 
@@ -108,15 +108,19 @@ router.post('/admin/tips/add/bettingtipsters', adminMiddleware, async (req, res)
       const baseUrl = 'https://mikekatips.co.tz';
       
       const urlsToNotify = [
-        `${baseUrl}`, // Homepage
-        `${baseUrl}/date/${date2}` // Date-specific page
+        `${baseUrl}`,
+        `${baseUrl}/date/${date2}`
       ];
       
+      //notify google
       const indexingResults = await notifyMultipleUrls(urlsToNotify);
       console.log('Google indexing results:', indexingResults);
+
+      //notify indexnow (multiple search engines)
+      const indexNowResult = await submitToIndexNow(urlsToNotify)
       
       const indexingSuccess = indexingResults.every(result => result?.success);
-      req.flash('success', `${scraping.message} & Google indexing: ${indexingSuccess ? 'Success' : 'Failed'}`);
+      req.flash('success', `${scraping.message} & Google indexing: ${indexingSuccess ? 'Success' : 'Failed'} & IndexNow: ${indexNowResult.success ? 'Success' : 'Failed'}`);
     } catch (indexingError) {
       console.error('Indexing notification failed:', indexingError);
       req.flash('success', scraping.message);
