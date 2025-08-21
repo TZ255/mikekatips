@@ -19,7 +19,7 @@ function createJWT(clientEmail, privateKey, scope) {
 
   const encodedHeader = Buffer.from(JSON.stringify(header)).toString('base64url');
   const encodedPayload = Buffer.from(JSON.stringify(payload)).toString('base64url');
-  
+
   const signatureInput = `${encodedHeader}.${encodedPayload}`;
   const signature = crypto
     .createSign('RSA-SHA256')
@@ -34,14 +34,14 @@ async function getAccessToken() {
   try {
     const privateKey = process.env.INDEXING_API_PRIVATE_KEY?.replace(/\\n/g, '\n');
     const clientEmail = process.env.INDEXING_API_CLIENT_EMAIL;
-    
+
     if (!privateKey || !clientEmail) {
       throw new Error('Missing indexing API credentials');
     }
 
     const jwt = createJWT(
-      clientEmail, 
-      privateKey, 
+      clientEmail,
+      privateKey,
       'https://www.googleapis.com/auth/indexing'
     );
 
@@ -64,7 +64,7 @@ async function getAccessToken() {
 async function notifyGoogle(url, type = 'URL_UPDATED') {
   try {
     const accessToken = await getAccessToken();
-    
+
     const response = await axios.post(
       'https://indexing.googleapis.com/v3/urlNotifications:publish',
       {
@@ -80,54 +80,48 @@ async function notifyGoogle(url, type = 'URL_UPDATED') {
     );
 
     console.log(`✅ Google indexing notification sent for ${url} (type: ${type})`);
-    return { 
-      success: true, 
+    return {
+      success: true,
       message: 'Indexing notification sent successfully',
-      data: response.data 
+      data: response.data
     };
   } catch (error) {
     console.error(`❌ Google indexing failed for ${url}:`, error.response?.data || error.message);
-    return { 
-      success: false, 
+    return {
+      success: false,
       message: error.response?.data?.error?.message || error.message,
-      error: error.response?.data || error.message 
+      error: error.response?.data || error.message
     };
   }
 }
 
 async function notifyMultipleUrls(urls, type = 'URL_UPDATED') {
   const results = [];
-  
+
   for (const url of urls) {
     try {
       const result = await notifyGoogle(url, type);
       results.push({ url, success: result.success, result });
-      
+
       // Small delay to avoid rate limiting
       await new Promise(resolve => setTimeout(resolve, 200));
     } catch (error) {
       results.push({ url, success: false, error: error.message });
     }
   }
-  
+
   return results;
 }
 
 // BING INDEXING API
 const submitToIndexNow = async (urlList) => {
   try {
-    const response = await axios.post(
-      "https://api.indexnow.org/IndexNow",
+    const response = await axios.post("https://api.indexnow.org/IndexNow",
       {
         host: "mikekatips.co.tz",
         key: "ca3c11def14944febd5ae1cd77de5149",
-        keyLocation: "https://mikekatips.co.tz/indexnow_key.txt",
+        keyLocation: "https://mikekatips.co.tz/ca3c11def14944febd5ae1cd77de5149.txt",
         urlList,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-        },
       }
     );
 
@@ -135,21 +129,21 @@ const submitToIndexNow = async (urlList) => {
       throw new Error(`IndexNow API returned status ${response.status}`);
     }
 
-    return {success: true}
+    return { success: true }
   } catch (error) {
     if (error.response) {
       console.error("Error:", error.response.status, error.response.data);
-      return {success: false, error: error.response.data};
+      return { success: false, error: error.response.data };
     } else {
       console.error("Error:", error.message);
-      return {success: false, error: error.message};
+      return { success: false, error: error.message };
     }
   }
 }
 
 
-module.exports = { 
-  notifyGoogle, 
+module.exports = {
+  notifyGoogle,
   notifyMultipleUrls,
   submitToIndexNow
 };
