@@ -20,7 +20,7 @@ router.post('/load-more-tips/:date', async (req, res) => {
     const remainingTips = await Tip.find({
       date: dateStr,
       isPremium: false
-    }).sort({ time: 1 }).skip(25);
+    }).sort({ time: 1 }).skip(50);
     
     res.render('zz-fragments/tips', { freeTips: remainingTips, layout: false });
   } catch (error) {

@@ -85,10 +85,11 @@
         <% }); %>
         <% } %>
 
-        <!-- Load More Button -->
+        <!-- Load More Button: Note 50: if freetips is 50, we know there maybe other matches -->
+        <% if (freeTips.length >= 50) { %>
         <div class="col-12 text-center mt-4 w-100 d-flex justify-content-center" id="load-more-container">
-            <div id="load-more-btn"
-                hx-post="/load-more-tips/<%= currentDate %>" hx-target="#load-more-container" hx-trigger="revealed" hx-swap="outerHTML">
+            <div id="load-more-btn" hx-post="/load-more-tips/<%= currentDate %>" hx-target="#load-more-container"
+                hx-trigger="revealed" hx-swap="outerHTML">
                 <div class="text-center" style="width: 4rem; height: 4rem;">
                     <div class="spinner-border text-dark" role="status">
                         <span class="visually-hidden">Loading...</span>
@@ -96,6 +97,7 @@
                 </div>
             </div>
         </div>
+        <% } %>
     </div>
     <% } %>
 

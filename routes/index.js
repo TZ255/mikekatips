@@ -77,7 +77,7 @@ router.get('/', freshUserInfo, async (req, res) => {
     const freeTips = await Tip.find({
       date: dateStr,
       isPremium: false
-    }).sort({ time: 1 }).limit(25);
+    }).sort({ time: 1 }).limit(50);
     
     // Fetch premium tips
     const premiumTips = await Tip.find({
@@ -129,7 +129,7 @@ router.get('/date/:date', freshUserInfo, async (req, res) => {
     const freeTips = await Tip.find({
       date: dateStr,
       isPremium: false
-    }).sort({ time: 1 }).limit(25);
+    }).sort({ time: 1 }).limit(50);
     
     // Fetch premium tips
     const premiumTips = await Tip.find({

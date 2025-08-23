@@ -1,6 +1,16 @@
-<!-- Variables -->
-<% title = `Tips za ${swahiliDay} ${currentDateDisplay} | MikekaTips` %>
+<!-- Home Page Variables -->
+<% if (page === "index") { %>
+<% title = `Tips na Utabiri wa Mechi za Leo` %>
+<% description = `Pata tips za soka zinazoshinda na odds za uhakika. Tips za uhakika, mikeka ya bure na mechi za leo. Code za mikeka ya leo pamoja na utabiri wa mechi za kesho` %>
+<% } %>
+
+<!-- Date Page Variables -->
+<% if (page === "index-date") { %>
+<% title = `Tips na Utabiri wa Mechi za ${swahiliDay} ${currentDateDisplay}` %>
 <% description = `Pata tips za soka zinazoshinda za ${swahiliDay}. Tips za bure, VIP na Premium. Shinda mikeka ya ${swahiliDay} kwa kutumia tips zetu za bure` %>
+<% } %>
+
+<!-- General Variables -->
 <% keywords = `betting tips ${swahiliDay.toLowerCase()}, soka, michezo, tanzania, tips za soka, mkeka wa leo, mikeka ya bure, codes za betpawa, mechi za ${currentDateDisplay}` %>
 <% page = page %>
 <% page_url = page_url %>
@@ -15,7 +25,8 @@
             <h1 class="display-5 fw-bold text-dark mb-3">
                 Tips za <%= swahiliDay %>
             </h1>
-            <p class="lead text-secondary fs-5">Pata tips na mikeka inayoshinda kila siku kutoka kwa wataalamu. Utabiri wa mechi za <%= swahiliDay.toLowerCase() %> <%= currentDateDisplay %></p>
+            <p class="lead text-secondary fs-5">Pata tips na mikeka inayoshinda kila siku kutoka kwa wataalamu. Utabiri
+                wa mechi za <%= swahiliDay.toLowerCase() %> <%= currentDateDisplay %></p>
         </div>
 
         <!-- Bootstrap Nav Tabs -->
