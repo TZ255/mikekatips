@@ -14,9 +14,12 @@
                     </small>
                 </div>
                 <div class="card-body p-3">
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="bi bi-clock me-2 text-muted"></i>
-                        <span class="fw-semibold text-dark"><%= tip.time %></span>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-clock me-2 text-muted"></i>
+                            <span class="fw-semibold text-dark"><%= tip.time %></span>
+                        </div>
+                        <span class="text-muted small"><%= new Date(tip.date).toLocaleDateString('sw-TZ', {day: '2-digit', month: '2-digit', year: 'numeric'}) %></span>
                     </div>
 
                     <div class="card-title fw-bold text-dark mb-2">
@@ -55,9 +58,12 @@
                         </small>
                     </div>
                     <div class="card-body p-3">
-                        <div class="d-flex align-items-center mb-2">
-                            <i class="bi bi-clock me-2 text-muted"></i>
-                            <span class="fw-semibold text-dark"><%= prediction.time %></span>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-clock me-2 text-muted"></i>
+                                <span class="fw-semibold text-dark"><%= prediction.time %></span>
+                            </div>
+                            <span class="text-muted small"><%= new Date(prediction.date).toLocaleDateString('sw-TZ', {day: '2-digit', month: '2-digit', year: 'numeric'}) %></span>
                         </div>
 
                         <div class="card-title fw-bold text-dark mb-2">
@@ -107,8 +113,8 @@
             style="width: 100px; height: 100px;">
             <i class="bi bi-info-circle text-muted" style="font-size: 3rem;"></i>
         </div>
-        <h4 class="text-dark fw-semibold mb-3">Hakuna tips za bure kwa siku hii</h4>
-        <p class="text-secondary">Rudi baadaye au angalia tips za kulipwa</p>
+        <h4 class="text-dark fw-semibold mb-3">Tips na Utabiri wa bure kwa siku ya <%= swahiliDay %> bado hujaandaliwa</h4>
+        <p class="text-secondary">Tafadhali rudi tena baadaye kidogo utakuwa tayari. Asante!</p>
     </div>
     <% } %>
 </div>

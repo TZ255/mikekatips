@@ -12,15 +12,21 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">
+                    <a class="nav-link <%= (page === 'index' || page === 'index-jana' || page === 'index-date') ? 'active' : '' %>" href="/">
                         <i class="bi bi-house-fill"></i>
                         Nyumbani
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/prediction">
+                    <a class="nav-link <%= page === 'prediction' ? 'active' : '' %>" href="/prediction">
                         <i class="bi bi-graph-up-arrow"></i>
                         Predictions
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%= page === 'index-kesho' ? 'active' : '' %>" href="/utabiri-wa-mechi-za-kesho">
+                        <i class="bi bi-arrow-right-circle"></i>
+                        Kesho
                     </a>
                 </li>
                 <li class="nav-item">

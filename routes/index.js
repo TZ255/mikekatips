@@ -28,52 +28,48 @@ const swahiliDays = {
   6: 'Jumamosi'     // Saturday
 };
 
-// Helper function to check if tips exist for a date
-async function checkTipsExist(dateStr) {
-  const tipsCount = await Tip.countDocuments({ date: dateStr });
-  return tipsCount > 0;
-}
 
 // Helper function to generate dynamic title and navigation data
-async function generateDateNavigation(currentDate) {
+function generateDateNavigation(currentDate, currentRoute = '/') {
   const dateStr = currentDate.format('YYYY-MM-DD');
-  const prevDate = currentDate.subtract(1, 'day');
-  const nextDate = currentDate.add(1, 'day');
-  
-  // Check if tips exist for navigation dates
-  const [hasPrevTips, hasNextTips] = await Promise.all([
-    checkTipsExist(prevDate.format('YYYY-MM-DD')),
-    checkTipsExist(nextDate.format('YYYY-MM-DD'))
-  ]);
+  const today = dayjs().tz(TZ);
+  const yesterday = today.subtract(1, 'day');
+  const tomorrow = today.add(1, 'day');
   
   // Generate Swahili day name and title
   const dayOfWeek = currentDate.day();
   const swahiliDay = swahiliDays[dayOfWeek];
   const formattedDate = currentDate.format('DD/MM/YYYY');
   
+  // Determine active navigation based on current route or date comparison
+  let activeNav = 'leo'; // default
+  if (currentRoute === '/utabiri-wa-mechi-za-jana' || currentDate.isSame(yesterday, 'day')) {
+    activeNav = 'jana';
+  } else if (currentRoute === '/utabiri-wa-mechi-za-kesho' || currentDate.isSame(tomorrow, 'day')) {
+    activeNav = 'kesho';
+  }
+  
   return {
-    prevDate: prevDate.format('YYYY-MM-DD'),
-    nextDate: nextDate.format('YYYY-MM-DD'),
-    hasPrevTips,
-    hasNextTips,
+    activeNav,
     currentDateDisplay: formattedDate,
     currentDateFull: `${swahiliDay}, ${formattedDate}`,
-    prevDateDisplay: prevDate.format('DD/MM'),
-    nextDateDisplay: nextDate.format('DD/MM'),
-    swahiliDay
+    swahiliDay,
+    yesterdayDate: yesterday.format('YYYY-MM-DD'),
+    todayDate: today.format('YYYY-MM-DD'),
+    tomorrowDate: tomorrow.format('YYYY-MM-DD')
   };
 }
 
-// Home page
+// Home page - Today's matches
 router.get('/', freshUserInfo, async (req, res) => {
   try {
     const currentDate = dayjs().tz(TZ, false);
     const dateStr = currentDate.format('YYYY-MM-DD');
     
     // Generate navigation data
-    const navData = await generateDateNavigation(currentDate);
+    const navData = generateDateNavigation(currentDate, '/');
     
-    // Fetch free tips (limit to first 25)
+    // Fetch free tips (limit to first 50)
     const freeTips = await Tip.find({
       date: dateStr,
       isPremium: false
@@ -116,16 +112,16 @@ router.get('/', freshUserInfo, async (req, res) => {
   }
 });
 
-// Date-specific tips page
-router.get('/date/:date', freshUserInfo, async (req, res) => {
+// Yesterday's matches
+router.get('/utabiri-wa-mechi-za-jana', freshUserInfo, async (req, res) => {
   try {
-    const currentDate = dayjs(req.params.date).tz(TZ, false);
+    const currentDate = dayjs().tz(TZ).subtract(1, 'day');
     const dateStr = currentDate.format('YYYY-MM-DD');
     
     // Generate navigation data
-    const navData = await generateDateNavigation(currentDate);
+    const navData = generateDateNavigation(currentDate, '/utabiri-wa-mechi-za-jana');
     
-    // Fetch free tips (limit to first 10)
+    // Fetch free tips
     const freeTips = await Tip.find({
       date: dateStr,
       isPremium: false
@@ -137,7 +133,107 @@ router.get('/date/:date', freshUserInfo, async (req, res) => {
       isPremium: true
     }).sort({ time: 1 });
     
-    // Fetch recent predictions (last 3)
+    // Fetch recent predictions
+    const predictions = await Prediction.find({ 
+      date: dateStr,
+      status: 'published' 
+    });
+
+    //add jana to the swahiliday  
+    navData.swahiliDay = `Jana, ${navData.swahiliDay}`
+    
+    // Generate modified date for SEO
+    const today = dayjs().tz(TZ);
+    const modifiedDate = currentDate.endOf('day').format();
+    
+    res.render('index', {
+      page_url: `https://mikekatips.co.tz/utabiri-wa-mechi-za-jana`,
+      page: 'index-jana',
+      freeTips,
+      premiumTips,
+      predictions,
+      currentDate: dateStr,
+      modifiedDate,
+      ...navData
+    });
+  } catch (error) {
+    console.error('Jana route error:', error);
+    res.status(500).render('500', { title: 'Server Error' });
+  }
+});
+
+// Tomorrow's matches
+router.get('/utabiri-wa-mechi-za-kesho', freshUserInfo, async (req, res) => {
+  try {
+    const currentDate = dayjs().tz(TZ).add(1, 'day');
+    const dateStr = currentDate.format('YYYY-MM-DD');
+    
+    // Generate navigation data
+    const navData = generateDateNavigation(currentDate, '/utabiri-wa-mechi-za-kesho');
+    
+    // Fetch free tips
+    const freeTips = await Tip.find({
+      date: dateStr,
+      isPremium: false
+    }).sort({ time: 1 }).limit(50);
+    
+    // Fetch premium tips
+    const premiumTips = await Tip.find({
+      date: dateStr,
+      isPremium: true
+    }).sort({ time: 1 });
+    
+    // Fetch recent predictions
+    const predictions = await Prediction.find({ 
+      date: dateStr,
+      status: 'published' 
+    });
+
+    //add kesho to the swahiliday  
+    navData.swahiliDay = `Kesho, ${navData.swahiliDay}`
+    
+    // Generate modified date for SEO
+    const today = dayjs().tz(TZ);
+    const modifiedDate = today.startOf('day').format();
+    
+    res.render('index', {
+      page_url: `https://mikekatips.co.tz/utabiri-wa-mechi-za-kesho`,
+      page: 'index-kesho',
+      freeTips,
+      premiumTips,
+      predictions,
+      currentDate: dateStr,
+      modifiedDate,
+      ...navData
+    });
+  } catch (error) {
+    console.error('Kesho route error:', error);
+    res.status(500).render('500', { title: 'Server Error' });
+  }
+});
+
+// Date-specific tips page (kept for SEO purposes)
+router.get('/date/:date', freshUserInfo, async (req, res) => {
+  try {
+    const currentDate = dayjs(req.params.date).tz(TZ, false);
+    const dateStr = currentDate.format('YYYY-MM-DD');
+    
+    // Generate navigation data
+    const navData = generateDateNavigation(currentDate);
+    
+    // Fetch free tips (limit to first 50)
+    const freeTips = await Tip.find({
+      date: dateStr,
+      isPremium: false
+    }).sort({ time: 1 }).limit(50);
+    
+    // Fetch premium tips
+    const premiumTips = await Tip.find({
+      date: dateStr,
+      isPremium: true
+    }).sort({ time: 1 });
+    
+    // Fetch recent predictions
     const predictions = await Prediction.find({ 
       date: dateStr,
       status: 'published' 

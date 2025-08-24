@@ -14,7 +14,7 @@
                 <h6 class="text-light fw-semibold mb-3">Viungo</h6>
                 <ul class="list-unstyled">
                     <li class="mb-2">
-                        <a href="/" class="text-light text-decoration-none">
+                        <a href="/" class="text-light text-decoration-none <%= (page === 'index' || page === 'index-jana' || page === 'index-date') ? 'text-warning fw-semibold' : '' %>">
                             <i class="bi bi-house-fill me-2"></i>Nyumbani
                         </a>
                     </li>
@@ -24,8 +24,13 @@
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="/prediction" class="text-light text-decoration-none">
+                        <a href="/prediction" class="text-decoration-none <%= page === 'prediction' ? 'text-warning fw-semibold' : 'text-light' %>">
                             <i class="bi bi-substack me-2"></i>Predictions
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="/utabiri-wa-mechi-za-kesho" class="text-decoration-none <%= page === 'index-kesho' ? 'text-warning fw-semibold' : 'text-light' %>" title="Utabiri wa mechi za kesho">
+                            <i class="bi bi-arrow-right-circle me-2"></i>Kesho
                         </a>
                     </li>
                 </ul>

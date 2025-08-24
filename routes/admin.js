@@ -108,8 +108,7 @@ router.post('/admin/tips/add/bettingtipsters', adminMiddleware, async (req, res)
       const baseUrl = 'https://mikekatips.co.tz';
       
       const urlsToNotify = [
-        `${baseUrl}`,
-        `${baseUrl}/date/${date2}`
+        `${baseUrl}/utabiri-wa-mechi-za-kesho`
       ];
       
       //notify google
