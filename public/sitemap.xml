@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+       <loc>https://mikekatips.co.tz/</loc>
+       <lastmod>2025-09-10T21:00:00+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>1.0000</priority>
+  </url>
+  <url>
+       <loc>https://mikekatips.co.tz/prediction</loc>
+       <lastmod>2025-09-11T12:39:56+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://mikekatips.co.tz/utabiri-wa-mechi-za-kesho</loc>
+       <lastmod>2025-09-10T21:00:00+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://mikekatips.co.tz/utabiri-wa-mechi-za-jana</loc>
+       <lastmod>2025-09-10T20:59:59+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.8000</priority>
+  </url>
+</urlset>
