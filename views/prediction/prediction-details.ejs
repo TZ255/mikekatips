@@ -3,7 +3,7 @@
 <% description = description %>
 <% keywords = keywords %>
 <% page = 'prediction' %>
-<% page_url = `https://mikekatips.co.tz/prediction/${prediction.slug}` %>
+<% page_url = `https://mikekatips.co.tz/prediction/${slug}` %>
 
 <main>
     <!-- Breadcrumb -->
@@ -20,7 +20,7 @@
                         <a href="/prediction" class="text-decoration-none">Predictions</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <%= prediction.title.length > 50 ? prediction.title.substring(0, 50) + '...' : prediction.title %>
+                        <%= title.length > 50 ? title.substring(0, 50) + '...' : title %>
                     </li>
                 </ol>
             </nav>
@@ -36,12 +36,12 @@
                     <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
                         <span class="badge bg-success px-3 py-2 fs-6">
                             <i class="bi bi-trophy-fill me-1"></i>
-                            <%= prediction.league %>
+                            <%= league %>
                         </span>
                         <span class="badge bg-primary px-3 py-2 fs-6">
                             <i class="bi bi-calendar-event me-1"></i>
                             <span class="d-none d-sm-inline">
-                                <%= new Date(prediction.date).toLocaleDateString('sw-TZ', { 
+                                <%= new Date(date).toLocaleDateString('sw-TZ', { 
                                     weekday: 'long',
                                     day: '2-digit', 
                                     month: 'long',
@@ -49,7 +49,7 @@
                                 }) %>
                             </span>
                             <span class="d-sm-none">
-                                <%= new Date(prediction.date).toLocaleDateString('sw-TZ', { 
+                                <%= new Date(date).toLocaleDateString('sw-TZ', { 
                                     day: '2-digit', 
                                     month: 'short',
                                     year: '2-digit'
@@ -58,16 +58,16 @@
                         </span>
                         <span class="badge bg-info px-3 py-2 fs-6">
                             <i class="bi bi-clock me-1"></i>
-                            <%= prediction.time %>
+                            <%= time %>
                         </span>
                     </div>
 
                     <h1 class="display-5 fw-bold text-dark mb-4">
-                        <%= prediction.title %>
+                        <%= title %>
                     </h1>
 
                     <p class="lead text-muted fs-5 mb-4">
-                        <%= prediction.snippet_text %>
+                        <%= description %>
                     </p>
 
                     <!-- Odds & Affiliate -->
@@ -75,13 +75,13 @@
                         <div class="col-md-6">
                             <div class="card border-warning bg-warning bg-opacity-10 p-4 rounded-4">
                                 <div class="text-center">
-                                    <h6 class="text-muted mb-2">Recommended Odds</h6>
+                                    <div class="h6 text-muted fw-bold mb-2"><%= tip %></div>
                                     <div class="display-4 fw-bold text-warning mb-3">
-                                        <%= prediction.odds %>
+                                        <%= odds %>
                                     </div>
                                     <div class="mb-3">
                                         <span class="badge bg-light text-dark px-3 py-2 fs-6">
-                                            <%= prediction.affiliate.toUpperCase() %>
+                                            <%= affiliate.toUpperCase() %>
                                         </span>
                                     </div>
                                     <button class="btn btn-warning btn-lg px-4 py-2 rounded-pill fw-semibold">
@@ -96,7 +96,7 @@
 
                 <!-- Article Content -->
                 <div class="article-content">
-                    <%- prediction.body %>
+                    <%- contentHtml %>
                 </div>
 
                 <!-- Back to Predictions -->

@@ -5,6 +5,7 @@ const Prediction = require('../models/Prediction');
 const { authMiddleware, adminMiddleware } = require('../middleware/auth');
 const { processTipsForDate } = require('../utils/tipsProcessor');
 const { notifyMultipleUrls, submitToIndexNow } = require('../utils/googleIndexing');
+const { GeneratePredictionWithAI } = require('../utils/predictionGPT');
 
 const router = express.Router();
 
@@ -253,23 +254,23 @@ router.get('/admin/predictions/add', adminMiddleware, (req, res) => {
 // Create new prediction
 router.post('/admin/predictions/add', adminMiddleware, async (req, res) => {
   try {
-    const { 
-      title, snippet_text, body, league, date, time, odds, 
-      affiliate, description, keywords, status 
-    } = req.body;
+    const { html, affiliate } = req.body;
+
+    const generated_md = await GeneratePredictionWithAI(html);
     
     const newPrediction = new Prediction({
-      title,
-      snippet_text,
-      body,
-      league,
-      date,
-      time,
-      odds,
+      title: generated_md.title,
+      description: generated_md.description,
+      body: generated_md.markdown_body,
+      league: generated_md.league,
+      match: generated_md.match,
+      date: generated_md.date,
+      time: generated_md.time,
+      prediction: generated_md.prediction,
+      odds: generated_md.odds,
       affiliate: affiliate || 'betway',
-      description,
-      keywords,
-      status: status || 'published'
+      keywords: generated_md.keywords,
+      status: 'published'
     });
     
     await newPrediction.save();

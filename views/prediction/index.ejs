@@ -26,7 +26,7 @@
             <div class="row g-4">
                 <% predictions.forEach(prediction => { %>
                     <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative" style="cursor: pointer;" onclick="window.location.href='/prediction/<%= prediction.slug %>'">
+                        <a href="/prediction/<%= prediction.slug %>" class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative" style="cursor: pointer; text-decoration: none;">
                             <!-- League Badge -->
                             <div class="position-absolute top-0 start-0 m-3">
                                 <span class="badge bg-success px-3 py-2 rounded-pill">
@@ -59,7 +59,7 @@
                                 
                                 <!-- Snippet -->
                                 <p class="card-text text-muted mb-4 flex-grow-1">
-                                    <%= prediction.snippet_text %>
+                                    <%= prediction.description %>
                                 </p>
                                 
                                 <!-- Footer -->
@@ -79,7 +79,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 <% }); %>
             </div>

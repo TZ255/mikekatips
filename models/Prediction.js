@@ -10,16 +10,19 @@ const predictionSchema = new mongoose.Schema({
     type: String,
     unique: true
   },
-  snippet_text: {
-    type: String,
-    required: true,
-    maxlength: 200
-  },
   body: {
     type: String,
     required: true
   },
   league: {
+    type: String,
+    required: true
+  },
+  match: {
+    type: String,
+    required: true
+  },
+  prediction: {
     type: String,
     required: true
   },
@@ -43,7 +46,6 @@ const predictionSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-    maxlength: 160
   },
   keywords: {
     type: String,

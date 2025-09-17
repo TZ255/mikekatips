@@ -1,5 +1,6 @@
 const express = require('express');
 const Prediction = require('../models/Prediction');
+const { parseMarkdown } = require('../utils/mdParser');
 const { freshUserInfo } = require('../middleware/auth');
 
 const router = express.Router();
@@ -36,12 +37,22 @@ router.get('/prediction/:slug', freshUserInfo, async (req, res) => {
         title: 'Prediction Haijapatikana - MikekaTips'
       });
     }
+
+    const parsedContent = await parseMarkdown(prediction.body)
     
     res.render('prediction/prediction-details', {
-      prediction,
       title: prediction.title + ' - MikekaTips',
       description: prediction.description,
-      keywords: prediction.keywords
+      keywords: prediction.keywords,
+      tip: prediction.prediction,
+      odds: prediction.odds,
+      match: prediction.match,
+      league: prediction.league,
+      date: prediction.date,
+      time: prediction.time,
+      contentHtml: parsedContent,
+      slug: prediction.slug,
+      affiliate: prediction.affiliate
     });
   } catch (error) {
     console.error('Prediction details route error:', error);

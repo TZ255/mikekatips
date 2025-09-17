@@ -136,8 +136,8 @@ router.get('/utabiri-wa-mechi-za-jana', freshUserInfo, async (req, res) => {
     // Fetch recent predictions
     const predictions = await Prediction.find({ 
       date: dateStr,
-      status: 'published' 
-    });
+      status: 'published'
+    }).select('-body'); // Exclude body for listing
 
     //add jana to the swahiliday  
     navData.swahiliDay = `Jana, ${navData.swahiliDay}`
