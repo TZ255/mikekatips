@@ -36,8 +36,8 @@ const freshUserInfo = async (req, res, next) => {
       await user.save()
     }
 
-    // Update req.user with fresh payment data
-    req.user = {
+    // Build fresh user payload
+    const fresh = {
       id: user._id,
       uid: user.uid,
       email: user.email,
@@ -46,6 +46,18 @@ const freshUserInfo = async (req, res, next) => {
       isPaid: user.isPaid,
       expiresAt: user.expiresAt
     };
+
+    // Expose fresh user for this request and views
+    req.user = fresh;
+    res.locals.user = fresh;
+
+    // Keep session user in sync so subsequent requests see updated info
+    // Only update when something changed to avoid unnecessary session writes
+    const keys = ['id', 'uid', 'email', 'name', 'role', 'isPaid', 'expiresAt'];
+    const changed = !sessionUser || keys.some(k => String(sessionUser[k]) !== String(fresh[k]));
+    if (changed) {
+      req.session.user = fresh;
+    }
 
     next();
   } catch (error) {
@@ -78,8 +90,8 @@ const adminMiddleware = async (req, res, next) => {
       return res.redirect('/');
     }
 
-    // Update req.user with fresh data
-    req.user = {
+    // Build fresh user payload
+    const fresh = {
       id: user._id,
       uid: user.uid,
       email: user.email,
@@ -88,6 +100,16 @@ const adminMiddleware = async (req, res, next) => {
       isPaid: user.isPaid,
       expiresAt: user.expiresAt
     };
+    // Expose fresh user for this request and views
+    req.user = fresh;
+    res.locals.user = fresh;
+    // Sync session user if changed
+    const sessionUser = req.session.user;
+    const keys = ['id', 'uid', 'email', 'name', 'role', 'isPaid', 'expiresAt'];
+    const changed = !sessionUser || keys.some(k => String(sessionUser[k]) !== String(fresh[k]));
+    if (changed) {
+      req.session.user = fresh;
+    }
 
     next();
   } catch (error) {

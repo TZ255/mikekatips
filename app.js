@@ -100,9 +100,11 @@ app.use(flash());
 
 // Global variables for templates
 app.use((req, res, next) => {
-  // Set user from session for Firebase auth
-  res.locals.user = req.session.user || null;
-  res.locals.messages = req.flash();
+  // Prefer request-scoped user (fresh), fallback to session user
+  res.locals.user = req.user || req.session.user || null;
+  // Only read (and clear) flash if it exists to avoid modifying new sessions
+  const hasFlash = req.session && req.session.flash && Object.keys(req.session.flash).length > 0;
+  res.locals.messages = hasFlash ? req.flash() : {};
   next();
 });
 
