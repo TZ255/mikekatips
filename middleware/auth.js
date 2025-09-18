@@ -104,9 +104,9 @@ const adminMiddleware = async (req, res, next) => {
     req.user = fresh;
     res.locals.user = fresh;
     // Sync session user if changed
-    const sessionUser = req.session.user;
+    const sessUser = req.session.user;
     const keys = ['id', 'uid', 'email', 'name', 'role', 'isPaid', 'expiresAt'];
-    const changed = !sessionUser || keys.some(k => String(sessionUser[k]) !== String(fresh[k]));
+    const changed = !sessUser || keys.some(k => String(sessUser[k]) !== String(fresh[k]));
     if (changed) {
       req.session.user = fresh;
     }
