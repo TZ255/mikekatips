@@ -75,16 +75,16 @@
                         <div class="col-md-6">
                             <div class="card border-warning bg-warning bg-opacity-10 p-4 rounded-4">
                                 <div class="text-center">
-                                    <div class="h6 text-muted fw-bold mb-2"><%= tip %></div>
+                                    <div class="h6 text-muted fw-bold mb-2"><%= tip?.toUpperCase() %></div>
                                     <div class="display-4 fw-bold text-warning mb-3">
                                         <%= odds %>
                                     </div>
                                     <div class="mb-3">
                                         <span class="badge bg-light text-dark px-3 py-2 fs-6">
-                                            <%= affiliate.toUpperCase() %>
+                                            <%= affiliate?.toUpperCase() %>
                                         </span>
                                     </div>
-                                    <button class="btn btn-warning btn-lg px-4 py-2 rounded-pill fw-semibold">
+                                    <button class="btn btn-warning btn-lg px-4 py-2 rounded-pill fw-semibold" onclick="window.open('/goto/<%= affiliate %>', '_blank')">
                                         BET NOW
                                         <i class="bi bi-cursor-fill ms-2"></i>
                                     </button>

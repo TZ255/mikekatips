@@ -8,6 +8,7 @@ const Prediction = require('../models/Prediction');
 const { freshUserInfo } = require('../middleware/auth');
 const { scrapeTips } = require('../utils/tipsScraper');
 const { processTipsForDate } = require('../utils/tipsProcessor');
+const { LinkToRedirect } = require('../utils/affLinktoRedirect');
 
 const router = express.Router();
 
@@ -158,6 +159,18 @@ router.get('/utabiri-wa-mechi-za-jana', freshUserInfo, async (req, res) => {
     });
   } catch (error) {
     console.error('Jana route error:', error);
+    res.status(500).render('500', { title: 'Server Error' });
+  }
+});
+
+//redirect to affiliate link based on comp
+router.get('/goto/:comp', async (req, res) => {
+  try {
+    const comp = req.params.comp;
+    const redirectLink = await LinkToRedirect(comp);
+    res.redirect(redirectLink);
+  } catch (error) {
+    console.error('Affiliate redirect error:', error);
     res.status(500).render('500', { title: 'Server Error' });
   }
 });
