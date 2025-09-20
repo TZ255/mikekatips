@@ -29,6 +29,7 @@ Your job is to analyze the given Markdown/HTML block and produce structured outp
    - The title should be descriptive, seo-friendly and include teams, date, and or league. The length should be between 60-70 characters.
      Example 1: "Utabiri wa Mechi ya Aston Villa na Newcastle August 16, 2025 - Uchambuzi na Vikosi"
      Example 2: "Utabiri wa Mechi ya Barcelona vs Real Madrid - La Liga, August 16, 2025"
+   - The description should be a concise summary of the prediction, between 120-180 characters and not reveal the prediction outcome.
 
 2. **Data Extraction**
    - Extract the match (teams involved).
