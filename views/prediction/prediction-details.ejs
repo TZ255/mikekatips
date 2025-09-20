@@ -100,11 +100,15 @@
                 </div>
 
                 <!-- Other Today's Predictions, styling the list to shows the match time and date -->
-                 <% if (todays_other_predictions.length > 0) { %>
+                 <% if (other_predictions.length > 0) { %>
                   <div class="mt-5 pt-4 border-top">
-                    <h3 class="mb-4 text-center">Predictions Zingine za Leo</h3>
+                    <h3 class="mb-4 text-center">Predictions Zingine za <%= new Date(date).toLocaleDateString('sw-TZ', { 
+                        day: '2-digit', 
+                        month: 'long',
+                        year: 'numeric'
+                    }) %></h3>
                     <div class="list-group">
-                        <% todays_other_predictions.forEach(pred => { %>
+                        <% other_predictions.forEach(pred => { %>
                         <a href="/prediction/<%= pred.slug %>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center link-primary">
                             <div>
                                 <div class="fw-bold">Utabiri wa mechi ya <%= pred.match %></div>

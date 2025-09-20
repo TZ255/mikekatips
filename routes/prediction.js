@@ -42,8 +42,8 @@ router.get('/prediction/:slug', freshUserInfo, async (req, res) => {
     const date = new Date().toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Africa/Nairobi' });
 
     //get todays predictions, exclude current slug
-    const todays_other_predictions = await Prediction.find({ 
-      date: date,
+    const other_predictions = await Prediction.find({ 
+      date: prediction.date,
       status: 'published',
       slug: { $ne: req.params.slug }
     }).select('title slug match date time').sort('time');
@@ -51,7 +51,7 @@ router.get('/prediction/:slug', freshUserInfo, async (req, res) => {
     const parsedContent = await parseMarkdown(prediction.body)
     
     res.render('prediction/prediction-details', {
-      todays_other_predictions,
+      other_predictions,
       title: prediction.title + ' - MikekaTips',
       description: prediction.description,
       keywords: prediction.keywords,
