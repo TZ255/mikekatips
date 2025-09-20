@@ -30,6 +30,7 @@ Your job is to analyze the given Markdown/HTML block and produce structured outp
      Example 1: "Utabiri wa Mechi ya Aston Villa na Newcastle August 16, 2025 - Uchambuzi na Vikosi"
      Example 2: "Utabiri wa Mechi ya Barcelona vs Real Madrid - La Liga, August 16, 2025"
    - The description should be a concise summary of the prediction, between 120-180 characters and not reveal the prediction outcome.
+     Example: "Utabiri wa mechi ya Aston Villa dhidi ya Newcastle tarehe 16 Agosti 2025. Pata uchambuzi wa kina, vikosi vya timu, na Chaguo bora la kubashiri mechi hii."
 
 2. **Data Extraction**
    - Extract the match (teams involved).
