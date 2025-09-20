@@ -38,9 +38,20 @@ router.get('/prediction/:slug', freshUserInfo, async (req, res) => {
       });
     }
 
+    //todays date in yyyy-mm-dd tanzania timezone
+    const date = new Date().toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Africa/Nairobi' });
+
+    //get todays predictions, exclude current slug
+    const todays_other_predictions = await Prediction.find({ 
+      date: date,
+      status: 'published',
+      slug: { $ne: req.params.slug }
+    }).select('title slug match date time').sort('time');
+
     const parsedContent = await parseMarkdown(prediction.body)
     
     res.render('prediction/prediction-details', {
+      todays_other_predictions,
       title: prediction.title + ' - MikekaTips',
       description: prediction.description,
       keywords: prediction.keywords,

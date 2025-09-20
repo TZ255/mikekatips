@@ -99,11 +99,37 @@
                     <%- contentHtml %>
                 </div>
 
+                <!-- Other Today's Predictions, styling the list to shows the match time and date -->
+                 <% if (todays_other_predictions.length > 0) { %>
+                  <div class="mt-5 pt-4 border-top">
+                    <h3 class="mb-4 text-center">Predictions Zingine za Leo</h3>
+                    <div class="list-group">
+                        <% todays_other_predictions.forEach(pred => { %>
+                        <a href="/prediction/<%= pred.slug %>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center link-primary">
+                            <div>
+                                <div class="fw-bold">Utabiri wa mechi ya <%= pred.match %></div>
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar-event me-1"></i>
+                                    <%= new Date(pred.date).toLocaleDateString('sw-TZ', { 
+                                        day: '2-digit', 
+                                        month: 'short',
+                                        year: '2-digit'
+                                    }) %>
+                                    &nbsp; | &nbsp;
+                                    <i class="bi bi-clock me-1"></i>
+                                    <%= pred.time %>
+                                </small>
+                            </div>
+                        </a>
+                        <% }) %>
+                    </div>
+                 <% } %>
+
                 <!-- Back to Predictions -->
                 <div class="text-center mt-5 pt-4 border-top">
                     <a href="/prediction" class="btn btn-outline-primary btn-lg px-4 py-2 rounded-pill">
                         <i class="bi bi-arrow-left me-2"></i>
-                        Rudi kwa Predictions
+                        Rudi Kwa Predictions
                     </a>
                 </div>
             </div>
