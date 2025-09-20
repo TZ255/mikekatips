@@ -261,7 +261,7 @@ router.post('/admin/predictions/add', adminMiddleware, async (req, res) => {
     const newPrediction = new Prediction({
       title: generated_md.title,
       description: generated_md.description,
-      body: generated_md.markdown_body,
+      body: html,
       league: generated_md.league,
       match: generated_md.match,
       date: generated_md.date,
