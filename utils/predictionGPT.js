@@ -36,7 +36,7 @@ Your job is to analyze the given Markdown/HTML block and produce structured outp
    - Extract the match (teams involved).
    - Extract the betting prediction in common formats, e.g., "Bayern Munich Win", "Over 2.5", "GG".
    - Extract the league name.
-   - Extract the odds in decimal format (e.g., 1.75, 2.50).
+   - Extract the odds in decimal format (e.g., 1.75, 2.50). The odds for the prediction, not the overall match odds.
    - Extract the match date in "YYYY-MM-DD" format and time in "HH:MM" 24-hour format.
 
 ## Final Output:
