@@ -1,76 +1,148 @@
 <!-- Article Content Styles -->
 <style>
     .article-content {
-        font-size: 1.1rem;
-        line-height: 1.7;
-        color: #333;
-    }
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #2c2c2c;
+    max-width: 850px; /* keeps long text readable on large screens */
+    margin: 0 auto; /* center the content */
+    padding: 0 1rem;
+}
 
-    .article-content h1,
-    .article-content h2 {
-        color: #007bff;
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-        font-weight: bold;
-    }
+/* Headings */
+.article-content h1,
+.article-content h2 {
+    color: #0056b3;
+    margin-top: 2.25rem;
+    margin-bottom: 1.2rem;
+    font-weight: 700;
+    line-height: 1.3;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 0.3rem;
+}
 
-    .article-content h3,
-    .article-content h4 {
-        color: #495057;
-        margin-top: 1.5rem;
-        margin-bottom: 0.75rem;
-        font-weight: 600;
-    }
+.article-content h3,
+.article-content h4 {
+    color: #343a40;
+    margin-top: 1.75rem;
+    margin-bottom: 0.9rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
 
-    .article-content p {
-        margin-bottom: 1.25rem;
-        text-align: justify;
-    }
+/* Paragraphs */
+.article-content p {
+    margin-bottom: 1.35rem;
+    text-align: justify;
+}
 
-    .article-content ul,
-    .article-content ol {
-        margin-bottom: 1.25rem;
-        padding-left: 2rem;
-    }
+/* Lists */
+.article-content ul,
+.article-content ol {
+    margin-bottom: 1.35rem;
+    padding-left: 1.75rem;
+}
 
-    .article-content li {
-        margin-bottom: 0.5rem;
-    }
+.article-content li {
+    margin-bottom: 0.45rem;
+}
 
-    .article-content blockquote {
-        border-left: 4px solid #007bff;
-        padding-left: 1.5rem;
-        margin: 1.5rem 0;
-        font-style: italic;
-        color: #6c757d;
-        background-color: #f8f9fa;
-        padding: 1rem 1.5rem;
-        border-radius: 0 8px 8px 0;
-    }
+/* Blockquotes */
+.article-content blockquote {
+    border-left: 4px solid #0056b3;
+    background-color: #f8f9fa;
+    margin: 1.75rem 0;
+    padding: 1.25rem 1.5rem;
+    font-style: italic;
+    font-size: 1rem;
+    color: #555;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
 
-    .article-content img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 8px;
-        margin: 1.5rem 0;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+/* Images */
+.article-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin: 1.75rem 0;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
 
+/* Tables */
+.article-content {
+    width: 100%;
+    overflow-x: auto; /* scroll only if really needed */
+}
+
+.article-content table {
+    width: 100%;
+    margin: 1.75rem 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 15px;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    table-layout: fixed;
+}
+
+.article-content th,
+.article-content td {
+    padding: 0.9rem 1rem;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #dee2e6;
+    word-wrap: break-word;
+}
+
+.article-content th {
+    background-color: #f1f3f5;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #212529;
+}
+
+.article-content tr:last-child td {
+    border-bottom: none;
+}
+
+.article-content tr:nth-child(even) td {
+    background-color: #fafafa;
+}
+
+.article-content tr:hover td {
+    background-color: #f6f8fa;
+    transition: background 0.2s ease-in-out;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 992px) {
+    .article-content {
+        font-size: 1rem;
+        padding: 0 0.75rem;
+    }
+}
+
+@media (max-width: 768px) {
     .article-content table {
-        width: 100%;
-        margin: 1.5rem 0;
-        border-collapse: collapse;
+        font-size: 13px;
     }
-
     .article-content th,
     .article-content td {
-        border: 1px solid #dee2e6;
-        padding: 0.75rem;
-        text-align: left;
+        padding: 0.65rem 0.75rem;
     }
+}
 
-    .article-content th {
-        background-color: #f8f9fa;
-        font-weight: 600;
+@media (max-width: 576px) {
+    .article-content table {
+        font-size: 12px;
     }
+    .article-content th,
+    .article-content td {
+        padding: 0.5rem 0.6rem;
+    }
+}
+
 </style>
