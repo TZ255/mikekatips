@@ -38,6 +38,7 @@ const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 const paymentRoutes = require('./routes/payment');
 const predictionRoutes = require('./routes/prediction');
+const zenoRoutes = require('./routes/zeno');
 const htmxRoutes = require('./routes/htmx');
 
 const app = express()
@@ -55,20 +56,12 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(expressLayouts);
 app.set('layout', path.join(__dirname, 'views/0-layouts/main'));
-
-// Middleware
-const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://mikekatips.fly.dev', 'https://mikekatips.co.tz', 'https://mikekatips-production.up.railway.app'] 
-    : 'http://localhost:3000',
-  credentials: true,
-  optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
+//accept cors from all sites
+app.use(cors());
 
 // Trust proxy for Fly.io
 if (process.env.NODE_ENV === 'production') {
@@ -114,6 +107,7 @@ app.use(paymentRoutes);
 app.use(authRoutes);
 app.use(predictionRoutes);
 app.use(htmxRoutes);
+app.use(zenoRoutes);
 app.use(adminRoutes);
 
 // 404 handler

@@ -9,6 +9,7 @@ const { freshUserInfo } = require('../middleware/auth');
 const { scrapeTips } = require('../utils/tipsScraper');
 const { processTipsForDate } = require('../utils/tipsProcessor');
 const { LinkToRedirect } = require('../utils/affLinktoRedirect');
+const { unconfirmUserSubscription } = require('../utils/confirmSubscription');
 
 const router = express.Router();
 
@@ -286,6 +287,13 @@ router.get('/terms-of-service', (req, res) => {
   res.render('terms-of-service', {
     title: 'Masharti ya Huduma - MikekaTips.co.tz'
   });
+});
+
+//disabling user payments
+router.get('/payments/disable', (req, res) => {
+  // Logic to disable user payments
+  unconfirmUserSubscription("janjatzblog@gmail.com")
+  res.end()
 });
 
 module.exports = router;

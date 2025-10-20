@@ -32,10 +32,15 @@
                         </div>
                         <small class="text-secondary">Punguzo la 50%</small>
                     </div>
-                <a href="/payment" class="btn btn-warning btn-lg d-block px-4">
+                <button type="button"
+                        class="btn btn-warning btn-lg d-block px-4 mx-auto"
+                        data-bs-toggle="modal" data-bs-target="#paymentModal"
+                        hx-get="/api/pay-form"
+                        hx-target="#paymentModalBody"
+                        hx-swap="innerHTML">
                     <i class="bi bi-crown-fill"></i>
                     LIPIA SASA
-                </a>
+                </button>
             </div>
         </div>
     </div>

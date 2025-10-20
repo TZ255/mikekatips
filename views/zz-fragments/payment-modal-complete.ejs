@@ -1,0 +1,19 @@
+<!-- OOB update: completed state in the same modal -->
+<h5 id="paymentModalTitle" hx-swap-oob="true" class="modal-title text-success">
+  <i class="bi bi-check-circle me-2"></i> Malipo Yamekamilika
+</h5>
+
+<div id="paymentModalBody" hx-swap-oob="true" class="modal-body">
+  <div class="alert alert-success d-flex flex-column align-items-center mb-2">
+    <i class="bi bi-check-circle fs-1 my-3"></i>
+    <div>Hongera! Malipo yamekamilika. <%= message %> Bonyeza "Fungua Premium Tips" kuona mikeka yetu ya premium</div>
+  </div>
+  <div class="small text-muted">Order ID: <code><%= orderId %></code></div>
+</div>
+
+<div id="paymentModalFooter" hx-swap-oob="true" class="modal-footer">
+  <button type="button" class="btn btn-success" onclick="window.location.href='/#premium-tips'">
+    <i class="bi bi-check-circle me-2"></i>
+    FUNGUA PREMIUM TIPS
+  </button>
+</div>

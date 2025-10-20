@@ -11,7 +11,7 @@ const sendTelegramNotification = async (message, disable_notification = false) =
             return;
         }
 
-        if(NODE_ENV === 'development') {
+        if(process.env.NODE_ENV === 'development') {
             console.log(`Development mode: ${message}`);
             return;
         }

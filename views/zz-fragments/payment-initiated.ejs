@@ -1,0 +1,31 @@
+<!-- OOB updates to reuse the already-open modal -->
+<h5 id="paymentModalTitle" hx-swap-oob="true" class="modal-title">
+  <i class="bi bi-wallet2 me-2"></i> Thibitisha Malipo
+</h5>
+
+<div id="paymentModalBody" hx-swap-oob="true" class="modal-body">
+  <p class="mb-2">Ombi la malipo limetumwa. Thibitisha kwenye simu yako. Tunasubiri uthibitisho kutoka namba <%= phone %></p>
+  <div class="small text-muted">Order ID: <code><%= orderId %></code></div>
+</div>
+
+<div id="paymentModalFooter" hx-swap-oob="true" class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" onclick="window.location.reload()">
+    <i class="bi bi-x-circle"></i> CANCEL
+  </button>
+  <!-- Poll for status every 10s; OOB fragments will update modal content -->
+  <form hx-post="/api/check-status" hx-trigger="every 10s" hx-swap="none" class="d-none">
+    <input type="hidden" name="orderId" value="<%= orderId %>">
+  </form>
+</div>
+
+<script>
+  (function(){
+    try {
+      var modalEl = document.getElementById('paymentModal');
+      if (modalEl && window.bootstrap) {
+        var modal = window.bootstrap.Modal.getOrCreateInstance(modalEl, { backdrop: 'static', keyboard: false });
+        modal.show();
+      }
+    } catch (e) {}
+  })();
+</script>

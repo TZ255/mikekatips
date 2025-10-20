@@ -1,0 +1,34 @@
+<!-- OOB update: pending state in the same modal -->
+<h5 id="paymentModalTitle" hx-swap-oob="true" class="modal-title">
+  <i class="bi bi-hourglass-split me-2"></i> Bado Inasubiri
+</h5>
+
+<div id="paymentModalBody" hx-swap-oob="true" class="modal-body">
+  <div class="d-flex flex-column align-items-center mb-2">
+    <span class="spinner-border spinner-border-sm my-3" role="status" aria-hidden="true" style="width: 2rem; height: 2rem;"></span>
+    <div><%= note || 'Malipo bado yanaendelea. Tafadhali subiri kidogo...' %></div>
+  </div>
+  <div class="small text-muted">Order ID: <code><%= orderId %></code></div>
+  <div class="small text-muted">Muda uliobaki: <span id="countdown" data-remaining="<%= typeof remainingSec !== 'undefined' ? remainingSec : 120 %>">--:--</span></div>
+  <script>
+    (function(){
+      try {
+        var el = document.getElementById('countdown');
+        if(!el) return;
+        var s = parseInt(el.getAttribute('data-remaining'), 10) || 0;
+        function fmt(x){ var m=Math.floor(x/60), r=x%60; return m+":"+String(r).padStart(2,'0'); }
+        function tick(){ if(s<=0) return; s--; el.textContent = fmt(s); setTimeout(tick, 1000); }
+        el.textContent = fmt(s);
+        setTimeout(tick, 1000);
+      } catch(e){}
+    })();
+  </script>
+</div>
+
+<div id="paymentModalFooter" hx-swap-oob="true" class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" onclick="window.location.reload()"><i class="bi bi-x-circle"></i> CANCEL</button>
+  <!-- Keep polling active via hidden form -->
+  <form hx-post="/api/check-status" hx-trigger="every 10s" hx-swap="none" class="d-none">
+    <input type="hidden" name="orderId" value="<%= orderId %>">
+  </form>
+</div>

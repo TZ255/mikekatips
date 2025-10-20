@@ -19,4 +19,23 @@ const confirmMonthlySubscription = async (email) => {
     }
 };
 
-module.exports = { confirmMonthlySubscription };
+//unconfirme user subscription
+const unconfirmUserSubscription = async (email) => {
+    try {
+        const user = await User.findOne({ email });
+        if (!user) console.log('User not found');
+
+        user.isPaid = false;
+        user.paidAt = null;
+        user.expiresAt = null;
+
+        await user.save();
+        sendTelegramNotification(`❌ MikekaTips - Subscription revoked for ${email} (manual)`)
+        return user;
+    } catch (error) {
+        console.error('Error unconfirming subscription:', error);
+        sendTelegramNotification(`⚠️ MikekaTips - Error unconfirming subscription for ${email} (manual): ${error.message}`)
+    }
+}
+
+module.exports = { confirmMonthlySubscription, unconfirmUserSubscription }
