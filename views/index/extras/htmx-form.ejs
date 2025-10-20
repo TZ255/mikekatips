@@ -12,7 +12,6 @@
   #payment-area .payment-card {
     background: #ffffff;
     border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     overflow: hidden;
     animation: slideUp 0.4s ease-out;
   }
@@ -22,6 +21,7 @@
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -94,11 +94,11 @@
     opacity: 0;
   }
 
-  #payment-area .plan-option input[type="radio"]:checked + .plan-content {
+  #payment-area .plan-option input[type="radio"]:checked+.plan-content {
     color: #10b981;
   }
 
-  #payment-area .plan-option input[type="radio"]:checked ~ .plan-check {
+  #payment-area .plan-option input[type="radio"]:checked~.plan-check {
     opacity: 1;
     transform: scale(1);
   }
@@ -193,7 +193,7 @@
     padding-left: 0.5rem;
   }
 
-  #payment-area .was-validated .phone-input:invalid ~ .payment-invalid-feedback {
+  #payment-area .was-validated .phone-input:invalid~.payment-invalid-feedback {
     display: block;
   }
 
@@ -244,7 +244,9 @@
   }
 
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   #payment-area .htmx-indicator {
@@ -261,7 +263,6 @@
 
   #payment-area #pay-form-feedback {
     border-radius: 8px;
-    padding: 0.75rem;
     font-size: 0.9rem;
   }
 
@@ -291,6 +292,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+
     #payment-area *,
     #payment-area *::before,
     #payment-area *::after {
@@ -302,7 +304,7 @@
 </style>
 
 <!-- Wrapper where HTMX swaps fragments -->
- <!-- This form should be inside the modal -->
+<!-- This form should be inside the modal -->
 <div id="payment-area">
   <div class="payment-card">
     <div class="payment-header">
@@ -310,25 +312,9 @@
       <h5>Lipa kwa Simu</h5>
     </div>
     <div class="payment-body">
-      <form id="@htmx-payment"
-            hx-post="/api/pay"
-            hx-target="#payment-area"
-            hx-swap="innerHTML"
-            hx-disabled-elt="input, button"
-            class="needs-validation"
-            novalidate>
-        <!-- Plan: fixed monthly -->
-        <div class="mb-3">
-          <div class="plan-option" style="border-color:#10b981; background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">
-            <div class="plan-content" style="color:#10b981;">
-              <div class="plan-name">Kifurushi cha Mwezi</div>
-              <div class="plan-price">TSh 9,500 / Mwezi</div>
-            </div>
-            <div class="plan-check" style="opacity:1; transform:scale(1);">
-              <i class="bi bi-check"></i>
-            </div>
-          </div>
-        </div>
+      <form id="@htmx-payment" hx-post="/api/pay" hx-target="#payment-area" hx-swap="innerHTML"
+        hx-disabled-elt="input, button" class="needs-validation" novalidate>
+
         <!-- Phone: +255 prefix + 9 digits not starting with 0 -->
         <div>
           <label for="payPhone" class="payment-label">
@@ -337,22 +323,14 @@
           </label>
           <div class="phone-input-group">
             <span class="phone-prefix">+255</span>
-            <input type="text"
-                   class="phone-input"
-                   id="payPhone"
-                   name="phone9"
-                   inputmode="numeric"
-                   pattern="[1-9][0-9]{8}"
-                   minlength="9"
-                   maxlength="9"
-                   placeholder="Mfano: 712345678"
-                   autocomplete="tel"
-                   required>
+            <input type="text" class="phone-input" id="payPhone" name="phone9" inputmode="numeric"
+              pattern="[1-9][0-9]{8}" minlength="9" maxlength="9" placeholder="Mfano: 712345678" autocomplete="tel"
+              required>
           </div>
           <div class="payment-invalid-feedback">Weka tarakimu 9 bila kuanza na 0.</div>
         </div>
         <!-- Inline feedback area for errors (updated via OOB swap) -->
-        <div id="pay-form-feedback"></div>
+        <div id="pay-form-feedback" class="d-none"></div>
         <button type="submit" class="submit-btn">
           <span class="label-text">
             Tuma Malipo

@@ -80,7 +80,9 @@
                             <%= tip.tip %>
                         </span>
                         <span class="fw-bold text-dark fs-5">
-                            <%= tip.odds %>
+                            <% if (['Home Win', 'Away Win', 'Draw'].includes(tip.tip)) { %>
+                             <%= tip.odds %>
+                            <% } %>
                         </span>
                     </div>
                 </div>

@@ -22,7 +22,7 @@ router.get('/api/pay-form', async (req, res) => {
     try {
         return res.render('index/extras/htmx-form', { layout: false });
     } catch (error) {
-        res.status(500).render('zz-fragments/payment-error', { layout: false, message: 'Imeshindikana kupakia fomu ya malipo.' });
+        res.render('zz-fragments/payment-error', { layout: false, message: 'Imeshindikana kupakia fomu ya malipo.' });
     }
 });
 
