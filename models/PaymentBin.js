@@ -1,31 +1,21 @@
 const mongoose = require('mongoose');
 
-const paymentSchema = new mongoose.Schema({
-    userId: {
+const paymentBinSchema = new mongoose.Schema({
+    email: { type: String, index: true },
+    phone: String,
+    orderId: { type: String, unique: true, index: true },
+    reference: String,
+    payment_status: {
         type: String,
-        required: true,
+        enum: ['PENDING', 'COMPLETED', 'FAILED'],
+        default: 'PENDING'
     },
-    userEmail: {
-        type: String,
-        required: true,
-    },
-    paymentId: {
-        type: String,
-        required: true,
-    },
-    orderReference: {
-        type: String,
-        required: true,
-    },
-    paymentStatus: {
-        type: String,
-        required: true,
-        enum: ["PROCESSING", "PENDING", "SUCCESS", "FAILED", "CONFIRMED"]
-    }
-},
-    {timestamps: true}
-);
+    meta: Object,
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: Date
+}, { collection: 'PaymentBin' });
 
-//use baruakazi payment bin
-const BaruakaziPaymentBinModel = mongoose.connection.useDb('baruakazi').model('PaymentBin', paymentSchema);
-module.exports = BaruakaziPaymentBinModel
+// Auto-clean old pending records after 24h
+paymentBinSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 });
+
+module.exports = mongoose.model('PaymentBin', paymentBinSchema);
