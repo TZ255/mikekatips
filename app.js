@@ -103,7 +103,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use(indexRoutes);
-app.use(paymentRoutes);
+// app.use(paymentRoutes); // Disabling clickpesa payments to use ZenoPay instead
 app.use(authRoutes);
 app.use(predictionRoutes);
 app.use(htmxRoutes);
