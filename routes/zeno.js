@@ -13,7 +13,7 @@ const generateOrderId = (phone) => `ORD-${Date.now().toString(36)}-${phone}`;
 
 // plan → amount + grant key
 const PRICE = {
-    monthly: 9500
+    monthly: 15000
 };
 
 // POST /api/pay
@@ -61,6 +61,16 @@ router.post("/api/pay", async (req, res) => {
 
         const order_id = generateOrderId(phone9);
 
+        // Save bin
+        await PaymentBin.create({
+            email,
+            phone,
+            orderId: order_id,
+            payment_status: 'PENDING',
+            meta: { gateway: 'ZenoPay', plan: "monthly", amount: PRICE.monthly },
+            updatedAt: new Date()
+        });
+
         // build payment payload
         const payload = {
             order_id,
@@ -78,16 +88,6 @@ router.post("/api/pay", async (req, res) => {
             res.set('HX-Reswap', 'none');
             return res.render('zz-fragments/payment-form-error', { layout: false, message: apiResp?.message || 'Imeshindikana kuanzisha malipo. Jaribu tena.' });
         }
-
-        // Save bin
-        await PaymentBin.create({
-            email,
-            phone,
-            orderId: apiResp.order_id || order_id,
-            payment_status: 'PENDING',
-            meta: { gateway: 'ZenoPay', plan: "monthly", amount: PRICE.monthly },
-            updatedAt: new Date()
-        });
 
         //send initiating message
         sendTelegramNotification(`💰 ${email} initiated payment for monthly plan via ZenoPay`, false)
@@ -116,15 +116,18 @@ router.post('/api/check-status', async (req, res) => {
             return res.render('zz-fragments/payment-modal-pending', { layout: false, orderId, note: 'Hatukupata kumbukumbu ya malipo. Tafadhali jaribu tena' });
         }
 
-        // Fail after 2 minutes without update (unless already completed)
-        const threeMinutes = 1000 * 60 * 2;
+        // Fail after 3 minutes without update (unless already completed)
+        const threeMinutes = 1000 * 60 * 3;
         const lastUpdate = new Date(record.updatedAt || record.createdAt || Date.now()).getTime();
         if ((Date.now() - lastUpdate) > threeMinutes && record.payment_status !== 'COMPLETED') {
             try {
                 record.payment_status = 'FAILED';
                 record.updatedAt = new Date();
                 await record.save();
-            } catch (e) { console.log('Mark FAILED error:', e?.message); }
+            } 
+            catch (e) { 
+                console.log('Mark FAILED error:', e?.message); 
+            }
             return res.render('zz-fragments/payment-modal-failed', { layout: false, orderId, email: record?.email });
         }
 
@@ -138,8 +141,8 @@ router.post('/api/check-status', async (req, res) => {
             return res.render('zz-fragments/payment-modal-failed', { layout: false, orderId, email: record?.email });
         }
 
-        // Compute remaining seconds for countdown (reuse 2-min window and lastUpdate above)
-        const remainingMs = Math.max(0, (1000 * 60 * 2) - (Date.now() - lastUpdate));
+        // Compute remaining seconds for countdown (reuse 3-min window and lastUpdate above)
+        const remainingMs = Math.max(0, (1000 * 60 * 3) - (Date.now() - lastUpdate));
         const remainingSec = Math.ceil(remainingMs / 1000);
         return res.render('zz-fragments/payment-modal-pending', { layout: false, orderId, note: `Bado tunasubiri uthibitisho wa muamala kwenye namba ${record?.phone}. Tafadhali thibitisha`, remainingSec });
     } catch (error) {
