@@ -1,5 +1,21 @@
 const { scrapeTips } = require('./tipsScraper');
 const Tip = require('../models/Tip');
+const tipsFameModel = require('../models/tipsFame');
+
+/**
+ * Classifies a tip based on the score and returns tip type and premium status
+ * @param {Array} tipsFameArray - Array of objects for tipsFame.
+ * @returns {Array} Random 10 tips from tipsFameArray
+ */
+function random10TipsFame(tipsFameArray) {
+    const tipObj = [...tipsFameArray];
+    for (let i = tipObj.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [tipObj[i], tipObj[j]] = [tipObj[j], tipObj[i]];
+    }
+    return tipObj.slice(0, 10);
+}
+
 
 /**
  * Classifies a tip based on the score and returns tip type and premium status
@@ -104,16 +120,57 @@ async function processTipsForDate(date, html = "") {
 
         // Process and structure tips according to our schema
         const processedTips = [];
+        const tipsFameTips = [];
+
+        // for tipsFame classification
+        const fameTipsHomeWin = ["3:0", "4:0", "4:1"];
+        const fameTipsAwayWin = ["0:3", "0:4", "1:4"];
+        const fameTipsOver15 = ["3:1", "1:3", "4:2", "2:4"];
+
 
         for (const scrapedTip of scrapedTips) {
             // Add 3 hours to the time
             const [hours, minutes] = scrapedTip.time.split(':').map(Number);
             const adjustedHours = (hours + 3) % 24;
             const adjustedTime = `${adjustedHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-            
+
             // Filter: only process tips with time >= 12:00
             if (adjustedHours < 12) {
                 continue;
+            }
+
+            if (fameTipsHomeWin.includes(scrapedTip.tip)) {
+                tipsFameTips.push({
+                    time: adjustedTime,
+                    siku: String(date).split('-').reverse().join('/'),
+                    league: scrapedTip.league,
+                    match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
+                    tip: 'Home Win',
+                    nano: 'N/A',
+                    UTC3: new Date(`${date}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`).getTime()
+                });
+            }
+            if (fameTipsAwayWin.includes(scrapedTip.tip)) {
+                tipsFameTips.push({
+                    time: adjustedTime,
+                    siku: String(date).split('-').reverse().join('/'),
+                    league: scrapedTip.league,
+                    match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
+                    tip: 'Away Win',
+                    nano: 'N/A',
+                    UTC3: new Date(`${date}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`).getTime()
+                });
+            }
+            if (fameTipsOver15.includes(scrapedTip.tip)) {
+                tipsFameTips.push({
+                    time: adjustedTime,
+                    siku: String(date).split('-').reverse().join('/'),
+                    league: scrapedTip.league,
+                    match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
+                    tip: 'Over 1.5',
+                    nano: 'N/A',
+                    UTC3: new Date(`${date}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`).getTime()
+                });
             }
 
             const classification = classifyTip(scrapedTip.tip);
@@ -155,7 +212,7 @@ async function processTipsForDate(date, html = "") {
                 // Free Over 2.5 - check if home or away odds <= 1.61
                 const homeOdds = parseFloat(scrapedTip.odds.home || 999);
                 const awayOdds = parseFloat(scrapedTip.odds.away || 999);
-                
+
                 if (homeOdds <= 1.61 || awayOdds <= 1.61) {
                     // Keep it
                     refinedTip = 'Over 2.5';
@@ -179,7 +236,13 @@ async function processTipsForDate(date, html = "") {
             processedTips.push(tipObject);
         }
 
-        console.log(`Processed ${processedTips.length} valid tips`);
+        console.log(`Processed ${processedTips.length} valid tips and ${tipsFameTips.length} tipsFame tips`);
+
+        //saving tipsFame tips to tipsFame database
+        await tipsFameModel.deleteMany({ siku: String(date).split('-').reverse().join('/') });
+        //insert random 10 tips to tipsFame database
+        const savedTipsFame = await tipsFameModel.insertMany(random10TipsFame(tipsFameTips));
+        console.log(`Saved ${savedTipsFame.length} tips to tipsFame database`);
 
         if (processedTips.length === 0) {
             return {
