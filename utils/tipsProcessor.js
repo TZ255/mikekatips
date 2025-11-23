@@ -1,6 +1,7 @@
 const { scrapeTips } = require('./tipsScraper');
 const Tip = require('../models/Tip');
 const tipsFameModel = require('../models/tipsFame');
+const { default: axios } = require('axios');
 
 /**
  * Classifies a tip based on the score and returns tip type and premium status
@@ -255,6 +256,12 @@ async function processTipsForDate(date, html = "") {
         //insert random 10 tips to tipsFame database
         const savedTipsFame = await tipsFameModel.insertMany(random10TipsFame(tipsFameTips));
         console.log(`Saved ${savedTipsFame.length} tips to tipsFame database`);
+
+        //Build MikekayaUhakika every hour
+        if (process.env.NODE_ENV === 'production') {
+            axios.post(`https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/ae249406-125e-4e1a-a6fd-e58e7799db52`)
+                .catch(e => console.log(e?.message))
+        }
 
         if (processedTips.length === 0) {
             return {
