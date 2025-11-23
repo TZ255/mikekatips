@@ -124,6 +124,7 @@ async function processTipsForDate(date, html = "") {
 
         // for tipsFame classification
         const fameTipsHomeWin = ["3:0", "4:0", "4:1"];
+        const fameTips1X = ["2:0"];
         const fameTipsAwayWin = ["0:3", "0:4", "1:4"];
         const fameTipsOver15 = ["3:1", "1:3", "4:2", "2:4"];
 
@@ -168,6 +169,17 @@ async function processTipsForDate(date, html = "") {
                     league: scrapedTip.league,
                     match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
                     tip: 'Over 1.5',
+                    nano: 'N/A',
+                    UTC3: new Date(`${date}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`).getTime()
+                });
+            }
+            if (fameTips1X.includes(scrapedTip.tip)) {
+                tipsFameTips.push({
+                    time: adjustedTime,
+                    siku: String(date).split('-').reverse().join('/'),
+                    league: scrapedTip.league,
+                    match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
+                    tip: '1X',
                     nano: 'N/A',
                     UTC3: new Date(`${date}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`).getTime()
                 });
