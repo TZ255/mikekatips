@@ -251,17 +251,17 @@ async function processTipsForDate(date, html = "") {
 
         console.log(`Processed ${processedTips.length} valid tips and ${tipsFameTips.length} tipsFame tips`);
 
-        //saving tipsFame tips to tipsFame database
-        await tipsFameModel.deleteMany({ siku: String(date).split('-').reverse().join('/') });
+        //saving tipsFame tips to tipsFame database (disabled for now)
+        // await tipsFameModel.deleteMany({ siku: String(date).split('-').reverse().join('/') });
         //insert random 10 tips to tipsFame database
-        const savedTipsFame = await tipsFameModel.insertMany(random10TipsFame(tipsFameTips));
-        console.log(`Saved ${savedTipsFame.length} tips to tipsFame database`);
+        // const savedTipsFame = await tipsFameModel.insertMany(random10TipsFame(tipsFameTips));
+        // console.log(`Saved ${savedTipsFame.length} tips to tipsFame database`);
 
         //Build MikekayaUhakika every hour
-        if (process.env.NODE_ENV === 'production') {
-            axios.post(`https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/ae249406-125e-4e1a-a6fd-e58e7799db52`)
-                .catch(e => console.log(e?.message))
-        }
+        // if (process.env.NODE_ENV === 'production') {
+        //     axios.post(`https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/ae249406-125e-4e1a-a6fd-e58e7799db52`)
+        //         .catch(e => console.log(e?.message))
+        // }
 
         if (processedTips.length === 0) {
             return {
