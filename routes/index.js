@@ -10,6 +10,7 @@ const { scrapeTips } = require('../utils/tipsScraper');
 const { processTipsForDate } = require('../utils/tipsProcessor');
 const { LinkToRedirect } = require('../utils/affLinktoRedirect');
 const { unconfirmUserSubscription } = require('../utils/confirmSubscription');
+const sendEmail = require('../utils/sendemail');
 
 const router = express.Router();
 
@@ -294,6 +295,11 @@ router.get('/payments/disable', (req, res) => {
   // Logic to disable user payments
   unconfirmUserSubscription("janjatzblog@gmail.com")
   res.end()
+});
+
+router.get('/api/testing', (req, res) => {
+  unconfirmUserSubscription("janjatzblog@gmail.com")
+  res.json({ message: 'API is working!' });
 });
 
 module.exports = router;

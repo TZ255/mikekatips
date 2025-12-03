@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const { isValidPhoneNumber } = require('tanzanian-phone-validator');
-const { makePayment, getTransactionStatus } = require('../utils/zenoapi');
+const { makePayment } = require('../utils/zenoapi');
 const User = require('../models/User');
 const PaymentBin = require('../models/PaymentBin');
 const { sendTelegramNotification } = require('../utils/sendTelegramNotifications');
@@ -13,7 +13,7 @@ const generateOrderId = (phone) => `ORD-${Date.now().toString(36)}-${phone}`;
 
 // plan → amount + grant key
 const PRICE = {
-    monthly: 15000
+    monthly: 9500
 };
 
 // POST /api/pay
@@ -97,58 +97,6 @@ router.post("/api/pay", async (req, res) => {
         console.log('PAY error:', error?.message, error);
         res.set('HX-Reswap', 'none');
         return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Hitilafu imetokea. Tafadhali jaribu tena.' });
-    }
-});
-
-// POST /api/check-status
-router.post('/api/check-status', async (req, res) => {
-    try {
-        const orderId = String(req.body.orderId || '').trim();
-        if (!orderId) {
-            return res.render('zz-fragments/payment-modal-pending', { layout: false, orderId: '', note: 'Hakuna orderId. Jaribu tena.' });
-        }
-
-        console.log('Checking Order status:', req.body)
-
-        const record = await PaymentBin.findOne({ orderId });
-        if (!record) {
-            // Keep same modal, inform pending state
-            return res.render('zz-fragments/payment-modal-pending', { layout: false, orderId, note: 'Hatukupata kumbukumbu ya malipo. Tafadhali jaribu tena' });
-        }
-
-        // Fail after 3 minutes without update (unless already completed)
-        const threeMinutes = 1000 * 60 * 3;
-        const lastUpdate = new Date(record.updatedAt || record.createdAt || Date.now()).getTime();
-        if ((Date.now() - lastUpdate) > threeMinutes && record.payment_status !== 'COMPLETED') {
-            try {
-                record.payment_status = 'FAILED';
-                record.updatedAt = new Date();
-                await record.save();
-            } 
-            catch (e) { 
-                console.log('Mark FAILED error:', e?.message); 
-            }
-            return res.render('zz-fragments/payment-modal-failed', { layout: false, orderId, email: record?.email });
-        }
-
-        if (record.payment_status === 'COMPLETED') {
-            let user = await User.findOne({ email: record?.email })
-            let message = `Malipo yako yamewezeshwa hadi ${new Date(user?.expiresAt).toLocaleString('sw-TZ', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Africa/Nairobi' })}`
-            return res.render('zz-fragments/payment-modal-complete', { layout: false, orderId, message });
-        }
-
-        if (record.payment_status === 'FAILED') {
-            return res.render('zz-fragments/payment-modal-failed', { layout: false, orderId, email: record?.email });
-        }
-
-        // Compute remaining seconds for countdown (reuse 3-min window and lastUpdate above)
-        const remainingMs = Math.max(0, (1000 * 60 * 3) - (Date.now() - lastUpdate));
-        const remainingSec = Math.ceil(remainingMs / 1000);
-        return res.render('zz-fragments/payment-modal-pending', { layout: false, orderId, note: `Bado tunasubiri uthibitisho wa muamala kwenye namba ${record?.phone}. Tafadhali thibitisha`, remainingSec });
-    } catch (error) {
-        console.log('CHECK-STATUS error:', error?.message, error);
-        // keep modal; provide a conservative countdown
-        return res.render('zz-fragments/payment-modal-pending', { layout: false, orderId: req.body?.orderId, note: 'Imeshindikana kuthibitisha sasa. Subiri kidogo...', remainingSec: 120 });
     }
 });
 

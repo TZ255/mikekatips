@@ -99,7 +99,7 @@ mikekatips.co.tz/
 **Status**: ✅ **COMPLETE - PRODUCTION READY**
 - **ClickPesa Integration**: Full mobile money payment processing
 - **Phone Validation**: Tanzanian number format with Vodacom restriction
-- **Pricing**: TSh 15,000/month (50% discount from 30,000)
+- **Pricing**: TSh 9,500/month (50% discount from 20,000)
 - **Status Tracking**: Real-time payment verification and expiry management
 - **Implementation**: `routes/payment.js`, `utils/clickPesaAPI.js`, `views/payment/`
 
