@@ -4,18 +4,20 @@
 </h5>
 
 <div id="paymentModalBody" hx-swap-oob="true" class="modal-body">
-  <p class="mb-2">Ombi la malipo limetumwa. Thibitisha kwenye simu yako. Tunasubiri uthibitisho kutoka namba <%= phone %></p>
-  <div class="small text-muted">Order ID: <code><%= orderId %></code></div>
+  <p class="mb-2">
+    Ombi la malipo limetumwa kwenye namba <strong><%= phone %></strong>.
+    Thibitisha kwa kuweka PIN yako.
+  </p>
+  <div class="alert alert-info mt-3 mb-0 small" role="alert">
+    <i class="bi bi-info-circle me-1"></i>
+    Hakikisha namba yako iko hewani. Baada ya malipo utapokea ujumbe wa kuthibitisha malipo yako na Premium Tips kufunguliwa.
+  </div>
 </div>
 
 <div id="paymentModalFooter" hx-swap-oob="true" class="modal-footer">
   <button type="button" class="btn btn-outline-secondary" onclick="window.location.reload()">
     <i class="bi bi-x-circle"></i> CANCEL
   </button>
-  <!-- Poll for status every 10s; OOB fragments will update modal content -->
-  <form hx-post="/api/check-status" hx-trigger="every 10s" hx-swap="none" class="d-none">
-    <input type="hidden" name="orderId" value="<%= orderId %>">
-  </form>
 </div>
 
 <script>
