@@ -1,21 +1,6 @@
 const { scrapeTips } = require('./tipsScraper');
 const Tip = require('../models/Tip');
-const tipsFameModel = require('../models/tipsFame');
 const { default: axios } = require('axios');
-
-/**
- * Classifies a tip based on the score and returns tip type and premium status
- * @param {Array} tipsFameArray - Array of objects for tipsFame.
- * @returns {Array} Random 10 tips from tipsFameArray
- */
-function random10TipsFame(tipsFameArray) {
-    const tipObj = [...tipsFameArray];
-    for (let i = tipObj.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [tipObj[i], tipObj[j]] = [tipObj[j], tipObj[i]];
-    }
-    return tipObj.slice(0, 10);
-}
 
 
 /**
@@ -31,12 +16,14 @@ function classifyTip(tipScore) {
     // Classification arrays
     const freeHomeWin = ["2:0"];
     const freeAwayWin = ["0:2"];
-    const freeUnder35 = ["1:0", "0:1"];
-    const freeBTTS = ["2:2", "1:2"];
+    const free1X = ["1:0"];
+    const freeX2 = ["0:1"];
+    const freeBTTS = ["1:3"];
 
     const premiumHomeWin = ["3:0", "4:0"];
     const premiumAwayWin = ["0:3", "0:4"];
-    const premiumUnder35 = ["0:0"];
+    const premium1X = ["2:0"];
+    const premiumX2 = ["0:2"];
     const premiumBTTS = ["2:3", "2:4"];
 
     // Calculate total goals for Over/Under classifications
@@ -66,14 +53,17 @@ function classifyTip(tipScore) {
         return { tip: 'Away Win', isPremium: false };
     }
 
-    if (freeUnder35.includes(tipScore)) {
-        return { tip: 'Under 3.5', isPremium: false };
-    }
-
     if (freeBTTS.includes(tipScore)) {
         return { tip: 'Both Teams to Score', isPremium: false };
     }
 
+    if (free1X.includes(tipScore)) {
+        return { tip: '1X', isPremium: false };
+    }
+
+    if (freeX2.includes(tipScore)) {
+        return { tip: 'X2', isPremium: false };
+    }
 
     if (premiumHomeWin.includes(tipScore)) {
         return { tip: 'Home Win', isPremium: true };
@@ -83,12 +73,16 @@ function classifyTip(tipScore) {
         return { tip: 'Away Win', isPremium: true };
     }
 
-    if (premiumUnder35.includes(tipScore)) {
-        return { tip: 'Under 3.5', isPremium: true };
-    }
-
     if (premiumBTTS.includes(tipScore)) {
         return { tip: 'Both Teams to Score', isPremium: true };
+    }
+
+    if (premium1X.includes(tipScore)) {
+        return { tip: '1X', isPremium: true };
+    }
+
+    if (premiumX2.includes(tipScore)) {
+        return { tip: 'X2', isPremium: true };
     }
 
     // If no classification matches, return null
@@ -121,13 +115,6 @@ async function processTipsForDate(date, html = "") {
 
         // Process and structure tips according to our schema
         const processedTips = [];
-        const tipsFameTips = [];
-
-        // for tipsFame classification
-        const fameTipsHomeWin = ["3:0", "4:0", "4:1"];
-        const fameTips1X = ["2:0"];
-        const fameTipsAwayWin = ["0:3", "0:4", "1:4"];
-        const fameTipsOver15 = ["3:1", "1:3", "4:2", "2:4"];
 
 
         for (const scrapedTip of scrapedTips) {
@@ -141,51 +128,6 @@ async function processTipsForDate(date, html = "") {
                 continue;
             }
 
-            if (fameTipsHomeWin.includes(scrapedTip.tip)) {
-                tipsFameTips.push({
-                    time: adjustedTime,
-                    siku: String(date).split('-').reverse().join('/'),
-                    league: scrapedTip.league,
-                    match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
-                    tip: 'Home Win',
-                    nano: 'N/A',
-                    UTC3: new Date(`${date}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`).getTime()
-                });
-            }
-            if (fameTipsAwayWin.includes(scrapedTip.tip)) {
-                tipsFameTips.push({
-                    time: adjustedTime,
-                    siku: String(date).split('-').reverse().join('/'),
-                    league: scrapedTip.league,
-                    match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
-                    tip: 'Away Win',
-                    nano: 'N/A',
-                    UTC3: new Date(`${date}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`).getTime()
-                });
-            }
-            if (fameTipsOver15.includes(scrapedTip.tip)) {
-                tipsFameTips.push({
-                    time: adjustedTime,
-                    siku: String(date).split('-').reverse().join('/'),
-                    league: scrapedTip.league,
-                    match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
-                    tip: 'Over 1.5',
-                    nano: 'N/A',
-                    UTC3: new Date(`${date}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`).getTime()
-                });
-            }
-            if (fameTips1X.includes(scrapedTip.tip)) {
-                tipsFameTips.push({
-                    time: adjustedTime,
-                    siku: String(date).split('-').reverse().join('/'),
-                    league: scrapedTip.league,
-                    match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
-                    tip: '1X',
-                    nano: 'N/A',
-                    UTC3: new Date(`${date}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`).getTime()
-                });
-            }
-
             const classification = classifyTip(scrapedTip.tip);
 
             if (!classification) {
@@ -197,43 +139,8 @@ async function processTipsForDate(date, html = "") {
             let refinedTip = classification.tip;
             let oddsString = '--';
 
-            if (classification.tip === 'Home Win' && !classification.isPremium && scrapedTip.odds) {
-                const homeOdds = parseFloat(scrapedTip.odds.home);
-                if (homeOdds <= 1.61) {
-                    refinedTip = 'Home Win';
-                    oddsString = homeOdds.toFixed(2);
-                } else {
-                    refinedTip = '1X';
-                    oddsString = ((homeOdds * 1.45) / 2.00).toFixed(2);
-                }
-            } else if (classification.tip === 'Away Win' && !classification.isPremium && scrapedTip.odds) {
-                const awayOdds = parseFloat(scrapedTip.odds.away);
-                if (awayOdds <= 1.61) {
-                    refinedTip = 'Away Win';
-                    oddsString = awayOdds.toFixed(2);
-                } else {
-                    refinedTip = 'X2';
-                    oddsString = ((awayOdds * 1.45) / 2.00).toFixed(2);
-                }
-            } else if (classification.tip === 'Home Win' && classification.isPremium && scrapedTip.odds) {
-                // Premium home win - keep as is
-                oddsString = parseFloat(scrapedTip.odds.home).toFixed(2);
-            } else if (classification.tip === 'Away Win' && classification.isPremium && scrapedTip.odds) {
-                // Premium away win - keep as is
-                oddsString = parseFloat(scrapedTip.odds.away).toFixed(2);
-            } else if (classification.tip === 'Over 2.5' && !classification.isPremium && scrapedTip.odds) {
-                // Free Over 2.5 - check if home or away odds <= 1.61
-                const homeOdds = parseFloat(scrapedTip.odds.home || 999);
-                const awayOdds = parseFloat(scrapedTip.odds.away || 999);
-
-                if (homeOdds <= 1.61 || awayOdds <= 1.61) {
-                    // Keep it
-                    refinedTip = 'Over 2.5';
-                } else {
-                    // Skip it
-                    continue;
-                }
-            }
+            if (classification.tip === 'Home Win') oddsString = scrapedTip.odds.home || '--';
+            if (classification.tip === 'Away Win') oddsString = scrapedTip.odds.away || '--';
 
             const tipObject = {
                 match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
@@ -249,19 +156,7 @@ async function processTipsForDate(date, html = "") {
             processedTips.push(tipObject);
         }
 
-        console.log(`Processed ${processedTips.length} valid tips and ${tipsFameTips.length} tipsFame tips`);
-
-        //saving tipsFame tips to tipsFame database (disabled for now)
-        // await tipsFameModel.deleteMany({ siku: String(date).split('-').reverse().join('/') });
-        //insert random 10 tips to tipsFame database
-        // const savedTipsFame = await tipsFameModel.insertMany(random10TipsFame(tipsFameTips));
-        // console.log(`Saved ${savedTipsFame.length} tips to tipsFame database`);
-
-        //Build MikekayaUhakika every hour
-        // if (process.env.NODE_ENV === 'production') {
-        //     axios.post(`https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/ae249406-125e-4e1a-a6fd-e58e7799db52`)
-        //         .catch(e => console.log(e?.message))
-        // }
+        console.log(`Processed ${processedTips.length} valid tips`);
 
         if (processedTips.length === 0) {
             return {
@@ -277,7 +172,7 @@ async function processTipsForDate(date, html = "") {
         console.log(`Found ${existingTipsCount} existing tips in database for ${date}`);
 
         // If scraped tips count is greater than existing, clear and save new ones
-        if (processedTips.length > existingTipsCount) {
+        if (processedTips.length !== existingTipsCount) {
             console.log(`Clearing existing tips and saving ${processedTips.length} new tips`);
 
             // Clear existing tips for the date
