@@ -52,7 +52,7 @@ router.post("/api/pay", async (req, res) => {
             return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Namba ya simu si sahihi. Weka namba sahihi bila kuanza na 0' });
         }
 
-        const phoneNumberDetails = getPhoneNumberDetails(phoneNumber);
+        const phoneNumberDetails = getPhoneNumberDetails(phone);
         if (phoneNumberDetails.telecomCompanyDetails.brand.toLowerCase() === 'vodacom') {
             res.set('HX-Reswap', 'none');
             return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Samahani! Malipo kwa Vodacom hayaruhusiwi kwa sasa. Tumia Tigo, Airtel au Halotel.' });
