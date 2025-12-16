@@ -135,7 +135,7 @@
         
         // Reset header to waiting state
         header.className = 'modal-header bg-warning text-white border-0';
-        title.innerHTML = '<i class="bi bi-clock me-2"></i>Subiri Malipo';
+        title.innerHTML = '<i class="fa-solid fa-clock me-2"></i>Subiri Malipo';
         
         // Remove close button
         const closeBtn = header.querySelector('.btn-close');
@@ -145,7 +145,7 @@
         body.innerHTML = `
             <div class="text-center">
                 <div class="mb-4">
-                    <i class="bi bi-phone text-warning" style="font-size: 3rem;"></i>
+                    <i class="fa-solid fa-phone text-warning" style="font-size: 3rem;"></i>
                 </div>
                 <h6 class="fw-bold mb-3">Inasubiri malipo...</h6>
                 <p class="text-muted mb-4">
@@ -153,7 +153,7 @@
                 </p>
                 <div class="mb-3">
                     <div class="alert alert-info" role="alert">
-                        <i class="bi bi-clock me-2"></i>
+                        <i class="fa-solid fa-clock me-2"></i>
                         <strong>Muda uliosalia: <span id="paymentTimer">3:00</span></strong>
                     </div>
                 </div>
@@ -169,7 +169,7 @@
         footer.innerHTML = `
             <div class="d-flex justify-content-center w-100">
                 <button type="button" class="btn btn-outline-secondary" onclick="cancelPaymentProcess()">
-                    <i class="bi bi-x-circle me-2"></i>Ghairi
+                    <i class="fa-solid fa-circle-xmark me-2"></i>Ghairi
                 </button>
             </div>
         `;
@@ -255,7 +255,7 @@
         const footer = modal.querySelector('.modal-footer');
         
         header.className = 'modal-header bg-success text-white border-0';
-        title.innerHTML = '<i class="bi bi-check-circle me-2"></i>Malipo Yamefanikiwa!';
+        title.innerHTML = '<i class="fa-solid fa-circle-check me-2"></i>Malipo Yamefanikiwa!';
         
         // Remove close button
         const closeBtn = header.querySelector('.btn-close');
@@ -264,14 +264,14 @@
         body.innerHTML = `
             <div class="text-center">
                 <div class="mb-4">
-                    <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                    <i class="fa-solid fa-circle-check text-success" style="font-size: 4rem;"></i>
                 </div>
                 <h4 class="fw-bold text-success mb-3">Hongera!</h4>
                 <p class="mb-4">
                     Malipo yako yamefanikiwa. Una nafasi ya kuona Premium Tips kwa wiki moja.
                 </p>
                 <div class="alert alert-success" role="alert">
-                    <i class="bi bi-info-circle me-2"></i>
+                    <i class="fa-solid fa-circle-info me-2"></i>
                     Utapelekwa ukurasa wa nyumbani baada ya sekunde <span id="redirectTimer">5</span>
                 </div>
             </div>
@@ -280,7 +280,7 @@
         footer.innerHTML = `
             <div class="d-flex justify-content-center w-100">
                 <button type="button" class="btn btn-success btn-lg" onclick="window.location.href='/#premium-tips'">
-                    <i class="bi bi-arrow-right me-2"></i>Angalia Premium Tips
+                    <i class="fa-solid fa-arrow-right me-2"></i>Angalia Premium Tips
                 </button>
             </div>
         `;
@@ -309,7 +309,7 @@
         const footer = modal.querySelector('.modal-footer');
         
         header.className = 'modal-header bg-danger text-white border-0';
-        title.innerHTML = '<i class="bi bi-x-circle me-2"></i>Malipo Yameshindikana';
+        title.innerHTML = '<i class="fa-solid fa-circle-xmark me-2"></i>Malipo Yameshindikana';
         
         // Remove close button
         const closeBtn = header.querySelector('.btn-close');
@@ -318,7 +318,7 @@
         body.innerHTML = `
             <div class="text-center">
                 <div class="mb-4">
-                    <i class="bi bi-x-circle-fill text-danger" style="font-size: 4rem;"></i>
+                    <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 4rem;"></i>
                 </div>
                 <h6 class="fw-bold mb-3">Malipo yameshindikana</h6>
                 <p class="text-muted mb-4">
@@ -330,7 +330,7 @@
         footer.innerHTML = `
             <div class="d-flex justify-content-center w-100">
                 <button type="button" class="btn btn-danger" onclick="window.location.href='/payment'">
-                    <i class="bi bi-arrow-clockwise me-2"></i>ANZA UPYA
+                    <i class="fa-solid fa-arrow-rotate-right me-2"></i>ANZA UPYA
                 </button>
             </div>
         `;
@@ -344,7 +344,7 @@
         const footer = modal.querySelector('.modal-footer');
         
         header.className = 'modal-header bg-warning text-white border-0';
-        title.innerHTML = '<i class="bi bi-clock me-2"></i>Muda Umeisha';
+        title.innerHTML = '<i class="fa-solid fa-clock me-2"></i>Muda Umeisha';
         
         // Remove close button
         const closeBtn = header.querySelector('.btn-close');
@@ -353,14 +353,14 @@
         body.innerHTML = `
             <div class="text-center">
                 <div class="mb-4">
-                    <i class="bi bi-clock-fill text-warning" style="font-size: 4rem;"></i>
+                    <i class="fa-solid fa-clock text-warning" style="font-size: 4rem;"></i>
                 </div>
                 <h6 class="fw-bold mb-3">Muda wa malipo umeisha</h6>
                 <p class="text-muted mb-4">
                     Ombi la malipo limetumwa kwenye namba yako ya simu kwa dakika 3 zilizopita. Ikiwa hujaweza kulipa, weka PIN yako ili kuthibitisha au kama tayari umelipa, balance yako itapandishwa.
                 </p>
                 <div class="alert alert-info" role="alert">
-                    <i class="bi bi-info-circle me-2"></i>
+                    <i class="fa-solid fa-circle-info me-2"></i>
                     Ikiwa haujaweza kulipa, bonyeza "ANZA UPYA" kujaribu tena.
                 </div>
             </div>
@@ -369,7 +369,7 @@
         footer.innerHTML = `
             <div class="d-flex justify-content-center w-100">
                 <button type="button" class="btn btn-warning" onclick="window.location.href='/payment'">
-                    <i class="bi bi-arrow-clockwise me-2"></i>ANZA UPYA
+                    <i class="fa-solid fa-arrow-rotate-right me-2"></i>ANZA UPYA
                 </button>
             </div>
         `;

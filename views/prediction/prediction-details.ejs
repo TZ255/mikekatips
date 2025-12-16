@@ -13,7 +13,7 @@
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item">
                         <a href="/" class="text-decoration-none">
-                            <i class="bi bi-house-fill"></i> Nyumbani
+                            <i class="fa-solid fa-house"></i> Nyumbani
                         </a>
                     </li>
                     <li class="breadcrumb-item">
@@ -35,11 +35,11 @@
                 <div class="text-center mb-5">
                     <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
                         <span class="badge bg-success px-3 py-2 fs-6">
-                            <i class="bi bi-trophy-fill me-1"></i>
+                            <i class="fa-solid fa-trophy me-1"></i>
                             <%= league %>
                         </span>
                         <span class="badge bg-primary px-3 py-2 fs-6">
-                            <i class="bi bi-calendar-event me-1"></i>
+                            <i class="fa-solid fa-calendar-days me-1"></i>
                             <span class="d-none d-sm-inline">
                                 <%= new Date(date).toLocaleDateString('sw-TZ', { 
                                     weekday: 'long',
@@ -57,7 +57,7 @@
                             </span>
                         </span>
                         <span class="badge bg-info px-3 py-2 fs-6">
-                            <i class="bi bi-clock me-1"></i>
+                            <i class="fa-solid fa-clock me-1"></i>
                             <%= time %>
                         </span>
                     </div>
@@ -86,7 +86,7 @@
                                     </div>
                                     <button class="btn btn-warning btn-lg px-4 py-2 rounded-pill fw-semibold" onclick="window.open('/goto/<%= affiliate %>', '_blank')">
                                         BET NOW
-                                        <i class="bi bi-cursor-fill ms-2"></i>
+                                        <i class="fa-solid fa-arrow-pointer ms-2"></i>
                                     </button>
                                 </div>
                             </div>
@@ -113,14 +113,14 @@
                             <div>
                                 <div class="fw-bold">Utabiri wa mechi ya <%= pred.match %></div>
                                 <small class="text-muted">
-                                    <i class="bi bi-calendar-event me-1"></i>
+                                    <i class="fa-solid fa-calendar-days me-1"></i>
                                     <%= new Date(pred.date).toLocaleDateString('sw-TZ', { 
                                         day: '2-digit', 
                                         month: 'short',
                                         year: '2-digit'
                                     }) %>
                                     &nbsp; | &nbsp;
-                                    <i class="bi bi-clock me-1"></i>
+                                    <i class="fa-solid fa-clock me-1"></i>
                                     <%= pred.time %>
                                 </small>
                             </div>
@@ -132,7 +132,7 @@
                 <!-- Back to Predictions -->
                 <div class="text-center mt-5 pt-4 border-top">
                     <a href="/prediction" class="btn btn-outline-primary btn-lg px-4 py-2 rounded-pill">
-                        <i class="bi bi-arrow-left me-2"></i>
+                        <i class="fa-solid fa-arrow-left me-2"></i>
                         Rudi Kwa Predictions
                     </a>
                 </div>

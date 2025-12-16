@@ -7,14 +7,14 @@
                     <!-- Jana (Yesterday) Button -->
                     <a href="/utabiri-wa-mechi-za-jana" class="btn <%= activeNav === 'jana' ? 'btn-primary' : 'btn-outline-primary' %> px-3 py-2 flex-fill d-flex align-items-center justify-content-center"
                         style="width: 100px;" onclick="spinNavBtn(event)">
-                        <i class="bi bi-arrow-left-circle"></i>
+                        <i class="fa-solid fa-circle-arrow-left"></i>
                         <span class="ms-1">Jana</span>
                     </a>
 
                     <!-- Leo (Today) Button -->
                     <a href="/" class="btn <%= activeNav === 'leo' ? 'btn-primary' : 'btn-outline-primary' %> px-3 py-2 flex-fill d-flex align-items-center justify-content-center"
                         onclick="spinNavBtn(event)">
-                        <i class="bi bi-calendar-event"></i>
+                        <i class="fa-solid fa-calendar-days"></i>
                         <!-- Desktop: Show full date -->
                         <span class="d-none d-sm-inline ms-1"><%= currentDateFull %></span>
                         <!-- Mobile: Show Leo -->
@@ -25,7 +25,7 @@
                     <a href="/utabiri-wa-mechi-za-kesho" class="btn <%= activeNav === 'kesho' ? 'btn-primary' : 'btn-outline-primary' %> px-3 py-2 flex-fill d-flex align-items-center justify-content-center"
                         style="width: 100px;" onclick="spinNavBtn(event)">
                         <span class="me-1">Kesho</span>
-                        <i class="bi bi-arrow-right-circle"></i>
+                        <i class="fa-solid fa-circle-arrow-right"></i>
                     </a>
                 </div>
             </div>

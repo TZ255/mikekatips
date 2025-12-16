@@ -16,7 +16,7 @@
         try {
             // Show loading state
             btn.disabled = true;
-            btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i><span>Inaingia...</span>';
+            btn.innerHTML = '<i class="fa-solid fa-hourglass-half me-2"></i><span>Inaingia...</span>';
             
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
@@ -66,7 +66,7 @@
         // Add new alert
         const alertHtml = `
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle me-2"></i>
+                <i class="fa-solid fa-triangle-exclamation me-2"></i>
                 ${message}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>

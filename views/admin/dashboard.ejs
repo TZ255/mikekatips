@@ -16,7 +16,7 @@
                 <p class="text-muted mb-0">Tips for <%= currentDate %></p>
             </div>
             <a href="/admin/tips/add" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Add New Tip
+                <i class="fa-solid fa-circle-plus"></i> Add New Tip
             </a>
         </div>
             
@@ -25,7 +25,7 @@
             <div class="col-md-3 mb-3">
                 <div class="card border-0 bg-light">
                     <div class="card-body text-center">
-                        <div class="text-success fs-1 mb-2"><i class="bi bi-gift-fill"></i></div>
+                        <div class="text-success fs-1 mb-2"><i class="fa-solid fa-gift"></i></div>
                         <div class="fs-3 fw-bold text-dark"><%= tips.filter(tip => !tip.isPremium).length %></div>
                         <div class="text-muted small">Free Tips Today</div>
                     </div>
@@ -35,7 +35,7 @@
             <div class="col-md-3 mb-3">
                 <div class="card border-0 bg-light">
                     <div class="card-body text-center">
-                        <div class="text-warning fs-1 mb-2"><i class="bi bi-crown-fill"></i></div>
+                        <div class="text-warning fs-1 mb-2"><i class="fa-solid fa-crown"></i></div>
                         <div class="fs-3 fw-bold text-dark"><%= tips.filter(tip => tip.isPremium).length %></div>
                         <div class="text-muted small">Premium Tips Today</div>
                     </div>
@@ -45,7 +45,7 @@
             <div class="col-md-3 mb-3">
                 <div class="card border-0 bg-light">
                     <div class="card-body text-center">
-                        <div class="text-success fs-1 mb-2"><i class="bi bi-check-circle-fill"></i></div>
+                        <div class="text-success fs-1 mb-2"><i class="fa-solid fa-circle-check"></i></div>
                         <div class="fs-3 fw-bold text-dark"><%= tips.filter(tip => tip.status === 'won').length %></div>
                         <div class="text-muted small">Won Tips</div>
                     </div>
@@ -55,7 +55,7 @@
             <div class="col-md-3 mb-3">
                 <div class="card border-0 bg-light">
                     <div class="card-body text-center">
-                        <div class="text-danger fs-1 mb-2"><i class="bi bi-x-circle-fill"></i></div>
+                        <div class="text-danger fs-1 mb-2"><i class="fa-solid fa-circle-xmark"></i></div>
                         <div class="fs-3 fw-bold text-dark"><%= tips.filter(tip => tip.status === 'lost').length %></div>
                         <div class="text-muted small">Lost Tips</div>
                     </div>
@@ -105,11 +105,11 @@
                                 <td>
                                     <div class="btn-group btn-group-sm">
                                         <a href="/admin/tips/edit/<%= tip._id %>" class="btn btn-outline-primary btn-sm">
-                                            <i class="bi bi-pencil"></i>
+                                            <i class="fa-solid fa-pencil"></i>
                                         </a>
                                         <form method="post" action="/admin/tips/delete/<%= tip._id %>" class="d-inline" onsubmit="return confirm('Are you sure?')">
                                             <button type="submit" class="btn btn-outline-danger btn-sm">
-                                                <i class="bi bi-trash"></i>
+                                                <i class="fa-solid fa-trash"></i>
                                             </button>
                                         </form>
                                     </div>
@@ -121,7 +121,7 @@
                 </div>
             <% } else { %>
                 <div class="card-body text-center py-5">
-                    <div class="fs-1 mb-3 opacity-50 text-muted"><i class="bi bi-clipboard2-data"></i></div>
+                    <div class="fs-1 mb-3 opacity-50 text-muted"><i class="fa-solid fa-clipboard-list"></i></div>
                     <h3 class="h5 mb-2">No Tips for Today</h3>
                     <p class="text-muted mb-3">Start by adding some tips for today's matches</p>
                     <a href="/admin/tips/add" class="btn btn-primary">Add First Tip</a>
