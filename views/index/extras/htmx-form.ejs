@@ -308,8 +308,13 @@
 <div id="payment-area">
   <div class="payment-card">
     <div class="payment-header">
-      <i class="fa-solid fa-wallet payment-header-icon"></i>
       <h5>Lipa kwa Simu</h5>
+      <div class="networks d-flex flex-nowrap align-items-center justify-content-center gap-2 bg-light rounded-3 mt-3 px-4 mx-auto"
+        style="width: fit-content; height: 50px; overflow: hidden;">
+        <img src="/images/mixx.png" style="width: 36px; height: 36px; object-fit: cover;" alt="Mixx by Yas">
+        <img src="/images/airtel.png" style="width: 36px; height: 36px; object-fit: cover;" alt="Airtel Money">
+        <img src="/images/halopesa.png" style="width: 36px; height: 36px; object-fit: cover;" alt="Halopesa">
+      </div>
     </div>
     <div class="payment-body">
       <form id="@htmx-payment" hx-post="/api/pay" hx-target="#payment-area" hx-swap="innerHTML"
@@ -317,17 +322,17 @@
 
         <!-- Phone: +255 prefix + 9 digits not starting with 0 -->
         <div>
-          <label for="payPhone" class="payment-label">
+          <label for="payPhone" class="payment-label fs-6">
             <i class="fa-solid fa-phone"></i>
-            Namba ya Simu
+            Namba Yako ya Simu
           </label>
-          <div class="phone-input-group">
+          <div class="phone-input-group mb-1">
             <span class="phone-prefix">+255</span>
             <input type="text" class="phone-input" id="payPhone" name="phone9" inputmode="numeric"
               pattern="[1-9][0-9]{8}" minlength="9" maxlength="9" placeholder="Mfano: 712345678" autocomplete="tel"
               required>
           </div>
-          <div class="payment-invalid-feedback">Weka tarakimu 9 bila kuanza na 0.</div>
+          <div class="small text-muted mt-0 mb-2 ps-1"><i class="fa-solid fa-circle-info"></i> Tigo, Airtel au Halotel.</div>
         </div>
         <!-- Inline feedback area for errors (updated via OOB swap) -->
         <div id="pay-form-feedback" class="d-none"></div>

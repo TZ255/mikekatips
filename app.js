@@ -36,9 +36,8 @@ const TZ = 'Africa/Nairobi';
 const indexRoutes = require('./routes/index');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
-const paymentRoutes = require('./routes/payment');
 const predictionRoutes = require('./routes/prediction');
-const zenoRoutes = require('./routes/zeno');
+const paymentRoutes = require('./routes/payment');
 const htmxRoutes = require('./routes/htmx');
 
 const app = express()
@@ -107,7 +106,7 @@ app.use(indexRoutes);
 app.use(authRoutes);
 app.use(predictionRoutes);
 app.use(htmxRoutes);
-app.use(zenoRoutes);
+app.use(paymentRoutes);
 app.use(adminRoutes);
 
 // 404 handler
