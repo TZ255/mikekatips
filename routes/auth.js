@@ -44,7 +44,6 @@ router.get('/auth/google', (req, res) => {
     state,
   });
 
-  console.log('Redirecting to Google OAuth URL:', url);
   res.redirect(url);
 });
 

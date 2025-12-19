@@ -95,8 +95,8 @@ app.use((req, res, next) => {
   // Prefer request-scoped user (fresh), fallback to session user
   res.locals.user = req.user || req.session.user || null;
   // Only read (and clear) flash if it exists to avoid modifying new sessions
-  const hasFlash = req.session && req.session.flash && Object.keys(req.session.flash).length > 0;
-  res.locals.messages = hasFlash ? req.flash() : {};
+  const hasFlash = req.session && req.session.flash;
+  res.locals.flash = hasFlash && typeof req.flash === 'function' ? req.flash() : {};
   next();
 });
 
