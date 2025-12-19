@@ -96,7 +96,7 @@ app.use((req, res, next) => {
   res.locals.user = req.user || req.session.user || null;
   // Only read (and clear) flash if it exists to avoid modifying new sessions
   const hasFlash = req.session && req.session.flash;
-  res.locals.flash = hasFlash && typeof req.flash === 'function' ? req.flash() : {};
+  res.locals.messages = hasFlash && typeof req.flash === 'function' ? req.flash() : {};
   next();
 });
 
