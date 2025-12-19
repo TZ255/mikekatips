@@ -22,31 +22,12 @@
 
                         <!-- Flash Messages -->
                         <%- include('../0-partials/flashMessages') %>
-                        
-                        <!-- URL Error Messages -->
-                        <% if (typeof query !== 'undefined' && query.error) { %>
-                            <div class="alert alert-danger" role="alert">
-                                <i class="fa-solid fa-triangle-exclamation me-2"></i>
-                                <%= query.error %>
-                            </div>
-                        <% } %>
-
                         <!-- Google Sign In Button -->
                         <div class="d-grid gap-3">
-                            <button id="googleSignInBtn" class="btn btn-danger btn-lg py-3 rounded-3 shadow-sm" onclick="signInWithGoogle()">
+                            <a href="/auth/google" class="btn btn-danger btn-lg py-3 rounded-3 shadow-sm" id="googleSignInBtn">
                                 <i class="fa-brands fa-google me-2"></i>
                                 <span>Ingia kwa Google</span>
-                            </button>
-                        </div>
-
-                        <div class="text-center mt-4">
-                            <hr class="my-4">
-                            <p class="text-muted mb-0">
-                                Huna akaunti? 
-                                <a href="/auth/register" class="text-primary text-decoration-none fw-semibold">
-                                    Jisajili hapa
-                                </a>
-                            </p>
+                            </a>
                         </div>
 
                         <!-- Legal Links -->
@@ -76,5 +57,4 @@
     </div>
 </main>
 
-<!-- Firebase Auth Script -->
-<%- include('extras/firebase-auth-script') %>
+<!-- Server-side Google OAuth redirect; no client Firebase needed -->

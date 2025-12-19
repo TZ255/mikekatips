@@ -1,9 +1,17 @@
 const express = require('express');
-const initializeFirebase = require('../config/firebase');
+const crypto = require('crypto');
 const User = require('../models/User');
+const { OAuth2Client } = require('google-auth-library');
 
 const router = express.Router();
-const admin = initializeFirebase();
+
+function getGoogleClient(req) {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  if (!clientId || !clientSecret) return null;
+  const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${req.protocol}://${req.get('host')}/auth/google/callback`;
+  return new OAuth2Client({ clientId, clientSecret, redirectUri });
+}
 
 // Auth page routes
 router.get('/auth/login', (req, res) => {
@@ -11,42 +19,94 @@ router.get('/auth/login', (req, res) => {
   if (req.session.user) {
     return res.redirect('/');
   }
-  res.render('auth/login', { query: req.query });
+  res.render('auth/login');
 });
 
+// Registration is disabled; funnel to login so Google flow creates accounts on first login
 router.get('/auth/register', (req, res) => {
-  // If already logged in, redirect to home
-  if (req.session.user) {
-    return res.redirect('/');
-  }
-  res.render('auth/register');
+  return res.redirect('/auth/login');
 });
 
+// Start Google OAuth (server-side)
+router.get('/auth/google', (req, res) => {
+  const googleClient = getGoogleClient(req);
+  if (!googleClient) {
+    req.flash('error', 'Google Auth haijasanidiwa');
+    return res.redirect('/auth/login');
+  }
 
-// Login endpoint (for Firebase token verification)
-router.post('/auth/verify', async (req, res) => {
+  const state = crypto.randomBytes(16).toString("hex");
+  req.session.oauthState = state;
+
+  const url = googleClient.generateAuthUrl({
+    scope: ['openid', 'email', 'profile'],
+    prompt: 'select_account',
+    state,
+  });
+
+  console.log('Redirecting to Google OAuth URL:', url);
+  res.redirect(url);
+});
+
+// Google OAuth callback
+router.get('/auth/google/callback', async (req, res) => {
+  const googleClient = getGoogleClient(req);
+  if (!googleClient) {
+    req.flash('error', 'Tatizo limetokea katika Google Auth');
+    return res.redirect('/auth/login');
+  }
+
   try {
-    const { idToken } = req.body;
-    
-    if (!idToken || typeof idToken !== 'string' || idToken.length < 10) {
-      return res.status(400).json({ success: false, message: 'Valid ID token required' });
+    const { code, state } = req.query;
+    if (!code) {
+      req.flash('error', 'Hakuna code iliyorejeshwa kutoka Google');
+      return res.redirect('/auth/login');
     }
 
-    // Verify Firebase token
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
-    
-    if (!decodedToken.uid || !decodedToken.email) {
-      return res.status(401).json({ success: false, message: 'Invalid token payload' });
+    // Validate state parameter
+    if (!state || state !== req.session.oauthState) {
+      req.flash('error', 'Invalid OAuth state');
+      return res.redirect('/auth/login');
     }
-    
-    let user = await User.findOne({ uid: decodedToken.uid });
-    
+
+    // Clear stored state
+    delete req.session.oauthState;
+
+    const { tokens } = await googleClient.getToken(code);
+    if (!tokens.id_token) {
+      req.flash('error', 'Hakuna ID token kutoka Google');
+      return res.redirect('/auth/login');
+    }
+
+    // Verify ID token and extract profile
+    const ticket = await googleClient.verifyIdToken({
+      idToken: tokens.id_token,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email) {
+      req.flash('error', 'Token haijakamilika');
+      return res.redirect('/auth/login');
+    }
+
+    const uid = payload.sub; // Google user ID
+    const email = payload.email;
+    const name = payload.name || email.split('@')[0];
+
+    // Find existing user by uid or email
+    let user = await User.findOne({ $or: [{ uid }, { email }] });
     if (!user) {
       user = await User.create({
-        uid: decodedToken.uid,
-        email: decodedToken.email,
-        name: decodedToken.name || decodedToken.email.split('@')[0]
+        uid,
+        email,
+        name
       });
+    } else {
+      // Keep uid in sync if it was created via another flow
+      if (!user.uid) {
+        user.uid = uid;
+        await user.save();
+      }
     }
 
     // Store user in session with explicit save
@@ -60,29 +120,18 @@ router.post('/auth/verify', async (req, res) => {
       expiresAt: user.expiresAt
     };
 
-    // Explicitly save session
     req.session.save((err) => {
       if (err) {
         console.error('Session save error:', err);
-        return res.status(500).json({ success: false, message: 'Session save failed' });
+        req.flash('error', 'Hitilafu katika kuhifadhi kikao');
+        return res.redirect('/auth/login');
       }
-      
-      res.json({ 
-        success: true, 
-        message: 'Login successful',
-        user: {
-          id: user._id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          isPaid: user.isPaid
-        }
-      });
+      return res.redirect('/');
     });
-
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(401).json({ success: false, message: 'Authentication failed' });
+    console.error('Google OAuth callback error:', error);
+    req.flash('error', 'Uthibitisho haukufanikiwa');
+    res.redirect('/auth/login');
   }
 });
 
@@ -131,7 +180,7 @@ router.post('/auth/refresh', async (req, res) => {
     }
 
     const user = await User.findById(req.session.user.id);
-    
+
     if (!user) {
       req.session.destroy();
       return res.status(401).json({ success: false, message: 'User not found' });

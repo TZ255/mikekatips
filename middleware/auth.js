@@ -1,7 +1,4 @@
-const initializeFirebase = require('../config/firebase');
 const User = require('../models/User');
-
-const admin = initializeFirebase();
 
 // Middleware to check if user is authenticated (required)
 const authMiddleware = (req, res, next) => {

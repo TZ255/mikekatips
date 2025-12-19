@@ -46,9 +46,6 @@
     <!-- main css file -->
     <link href="/css/style.css" rel="stylesheet">
 
-    <!-- Firebase Config and set window.firebaseConfig globally -->
-    <script src="/js/firebase-config.js"></script>
-
     <!-- Load HTMX -->
     <script src="/js/htmx.min.js"></script>
 
@@ -106,7 +103,7 @@
       </div>
     </div>
   </div>
+  <%- include('../0-partials/toastMessages') %>
   <%- include('../0-partials/body-scripts') %>
 </body>
-
 </html>

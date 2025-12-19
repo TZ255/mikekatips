@@ -93,7 +93,7 @@ router.post('/admin/tips/add/bettingtipsters', adminMiddleware, async (req, res)
     const htmfile = req.files?.htmfile
     
     if (!date2 || !htmfile) {
-      req.flash('File upload data missing');
+      req.flash('error', 'File upload data missing');
       return res.redirect('/admin/tips/add')
     }
 
