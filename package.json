@@ -34,7 +34,7 @@
     "nodemon": "^3.1.10",
     "openai": "^5.20.3",
     "resend": "^6.6.0",
-    "tanzanian-phone-validator": "^1.1.5",
+    "tanzanian-phone-validator": "github:TZ255/tanzanian-phone-validator",
     "zod": "^3.25.76"
   },
   "devDependencies": {
