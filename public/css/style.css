@@ -2,9 +2,9 @@
 
 /* Custom color variables */
 :root {
-  --bs-primary: #0d6efd;
-  --bs-success: #198754;
-  --bs-warning: #ffc107;
+  --bs-primary: #0f172a;
+  --bs-success: #1fbf75;
+  --bs-warning: #f6c344;
   --bs-danger: #dc3545;
 }
 
@@ -16,6 +16,22 @@
 .card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.tip-card {
+  border: 1px solid #f1f3f5;
+  border-radius: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.tip-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+}
+
+.tip-card__header {
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
 }
 
 /* Premium content styling */
@@ -39,6 +55,61 @@
 /* Custom navbar brand styling */
 .navbar-brand {
   font-size: 1.5rem !important;
+}
+
+.nav-modern {
+  background: linear-gradient(135deg, #0b1221, #0f172a);
+  color: #f8f9fc;
+}
+
+.nav-modern .navbar-brand {
+  color: #fff;
+}
+
+.nav-modern .brand-mark {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f6c344;
+}
+
+.nav-modern .nav-link {
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 600;
+  padding: 0.65rem 0.9rem;
+  border-radius: 999px;
+}
+
+.nav-modern .nav-link:hover,
+.nav-modern .nav-link:focus {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-modern .nav-link.active {
+  color: #f6c344;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-modern .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.nav-modern .navbar-toggler:focus {
+  box-shadow: 0 0 0 0.15rem rgba(246, 195, 68, 0.35);
+}
+
+.btn-ghost-light {
+  color: #f8f9fc;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-ghost-light:hover,
+.btn-ghost-light:focus {
+  color: #0f172a;
+  background: #f6c344;
+  border-color: #f6c344;
 }
 
 /* Sticky navbar offset */

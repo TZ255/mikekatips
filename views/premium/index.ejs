@@ -1,0 +1,316 @@
+<% title = title %>
+<% description = description %>
+<% keywords = keywords %>
+<% page = page %>
+<% page_url = page_url %>
+
+<main class="premium-page bg-light">
+  <section class="premium-hero py-5">
+    <div class="container">
+      <div class="row gy-4 align-items-center">
+        <div class="col-lg-7">
+          <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+            <span class="badge premium-badge">
+              <i class="fa-solid fa-crown me-1"></i>
+              Premium Tips
+            </span>
+            <span class="badge bg-light text-dark">
+              <i class="fa-solid fa-calendar-day me-1 text-primary"></i>
+              <%= swahiliDay %> - <%= currentDateDisplay %>
+            </span>
+          </div>
+          <h1 class="display-5 fw-bold text-white mb-3">
+            Premium Tips za <%= swahiliDay %>
+          </h1>
+          <p class="lead text-light opacity-75 mb-4">
+            Mikeka ya kulipia yenye viwango vikubwa vya ushindi. Tunachuja mechi na kukupa chaguo bora zaidi la ushindi. Lipia sasa na uanze kushinda!
+          </p>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="card shadow-lg border-0 premium-user-card h-100">
+            <% if (user) { %>
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="icon-circle bg-light text-primary">
+                  <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div>
+                  <p class="text-uppercase small text-white-50 mb-1">Akaunti Yako</p>
+                  <h5 class="text-white mb-0"><%= user.name || user.email %></h5>
+                  <% if (user.isPaid) { %>
+                  <span class="badge bg-success text-white mt-1">
+                    <i class="fa-solid fa-circle-check me-1"></i>
+                    Premium Member
+                  </span>
+                  <% } %>
+                  <% if (user && !user.isPaid) { %>
+                  <span class="badge bg-warning text-dark mt-1">
+                    <i class="fa-solid fa-lock me-1"></i>
+                    Bado hujalipia
+                  </span>
+                  <% } %>
+                </div>
+              </div>
+              <div class="bg-white bg-opacity-10 rounded-4 p-3 text-white">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-white-50">Email</span>
+                  <span class="fw-semibold"><%= user.email %></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-white-50">Account</span>
+                  <span class="fw-semibold"><%= user.isPaid ? 'PAID' : 'NOT PAID' %></span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span class="text-white-50">Expire</span>
+                  <span class="fw-semibold">
+                    <%= user.expiresAt ? new Date(user.expiresAt).toLocaleDateString('sw-TZ', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-:-' %>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <% } %>
+
+            <% if (!user) { %>
+            <div class="card-body p-4 text-center text-white">
+              <div class="icon-circle border border-light text-warning mx-auto mb-3">
+                <i class="fa-solid fa-crown fa-2x"></i>
+              </div>
+              <h5 class="fw-bold mb-2">Ingia kufungua Premium Tips</h5>
+              <p class="text-white-50 mb-3">Akaunti yako inakuwezesha kufuatilia mikeka ya Premium, kufanya malipo, na kupokea masasisho ya haraka.</p>
+              <a href="/auth/login" class="btn btn-warning fw-semibold w-100 py-3 rounded-5">
+                <i class="fa-solid fa-circle-user me-2"></i>
+                Ingia Sasa
+              </a>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5">
+    <div class="container">
+      <% if (!user) { %>
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+          <div class="card shadow-sm border-0">
+            <div class="card-body p-4 p-md-5 text-center">
+              <div class="icon-circle-lg bg-light text-dark border border-dark mx-auto mb-4">
+                <i class="fa-solid fa-lock-open fa-2x"></i>
+              </div>
+              <h3 class="fw-bold mb-3">Ingia kuona taarifa zako</h3>
+              <p class="text-secondary mb-4">
+                Tunaonyesha taarifa zako (jina, barua pepe), hali ya malipo na tarehe pindi unapoingia.
+              </p>
+              <a href="/auth/login" class="btn btn-primary btn-lg px-4">
+                <i class="fa-solid fa-user me-2"></i>
+                Ingia / Jisajili
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } %>
+
+      <% if (user && !user.isPaid) { %>
+      <div class="row gy-4 align-items-stretch">
+        <!-- paywall -->
+        <div class="col-lg-7 mb-4 mb-lg-0">
+          <div class="card h-100 shadow-sm border-0 premium-paywall">
+            <div class="card-body p-4 p-md-5 d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <span class="badge bg-warning text-dark mb-2">Punguzo la 50%</span>
+                  <h3 class="fw-bold mb-1">Fungua Premium Tips</h3>
+                  <p class="text-secondary mb-0">Lipia mara moja, upate mwezi mzima wa premium tips zilizoandaliwa na timu yetu.</p>
+                </div>
+                <div class="text-end">
+                  <div class="text-secondary text-decoration-line-through small">TSh 20,000</div>
+                  <div class="display-6 fw-bold text-dark">TSh 9,500</div>
+                  <div class="text-success fw-semibold">/ Mwezi</div>
+                </div>
+              </div>
+              <div class="row g-3 mb-4">
+                <div class="col-sm-6">
+                  <div class="d-flex align-items-start gap-3">
+                    <span class="text-success"><i class="fa-solid fa-check"></i></span>
+                    <div>
+                      <h6 class="mb-1">Tips zilizochujwa</h6>
+                      <p class="text-muted small mb-0">Tunachuja mechi na kukupa machaguo ya ushindi.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="d-flex align-items-start gap-3">
+                    <span class="text-success"><i class="fa-solid fa-check"></i></span>
+                    <div>
+                      <h6 class="mb-1">Odds 10+ kila siku</h6>
+                      <p class="text-muted small mb-0">Tunatoa odds 10+ kila siku kwa mwezi mzima.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="d-flex align-items-start gap-3">
+                    <span class="text-success"><i class="fa-solid fa-check"></i></span>
+                    <div>
+                      <h6 class="mb-1">Msaada wa timu</h6>
+                      <p class="text-muted small mb-0">Usaidizi pale unapohitaji ufafanuzi wa mechi au machaguo.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="d-flex align-items-start gap-3">
+                    <span class="text-success"><i class="fa-solid fa-check"></i></span>
+                    <div>
+                      <h6 class="mb-1">Upatikanaji 24/7</h6>
+                      <p class="text-muted small mb-0">Premium tips zinapatikana wakati wowote, mahali popote.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-auto d-grid gap-2">
+                <button type="button" class="btn btn-warning btn-lg shadow-sm fw-semibold py-3 rounded-4"
+                  data-bs-toggle="modal" data-bs-target="#paymentModal"
+                  hx-get="/api/pay-form"
+                  hx-target="#paymentModalBody"
+                  hx-swap="innerHTML">
+                  <i class="fa-solid fa-crown me-2"></i>
+                  Lipia Premium Tips
+                </button>
+                <small class="text-muted text-center">Malipo salama, muda wa upatikanaji: mwezi 1</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- taarifa za akaunti -->
+        <div class="col-lg-5">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body p-4">
+              <h5 class="fw-bold mb-3">
+                <i class="fa-solid fa-circle-info text-primary me-2"></i>
+                Taarifa za akaunti
+              </h5>
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="icon-circle bg-primary bg-opacity-10 text-primary">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+                <div>
+                  <p class="text-muted small mb-1">Jina</p>
+                  <h6 class="mb-0"><%= user.name || user.email %></h6>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="icon-circle bg-danger bg-opacity-10 text-danger">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                  <p class="text-muted small mb-1">Hali ya malipo</p>
+                  <h6 class="mb-0 text-danger">Bado hujalipia</h6>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                <div class="icon-circle bg-success bg-opacity-10 text-success">
+                  <i class="fa-solid fa-check-double"></i>
+                </div>
+                <div>
+                  <p class="text-muted small mb-1">Premium tips inatoa</p>
+                  <h6 class="mb-0">Mikeka bora na odds kubwa.</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } %>
+
+      <% if (user && user.isPaid) { %>
+      <div class="row gy-4">
+        <div class="col-12">
+          <div class="card shadow-sm border-0">
+            <div class="card-body d-flex flex-wrap gap-3 align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-3">
+                <div class="icon-circle bg-success bg-opacity-10 text-success">
+                  <i class="fa-solid fa-unlock"></i>
+                </div>
+                <div>
+                  <p class="text-muted small mb-1">Umefungua Premium Tips</p>
+                  <h5 class="mb-0">Mikeka ya leo kwa <%= swahiliDay %></h5>
+                </div>
+              </div>
+              <div class="text-end">
+                <p class="text-muted small mb-1">Inaisha</p>
+                <h6 class="mb-0">
+                  <%= user.expiresAt ? new Date(user.expiresAt).toLocaleDateString('sw-TZ', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Haijawekwa' %>
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12" id="premium-list">
+          <% if (premiumTips && premiumTips.length > 0) { %>
+          <div class="row g-3">
+            <% premiumTips.forEach(item => { %>
+            <div class="col-md-6 col-xl-4">
+              <div class="card h-100 premium-tip-card">
+                <div class="card-header border-0 py-3 premium-tip-card__header">
+                  <div class="d-flex justify-content-between align-items-center text-white">
+                    <span class="fw-semibold">
+                      <i class="fa-solid fa-crown me-1"></i>
+                      Premium Tip
+                    </span>
+                    <small class="text-white-75">
+                      <i class="fa-solid fa-calendar-check me-1"></i>
+                      <%= new Date(item.date).toLocaleDateString('sw-TZ', { day: '2-digit', month: '2-digit', year: 'numeric' }) %>
+                    </small>
+                  </div>
+                </div>
+                <div class="card-body p-3 p-md-4">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="text-secondary">
+                      <i class="fa-solid fa-clock me-1"></i>
+                      <span class="fw-semibold text-dark"><%= item.time %></span>
+                    </div>
+                    <span class="badge text-bg-light text-uppercase"><%= item.league %></span>
+                  </div>
+                  <h6 class="fw-bold text-dark mb-2"><%= item.match %></h6>
+                  <p class="text-muted small mb-3">
+                    Utabiri: <span class="fw-semibold text-dark"><%= item.tip %></span>
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge bg-warning text-dark px-3 py-2">
+                      <i class="fa-solid fa-bolt me-1"></i>
+                      <%= item.tip %>
+                    </span>
+                    <span class="fw-bold text-primary fs-5">
+                      <%= item.odds %>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% }); %>
+          </div>
+          <% } %>
+
+          <% if (!premiumTips || premiumTips.length === 0) { %>
+          <div class="text-center py-5">
+            <div class="icon-circle-lg bg-light text-warning mx-auto mb-3">
+              <i class="fa-solid fa-circle-info fa-2x"></i>
+            </div>
+            <h4 class="text-dark mb-2">Hakuna premium tips zilizowekwa kwa siku hii.</h4>
+            <p class="text-secondary mb-0">Tutakutumia mpya mara tu zinapoongezwa, endelea kufuatilia.</p>
+          </div>
+          <% } %>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<!-- Payment Modal -->
+<%- include('extras/payment-modal') %>

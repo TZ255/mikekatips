@@ -1,0 +1,27 @@
+<!-- Global Payment Modal (shared by HTMX fragments) -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
+    data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="paymentModalTitle" class="modal-title">
+                    <i class="fa-solid fa-wallet me-2"></i> Malipo
+                </h5>
+            </div>
+            <div id="paymentModalBody" class="modal-body">
+                <!-- HTMX will inject the payment form here -->
+                <div class="d-flex justify-content-center my-5">
+                    <div class="spinner-border text-dark fs-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div id="paymentModalFooter" class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" onclick="window.location.reload()">
+                    <i class="fa-solid fa-circle-xmark me-1"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

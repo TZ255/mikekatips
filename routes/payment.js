@@ -19,7 +19,7 @@ const PRICE = {
 // Serve the HTMX payment form (to be loaded inside the modal)
 router.get('/api/pay-form', async (req, res) => {
     try {
-        return res.render('index/extras/htmx-form', { layout: false });
+        return res.render('premium/extras/htmx-form', { layout: false });
     } catch (error) {
         res.render('zz-fragments/payment-error', { layout: false, message: 'Imeshindikana kupakia fomu ya malipo.' });
     }

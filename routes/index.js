@@ -72,22 +72,16 @@ router.get('/', freshUserInfo, async (req, res) => {
     // Generate navigation data
     const navData = generateDateNavigation(currentDate, '/');
     
-    // Fetch free tips (limit to first 50)
-    const freeTips = await Tip.find({
-      date: dateStr,
-      isPremium: false
-    }).sort({ time: 1 }).limit(50);
-    
-    // Fetch premium tips
-    const premiumTips = await Tip.find({
-      date: dateStr,
-      isPremium: true
-    }).sort({ time: 1 });
-    
-    // Fetch recent predictions (last 3)
-    const predictions = await Prediction.find({ 
-      date: dateStr,
-      status: 'published' 
+  // Fetch free tips (limit to first 50)
+  const freeTips = await Tip.find({
+    date: dateStr,
+    isPremium: false
+  }).sort({ time: 1 }).limit(50);
+  
+  // Fetch recent predictions (last 3)
+  const predictions = await Prediction.find({ 
+    date: dateStr,
+    status: 'published' 
     });
 
     //add leo to the swahiliday
@@ -103,7 +97,6 @@ router.get('/', freshUserInfo, async (req, res) => {
       page_url: `https://mikekatips.co.tz`,
       page: 'index',
       freeTips,
-      premiumTips,
       predictions,
       currentDate: dateStr,
       modifiedDate,
@@ -111,6 +104,37 @@ router.get('/', freshUserInfo, async (req, res) => {
     });
   } catch (error) {
     console.error('Home route error:', error);
+    res.status(500).render('500', { title: 'Server Error' });
+  }
+});
+
+// Premium tips dedicated page
+router.get('/premium-tips', freshUserInfo, async (req, res) => {
+  try {
+    const currentDate = dayjs().tz(TZ, false);
+    const dateStr = currentDate.format('YYYY-MM-DD');
+    const navData = generateDateNavigation(currentDate, '/premium-tips');
+
+    const premiumTips = await Tip.find({
+      date: dateStr,
+      isPremium: true
+    }).sort({ time: 1 });
+
+    const swahiliDay = `Leo, ${navData.swahiliDay}`;
+
+    res.render('premium/index', {
+      page_url: `https://mikekatips.co.tz/premium-tips`,
+      page: 'premium',
+      title: `Premium Tips za ${swahiliDay} ${navData.currentDateDisplay} - MikekaTips`,
+      description: `Premium tips zenye ushindi mkubwa kwa ${swahiliDay} ${navData.currentDateDisplay}. Jiunge uone mikeka ya kulipia yenye ubora mkubwa kila siku.`,
+      keywords: `premium betting tips, mikeka ya kulipia, tips za ushindi, vip tips, premium ${navData.currentDateDisplay}`,
+      premiumTips,
+      currentDate: dateStr,
+      swahiliDay,
+      currentDateDisplay: navData.currentDateDisplay
+    });
+  } catch (error) {
+    console.error('Premium tips route error:', error);
     res.status(500).render('500', { title: 'Server Error' });
   }
 });
@@ -124,22 +148,16 @@ router.get('/utabiri-wa-mechi-za-jana', freshUserInfo, async (req, res) => {
     // Generate navigation data
     const navData = generateDateNavigation(currentDate, '/utabiri-wa-mechi-za-jana');
     
-    // Fetch free tips
-    const freeTips = await Tip.find({
-      date: dateStr,
-      isPremium: false
-    }).sort({ time: 1 }).limit(50);
-    
-    // Fetch premium tips
-    const premiumTips = await Tip.find({
-      date: dateStr,
-      isPremium: true
-    }).sort({ time: 1 });
-    
-    // Fetch recent predictions
-    const predictions = await Prediction.find({ 
-      date: dateStr,
-      status: 'published'
+  // Fetch free tips
+  const freeTips = await Tip.find({
+    date: dateStr,
+    isPremium: false
+  }).sort({ time: 1 }).limit(50);
+  
+  // Fetch recent predictions
+  const predictions = await Prediction.find({ 
+    date: dateStr,
+    status: 'published'
     }).select('-body'); // Exclude body for listing
 
     //add jana to the swahiliday  
@@ -153,7 +171,6 @@ router.get('/utabiri-wa-mechi-za-jana', freshUserInfo, async (req, res) => {
       page_url: `https://mikekatips.co.tz/utabiri-wa-mechi-za-jana`,
       page: 'index-jana',
       freeTips,
-      premiumTips,
       predictions,
       currentDate: dateStr,
       modifiedDate,
@@ -186,22 +203,16 @@ router.get('/utabiri-wa-mechi-za-kesho', freshUserInfo, async (req, res) => {
     // Generate navigation data
     const navData = generateDateNavigation(currentDate, '/utabiri-wa-mechi-za-kesho');
     
-    // Fetch free tips
-    const freeTips = await Tip.find({
-      date: dateStr,
-      isPremium: false
-    }).sort({ time: 1 }).limit(50);
-    
-    // Fetch premium tips
-    const premiumTips = await Tip.find({
-      date: dateStr,
-      isPremium: true
-    }).sort({ time: 1 });
-    
-    // Fetch recent predictions
-    const predictions = await Prediction.find({ 
-      date: dateStr,
-      status: 'published' 
+  // Fetch free tips
+  const freeTips = await Tip.find({
+    date: dateStr,
+    isPremium: false
+  }).sort({ time: 1 }).limit(50);
+  
+  // Fetch recent predictions
+  const predictions = await Prediction.find({ 
+    date: dateStr,
+    status: 'published' 
     });
 
     //add kesho to the swahiliday  
@@ -215,7 +226,6 @@ router.get('/utabiri-wa-mechi-za-kesho', freshUserInfo, async (req, res) => {
       page_url: `https://mikekatips.co.tz/utabiri-wa-mechi-za-kesho`,
       page: 'index-kesho',
       freeTips,
-      premiumTips,
       predictions,
       currentDate: dateStr,
       modifiedDate,
@@ -236,23 +246,17 @@ router.get('/date/:date', freshUserInfo, async (req, res) => {
     // Generate navigation data
     const navData = generateDateNavigation(currentDate);
     
-    // Fetch free tips (limit to first 50)
-    const freeTips = await Tip.find({
-      date: dateStr,
-      isPremium: false
-    }).sort({ time: 1 }).limit(50);
-    
-    // Fetch premium tips
-    const premiumTips = await Tip.find({
-      date: dateStr,
-      isPremium: true
-    }).sort({ time: 1 });
-    
-    // Fetch recent predictions
-    const predictions = await Prediction.find({ 
-      date: dateStr,
-      status: 'published' 
-    });
+  // Fetch free tips (limit to first 50)
+  const freeTips = await Tip.find({
+    date: dateStr,
+    isPremium: false
+  }).sort({ time: 1 }).limit(50);
+  
+  // Fetch recent predictions
+  const predictions = await Prediction.find({ 
+    date: dateStr,
+    status: 'published' 
+  });
     
     // Generate modified date for SEO
     const today = dayjs().tz(TZ);
@@ -264,7 +268,6 @@ router.get('/date/:date', freshUserInfo, async (req, res) => {
       page_url: `https://mikekatips.co.tz/date/${dateStr}`,
       page: 'index-date',
       freeTips,
-      premiumTips,
       predictions,
       currentDate: dateStr,
       modifiedDate,

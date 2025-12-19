@@ -125,7 +125,7 @@ router.get('/auth/google/callback', async (req, res) => {
         req.flash('error', 'Hitilafu katika kuhifadhi kikao');
         return res.redirect('/auth/login');
       }
-      return res.redirect('/');
+      return res.redirect('/premium-tips');
     });
   } catch (error) {
     console.error('Google OAuth callback error:', error);

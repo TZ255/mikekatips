@@ -27,31 +27,21 @@
             </h1>
             <p class="lead text-secondary fs-5">Pata tips na mikeka inayoshinda kila siku kutoka kwa wataalamu. Utabiri
                 wa mechi za <%= swahiliDay.toLowerCase() %> <%= currentDateDisplay %></p>
+            <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+                <a href="#free-tips" class="btn btn-outline-secondary btn-lg">
+                    <i class="fa-solid fa-gift me-2"></i>
+                    Free Tips
+                </a>
+                <a href="/premium-tips" class="btn btn-warning btn-lg shadow-sm">
+                    <i class="fa-solid fa-crown me-2"></i>
+                    Premium Tips
+                </a>
+            </div>
         </div>
 
-        <!-- Bootstrap Nav Tabs -->
-        <ul class="nav nav-pills nav-justified mb-5 p-1 bg-light rounded-pill mx-auto" id="tipsTabs" role="tablist"
-            style="max-width: 800px;">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active fw-semibold rounded-pill px-4 py-3" id="free-tab" data-bs-toggle="tab"
-                    data-bs-target="#free-tips" type="button" role="tab">
-                    <i class="fa-solid fa-gift me-2"></i>
-                    FREE
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link fw-semibold rounded-pill px-4 py-3" id="premium-tab" data-bs-toggle="tab"
-                    data-bs-target="#premium-tips" type="button" role="tab">
-                    <i class="fa-solid fa-coins me-2"></i>
-                    PREMIUM
-                </button>
-            </li>
-        </ul>
-
-        <!-- Tab Content -->
-        <div class="tab-content tgt-tabContent" id="tipsTabContent">
+        <!-- Free Tips -->
+        <div class="bg-white rounded-4 shadow-sm p-3 p-md-4">
             <%- include('./extras/free-tips-tab') %>
-            <%- include('./extras/premium-tips-tab') %>
         </div>
 
         <!-- SEO Content -->

@@ -1,65 +1,67 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-    <div class="container">
-        <a class="navbar-brand fw-bold fs-4" href="/">
-            <i class="fa-solid fa-trophy text-warning"></i>
-            MikekaTips
-        </a>
-        
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link <%= (page === 'index' || page === 'index-jana' || page === 'index-date') ? 'active' : '' %>" href="/">
-                        <i class="fa-solid fa-house"></i>
-                        Nyumbani
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <%= page === 'prediction' ? 'active' : '' %>" href="/prediction">
-                        <i class="fa-solid fa-chart-line"></i>
-                        Predictions
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <%= page === 'index-kesho' ? 'active' : '' %>" href="/utabiri-wa-mechi-za-kesho">
-                        <i class="fa-solid fa-circle-arrow-right"></i>
-                        Kesho
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fa-solid fa-shield-halved"></i>
-                        Bookies
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="d-flex">
-                <% if (user) { %>
-                    <div class="dropdown">
-                        <button id="authBtn" class="btn btn-outline-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-circle-user"></i>
-                            <span><%= user.name || user.email %></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" id="userDropdown">
-                            <li><h6 class="dropdown-header"><%= user.name || user.email %></h6></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/auth/logout">
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                                Toka
-                            </a></li>
-                        </ul>
-                    </div>
-                <% } else { %>
-                    <a href="/auth/login" class="btn btn-outline-light">
-                        <i class="fa-solid fa-circle-user"></i>
-                        <span>Ingia</span>
-                    </a>
-                <% } %>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark nav-modern sticky-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+      <span class="brand-mark rounded-circle d-inline-flex align-items-center justify-content-center">
+        <i class="fa-solid fa-crown"></i>
+      </span>
+      <span class="fw-bold">MikekaTips</span>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto align-items-lg-center">
+        <li class="nav-item">
+          <a class="nav-link <% if (page === 'index' || page === 'index-jana' || page === 'index-date') { %>active<% } %>" href="/">
+            Nyumbani
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <% if (page === 'premium') { %>active<% } %>" href="/premium-tips">
+            Premium
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <% if (page === 'prediction') { %>active<% } %>" href="/prediction">
+            Predictions
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <% if (page === 'index-kesho') { %>active<% } %>" href="/utabiri-wa-mechi-za-kesho">
+            Kesho
+          </a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-2">
+        <% if (user) { %>
+        <div class="dropdown">
+          <button id="authBtn" class="btn btn-ghost-light d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-circle-user"></i>
+            <span><%= user.name || user.email %></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm" id="userDropdown">
+            <li><h6 class="dropdown-header"><%= user.name || user.email %></h6></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item" href="/auth/logout">
+                <i class="fa-solid fa-right-from-bracket me-2"></i>
+                Toka
+              </a>
+            </li>
+          </ul>
         </div>
+        <% } %>
+
+        <% if (!user) { %>
+        <a href="/auth/login" class="btn btn-ghost-light">
+          <i class="fa-solid fa-circle-user me-2"></i>
+          Ingia
+        </a>
+        <% } %>
+      </div>
     </div>
+  </div>
 </nav>

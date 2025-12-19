@@ -1,0 +1,84 @@
+<style>
+    .premium-hero {
+        position: relative;
+        background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 25%),
+                    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.08), transparent 20%),
+                    linear-gradient(135deg, #0d1b2a, #0b1221 45%, #11253a);
+        color: #f8f9fa;
+        overflow: hidden;
+    }
+
+    .premium-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.05) 100%);
+        pointer-events: none;
+    }
+
+    .premium-badge {
+        background: linear-gradient(135deg, #ffd700, #ff9f1c);
+        color: #5c3300;
+        border: none;
+        font-weight: 700;
+    }
+
+    .premium-user-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+    }
+
+    .icon-circle {
+        width: 48px;
+        height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 1.1rem;
+    }
+
+    .icon-circle-lg {
+        width: 70px;
+        height: 70px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .premium-paywall {
+        background: linear-gradient(145deg, #fffbea, #ffffff);
+    }
+
+    .premium-tip-card {
+        border: 1px solid #f1f3f5;
+        border-radius: 16px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        overflow: hidden;
+    }
+
+    .premium-tip-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .premium-tip-card__header {
+        background: linear-gradient(135deg, #ffb703, #ff7b00);
+    }
+
+    .text-white-75 {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    @media (max-width: 768px) {
+        .premium-hero h1 {
+            font-size: 2rem;
+        }
+
+        .premium-tip-card {
+            border-radius: 12px;
+        }
+    }
+</style>
