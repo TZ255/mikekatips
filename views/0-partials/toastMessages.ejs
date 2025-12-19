@@ -1,5 +1,5 @@
 <% if (messages && messages.error) { %>
- <div class="toast-container flash-toast-container position-fixed top-0 end-0 p-3">
+<div class="toast-container flash-toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
   <div id="liveToast" class="toast text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-body text-white">
       <%= messages.error %>
@@ -9,7 +9,7 @@
 <% } %>
 
 <% if (messages && messages.success) { %>
- <div class="toast-container flash-toast-container position-fixed top-0 end-0 p-3">
+<div class="toast-container flash-toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
   <div id="liveToast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-body text-white">
       <%= messages.success %>
@@ -19,7 +19,7 @@
 <% } %>
 
 <% if (messages && messages.info) { %>
- <div class="toast-container flash-toast-container position-fixed top-0 end-0 p-3">
+<div class="toast-container flash-toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
   <div id="liveToast" class="toast text-bg-info" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-body text-white">
       <%= messages.info %>
@@ -27,3 +27,17 @@
   </div>
 </div>
 <% } %>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const els = document.querySelectorAll('.toast');
+    els.forEach((el) => {
+      console.log('Showing toast message', el.textContent);
+      new bootstrap.Toast(el, {
+        autohide: true,
+        delay: Number(el.dataset.bsDelay) || 3500
+      }).show();
+    });
+  });
+</script>
