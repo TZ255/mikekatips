@@ -103,7 +103,7 @@ router.post("/api/pay", async (req, res) => {
 // POST /api/zenopay-webhook
 router.post('/api/payment-webhook', async (req, res) => {
     try {
-        const { order_id, payment_status, email, reference, SECRET } = req.body || {};
+        const { order_id, payment_status, email, phone, reference, SECRET } = req.body || {};
         if (!order_id || SECRET !== process.env.PASS_USER) return res.sendStatus(200);
 
         if (payment_status === 'COMPLETED') {
