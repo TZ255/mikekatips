@@ -72,7 +72,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   name: 'mikekatips.session',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: false, //dont save empty sessions
   store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI,
     collectionName: 'sessions',
@@ -96,7 +96,7 @@ app.use((req, res, next) => {
   res.locals.user = req.user || req.session.user || null;
   // Only read (and clear) flash if it exists to avoid modifying new sessions
   const hasFlash = req.session && req.session.flash;
-  res.locals.messages = hasFlash && typeof req.flash === 'function' ? req.flash() : {};
+  res.locals.messages = hasFlash ? req.flash() : {};
   next();
 });
 
