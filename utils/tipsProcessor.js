@@ -163,7 +163,7 @@ async function processTipsForDate(date, html = "") {
                     match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
                     league: scrapedTip.league,
                     tip: cls.tip,
-                    odds: null, // store as null for onemillion
+                    odds: '-:-', // Placeholder as odds are not used currently
                     isPremium: cls.isPremium,
                     date: date,
                     time: adjustedTime,
