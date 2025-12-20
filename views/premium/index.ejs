@@ -45,7 +45,7 @@
                   </span>
                   <% } %>
                   <% if (user && !user.isPaid) { %>
-                  <span class="badge bg-warning text-dark mt-1">
+                  <span class="badge bg-danger text-light mt-1">
                     <i class="fa-solid fa-lock me-1"></i>
                     Bado hujalipia
                   </span>
@@ -53,13 +53,13 @@
                 </div>
               </div>
               <div class="bg-white bg-opacity-10 rounded-4 p-3 text-white">
-                <div class="d-flex justify-content-between mb-2">
+                <div class="d-flex flex-wrap justify-content-between mb-2">
                   <span class="text-white-50">Email</span>
                   <span class="fw-semibold"><%= user.email %></span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
                   <span class="text-white-50">Account</span>
-                  <span class="fw-semibold"><%= user.isPaid ? 'PAID' : 'NOT PAID' %></span>
+                  <span class="fw-semibold"><%= user.isPaid ? 'PAID' : 'FREE' %></span>
                 </div>
                 <div class="d-flex justify-content-between">
                   <span class="text-white-50">Expire</span>
@@ -177,9 +177,9 @@
                   hx-target="#paymentModalBody"
                   hx-swap="innerHTML">
                   <i class="fa-solid fa-crown me-2"></i>
-                  Lipia Premium Tips
+                  Lipia Premium Sasa
                 </button>
-                <small class="text-muted text-center">Malipo salama, muda wa upatikanaji: mwezi 1</small>
+                <small class="text-muted text-center">Malipo salama, kifurushi cha mwezi 1</small>
               </div>
             </div>
           </div>

@@ -13,21 +13,3 @@
     Hakikisha namba yako iko hewani. Baada ya malipo utapokea ujumbe wa kuthibitisha malipo yako na Premium Tips kufunguliwa.
   </div>
 </div>
-
-<div id="paymentModalFooter" hx-swap-oob="true" class="modal-footer">
-  <button type="button" class="btn btn-outline-secondary" onclick="window.location.reload()">
-    <i class="fa-solid fa-circle-xmark"></i> CANCEL
-  </button>
-</div>
-
-<script>
-  (function(){
-    try {
-      var modalEl = document.getElementById('paymentModal');
-      if (modalEl && window.bootstrap) {
-        var modal = window.bootstrap.Modal.getOrCreateInstance(modalEl, { backdrop: 'static', keyboard: false });
-        modal.show();
-      }
-    } catch (e) {}
-  })();
-</script>
