@@ -25,7 +25,7 @@
                             <i class="fa-solid fa-clock me-1"></i>
                             <span class="fw-semibold text-dark"><%= tip.time %></span>
                         </div>
-                        <span class="badge text-bg-light text-uppercase"><%= tip.league %></span>
+                        <span class="badge text-bg-light text-uppercase fw-semibold text-secondary"><%= tip?.league.length > 20 ? tip?.league.substring(0, 20) + '...' : tip?.league %></span>
                     </div>
 
                     <h6 class="fw-bold text-dark mb-2"><%= tip.match %></h6>
