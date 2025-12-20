@@ -6,25 +6,27 @@ const { default: axios } = require('axios');
 /**
  * Classifies a tip based on the score and returns tip type and premium status
  * @param {string} tipScore - Score like "2:0", "1:1", etc.
+ * @param {string} isFree - Boolean for classifications for free or premium.
  * @returns {Object} Object with tip type and isPremium flag
  */
-function classifyTip(tipScore) {
+function classifyTip(tipScore, isFree) {
     if (!tipScore || tipScore === '') {
         return null;
     }
 
     // Classification arrays
-    const freeHomeWin = ["2:0"];
-    const freeAwayWin = ["0:2"];
-    const free1X = ["1:0"];
-    const freeX2 = ["0:1"];
-    const freeBTTS = ["1:3"];
+    const freeHomeWin = ["2:0", "4:1"];
+    const freeAwayWin = ["0:2", "1:4"];
+    const free1X = ["1:0", "2:1"];
+    const freeX2 = ["0:1", "1:2"];
+    const freeBTTS = ["1:3", "2:3"];
 
-    const premiumHomeWin = ["3:0", "4:0"];
+    const premiumHomeWin = ["3:0", "4:0", "3:1"];
     const premiumAwayWin = ["0:3", "0:4"];
     const premium1X = ["2:0"];
     const premiumX2 = ["0:2"];
-    const premiumBTTS = ["2:3", "2:4"];
+    const premiumUnder35 = ["0:0"];
+    const premiumBTTS = ["7:7"];
 
     // Calculate total goals for Over/Under classifications
     const parts = tipScore.split(':');
@@ -34,55 +36,60 @@ function classifyTip(tipScore) {
         const totalGoals = homeGoals + awayGoals;
 
         // Premium Over 2.5 (5+ goals)
-        if (totalGoals >= 5) {
+        if (totalGoals >= 5 && isFree === false) {
             return { tip: 'Over 2.5', isPremium: true };
         }
 
         // Free Over 2.5
-        if (totalGoals === 4) {
+        if (totalGoals === 4 && isFree === true) {
             return { tip: 'Over 2.5', isPremium: false };
         }
     }
 
-    // Check classifications
-    if (freeHomeWin.includes(tipScore)) {
-        return { tip: 'Home Win', isPremium: false };
-    }
-
-    if (freeAwayWin.includes(tipScore)) {
-        return { tip: 'Away Win', isPremium: false };
-    }
-
-    if (freeBTTS.includes(tipScore)) {
-        return { tip: 'Both Teams to Score', isPremium: false };
-    }
-
-    if (free1X.includes(tipScore)) {
-        return { tip: '1X', isPremium: false };
-    }
-
-    if (freeX2.includes(tipScore)) {
-        return { tip: 'X2', isPremium: false };
-    }
-
-    if (premiumHomeWin.includes(tipScore)) {
+    //Premium classifications
+    if (premiumHomeWin.includes(tipScore) && isFree === false) {
         return { tip: 'Home Win', isPremium: true };
     }
 
-    if (premiumAwayWin.includes(tipScore)) {
+    if (premiumAwayWin.includes(tipScore) && isFree === false) {
         return { tip: 'Away Win', isPremium: true };
     }
 
-    if (premiumBTTS.includes(tipScore)) {
-        return { tip: 'Both Teams to Score', isPremium: true };
+    if (premiumBTTS.includes(tipScore) && isFree === false) {
+        return { tip: 'BTTS: Yes', isPremium: true };
     }
 
-    if (premium1X.includes(tipScore)) {
+    if (premium1X.includes(tipScore) && isFree === false) {
         return { tip: '1X', isPremium: true };
     }
 
-    if (premiumX2.includes(tipScore)) {
+    if (premiumX2.includes(tipScore) && isFree === false) {
         return { tip: 'X2', isPremium: true };
+    }
+
+    if (premiumUnder35.includes(tipScore) && isFree === false) {
+        return { tip: 'Under 3.5', isPremium: true };
+    }
+
+    //Free classifications
+    if (freeHomeWin.includes(tipScore) && isFree === true) {
+        return { tip: 'Home Win', isPremium: false };
+    }
+
+    if (freeAwayWin.includes(tipScore) && isFree === true) {
+        return { tip: 'Away Win', isPremium: false };
+    }
+
+    if (freeBTTS.includes(tipScore) && isFree === true) {
+        return { tip: 'BTTS: Yes', isPremium: false };
+    }
+
+    if (free1X.includes(tipScore) && isFree === true) {
+        return { tip: '1X', isPremium: false };
+    }
+
+    if (freeX2.includes(tipScore) && isFree === true) {
+        return { tip: 'X2', isPremium: false };
     }
 
     // If no classification matches, return null
@@ -118,9 +125,17 @@ async function processTipsForDate(date, html = "") {
 
 
         for (const scrapedTip of scrapedTips) {
-            // Add 3 hours to the time
+            if (!scrapedTip.time || !scrapedTip.time.includes(':')) {
+                continue;
+            }
+
             const [hours, minutes] = scrapedTip.time.split(':').map(Number);
-            const adjustedHours = (hours + 3) % 24;
+            if (Number.isNaN(hours) || Number.isNaN(minutes)) {
+                continue;
+            }
+
+            // Adjust time by adding 1 hour for onemillion
+            const adjustedHours = (hours + 1) % 24;
             const adjustedTime = `${adjustedHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 
             // Filter: only process tips with time >= 12:00
@@ -128,32 +143,35 @@ async function processTipsForDate(date, html = "") {
                 continue;
             }
 
-            const classification = classifyTip(scrapedTip.tip);
+            const freeClassification = classifyTip(scrapedTip.tip, true);
+            const premiumClassification = classifyTip(scrapedTip.tip, false);
 
-            if (!classification) {
+            const classification = [freeClassification, premiumClassification];
+
+            if (freeClassification === null && premiumClassification === null) {
                 console.warn(`Could not classify tip: ${scrapedTip.tip} for match: ${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`);
                 continue;
             }
 
-            // Refine tips based on odds
-            let refinedTip = classification.tip;
-            let oddsString = '--';
 
-            if (classification.tip === 'Home Win') oddsString = scrapedTip.odds.home || '--';
-            if (classification.tip === 'Away Win') oddsString = scrapedTip.odds.away || '--';
+            for (const cls of classification) {
+                if (cls === null) {
+                    continue;
+                }
 
-            const tipObject = {
-                match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
-                league: scrapedTip.league,
-                tip: refinedTip,
-                odds: oddsString,
-                isPremium: classification.isPremium,
-                date: date,
-                time: adjustedTime,
-                status: 'pending'
-            };
+                const tipObject = {
+                    match: `${scrapedTip.homeTeam} vs ${scrapedTip.awayTeam}`,
+                    league: scrapedTip.league,
+                    tip: cls.tip,
+                    odds: null, // store as null for onemillion
+                    isPremium: cls.isPremium,
+                    date: date,
+                    time: adjustedTime,
+                    status: 'pending'
+                };
 
-            processedTips.push(tipObject);
+                processedTips.push(tipObject);
+            }
         }
 
         console.log(`Processed ${processedTips.length} valid tips`);

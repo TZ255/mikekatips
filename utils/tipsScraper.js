@@ -32,49 +32,77 @@ async function scrapeTips(date, html = "") {
         const tips = [];
         let currentLeague = '';
 
-        $('table tbody tr').each((index, row) => {
-            const $row = $(row);
+        // Find the main table that contains the "Correct Score" column
+        const scoreTable = $('table').filter((_, table) => {
+            const headers = $(table)
+                .find('thead th')
+                .map((i, th) => $(th).text().toLowerCase().trim())
+                .get();
+            return headers.includes('correct score');
+        }).first();
 
-            // Check if this is a league header row
-            const leagueCell = $row.find('td[colspan="2"] h4');
-            if (leagueCell.length > 0) {
-                currentLeague = leagueCell.text().trim();
+        if (!scoreTable.length) {
+            return [];
+        }
+
+        scoreTable.find('tbody tr').each((_, row) => {
+            const cells = $(row).find('td');
+            if (!cells.length) return;
+
+            const firstCell = $(cells[0]);
+            const rawCellsText = cells.map((i, cell) => $(cell).text().trim()).get();
+            const colSpan = parseInt(firstCell.attr('colspan') || '1', 10);
+            const thirdCellText = (rawCellsText[2] || '').toLowerCase();
+            const fourthCellText = (rawCellsText[3] || '').toLowerCase();
+
+            const looksLikeLeagueHeader =
+                colSpan > 1 ||
+                (thirdCellText.includes('correct score') && fourthCellText.includes('odds'));
+
+            if (looksLikeLeagueHeader) {
+                currentLeague = rawCellsText[0] || currentLeague;
                 return;
             }
 
-            // Skip header rows and empty rows
-            if ($row.find('th').length > 0 || $row.find('td').length < 5) {
-                return;
+            if (!currentLeague || cells.length < 3) return;
+
+            const datetimeText = firstCell.text().replace(/\s+/g, ' ').trim();
+            const timeMatch = datetimeText.match(/(\d{1,2}:\d{2})/);
+            if (!timeMatch) return;
+            const [hoursPart, minutesPart] = timeMatch[1].split(':');
+            const time = `${hoursPart.padStart(2, '0')}:${minutesPart}`;
+
+            let teams = $(cells[1])
+                .contents()
+                .filter((_, node) => node.type === 'text')
+                .map((_, node) => $(node).text().trim())
+                .get()
+                .filter(Boolean);
+
+            if (teams.length < 2) {
+                const htmlTeams = $(cells[1]).html() || '';
+                teams = htmlTeams
+                    .split(/<br\s*\/?>/i)
+                    .map(part => part.replace(/<[^>]+>/g, '').trim())
+                    .filter(Boolean);
             }
 
-            const cells = $row.find('td');
-            const time = $(cells[0]).text().trim();
-            const match = $(cells[1]).text().trim();
-            const homeOdd = $(cells[2]).text().trim();
-            const drawOdd = $(cells[3]).text().trim();
-            const awayOdd = $(cells[4]).text().trim();
-            const tip = $(cells[5]).find('strong').text().trim() || $(cells[5]).text().trim();
+            if (teams.length < 2) return;
 
-            // Skip if essential data is missing
-            if (!time || !match || !currentLeague) {
-                return;
-            }
+            const score = rawCellsText[2] || '';
+            if (!score) return;
 
-            const teams = match.split(' - ');
-            if (teams.length === 2) {
-                tips.push({
-                    time: time,
-                    league: currentLeague,
-                    homeTeam: teams[0].trim(),
-                    awayTeam: teams[1].trim(),
-                    odds: {
-                        home: parseFloat(homeOdd) || null,
-                        draw: parseFloat(drawOdd) || null,
-                        away: parseFloat(awayOdd) || null
-                    },
-                    tip: tip
-                });
-            }
+            const oddsRaw = rawCellsText[3] || '';
+            const oddsValue = oddsRaw ? parseFloat(oddsRaw) || oddsRaw : null;
+
+            tips.push({
+                time,
+                league: currentLeague,
+                homeTeam: teams[0],
+                awayTeam: teams[1],
+                odds: oddsValue,
+                tip: score
+            });
         });
 
         return tips;
