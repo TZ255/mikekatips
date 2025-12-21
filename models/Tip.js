@@ -13,6 +13,10 @@ const tipSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  score: {
+    type: String,
+    default: '-:-'
+  },
   odds: {
     type: String,
     required: true
@@ -35,7 +39,7 @@ const tipSchema = new mongoose.Schema({
     default: 'pending'
   }
 }, {
-  timestamps: true
+  timestamps: true, strict: false
 });
 
 tipSchema.index({ date: 1, isPremium: 1 });
