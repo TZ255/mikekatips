@@ -64,7 +64,7 @@ function generateDateNavigation(currentDate, currentRoute = '/') {
 }
 
 // Home page - Today's matches
-router.get('/', freshUserInfo, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const currentDate = dayjs().tz(TZ, false);
     const dateStr = currentDate.format('YYYY-MM-DD');
@@ -76,13 +76,13 @@ router.get('/', freshUserInfo, async (req, res) => {
   const freeTips = await Tip.find({
     date: dateStr,
     isPremium: false
-  }).sort({ time: 1 }).limit(50);
+  }).sort({ time: 1 }).limit(50).cache(600);
   
   // Fetch recent predictions (last 3)
   const predictions = await Prediction.find({ 
     date: dateStr,
     status: 'published' 
-    });
+    }).cache(600);
 
     //add leo to the swahiliday
     navData.swahiliDay = `Leo, ${navData.swahiliDay}`
@@ -93,6 +93,7 @@ router.get('/', freshUserInfo, async (req, res) => {
       ? today.startOf('day').format() // Today or future: use today's start
       : currentDate.startOf('day').format(); // Past date: use that specific day's start
     
+    res.set('Cache-Control', 'public, max-age=600');
     res.render('index', {
       page_url: `https://mikekatips.co.tz`,
       page: 'index',
@@ -118,7 +119,7 @@ router.get('/premium-tips', freshUserInfo, async (req, res) => {
     const premiumTips = await Tip.find({
       date: dateStr,
       isPremium: true
-    }).sort({ time: 1 });
+    }).sort({ time: 1 }).cache(600);
 
     const swahiliDay = `Leo, ${navData.swahiliDay}`;
 
@@ -140,7 +141,7 @@ router.get('/premium-tips', freshUserInfo, async (req, res) => {
 });
 
 // Yesterday's matches
-router.get('/utabiri-wa-mechi-za-jana', freshUserInfo, async (req, res) => {
+router.get('/utabiri-wa-mechi-za-jana', async (req, res) => {
   try {
     const currentDate = dayjs().tz(TZ).subtract(1, 'day');
     const dateStr = currentDate.format('YYYY-MM-DD');
@@ -152,13 +153,13 @@ router.get('/utabiri-wa-mechi-za-jana', freshUserInfo, async (req, res) => {
   const freeTips = await Tip.find({
     date: dateStr,
     isPremium: false
-  }).sort({ time: 1 }).limit(50);
+  }).sort({ time: 1 }).limit(50).cache(600);
   
   // Fetch recent predictions
   const predictions = await Prediction.find({ 
     date: dateStr,
     status: 'published'
-    }).select('-body'); // Exclude body for listing
+    }).select('-body').cache(600); // Exclude body for listing
 
     //add jana to the swahiliday  
     navData.swahiliDay = `Jana, ${navData.swahiliDay}`
@@ -167,6 +168,7 @@ router.get('/utabiri-wa-mechi-za-jana', freshUserInfo, async (req, res) => {
     const today = dayjs().tz(TZ);
     const modifiedDate = currentDate.endOf('day').format();
     
+    res.set('Cache-Control', 'public, max-age=600');
     res.render('index', {
       page_url: `https://mikekatips.co.tz/utabiri-wa-mechi-za-jana`,
       page: 'index-jana',
@@ -207,13 +209,13 @@ router.get('/utabiri-wa-mechi-za-kesho', freshUserInfo, async (req, res) => {
   const freeTips = await Tip.find({
     date: dateStr,
     isPremium: false
-  }).sort({ time: 1 }).limit(50);
+  }).sort({ time: 1 }).limit(50).cache(600);
   
   // Fetch recent predictions
   const predictions = await Prediction.find({ 
     date: dateStr,
     status: 'published' 
-    });
+    }).cache(600);
 
     //add kesho to the swahiliday  
     navData.swahiliDay = `Kesho, ${navData.swahiliDay}`
@@ -222,6 +224,7 @@ router.get('/utabiri-wa-mechi-za-kesho', freshUserInfo, async (req, res) => {
     const today = dayjs().tz(TZ);
     const modifiedDate = today.startOf('day').format();
     
+    res.set('Cache-Control', 'public, max-age=600');
     res.render('index', {
       page_url: `https://mikekatips.co.tz/utabiri-wa-mechi-za-kesho`,
       page: 'index-kesho',

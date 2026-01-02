@@ -1,4 +1,9 @@
 const mongoose = require('mongoose');
+const cachegoose = require('recachegoose');
+
+cachegoose(mongoose, {
+  engine: 'memory'
+});
 
 const connectDB = async () => {
   try {
