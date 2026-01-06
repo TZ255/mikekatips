@@ -147,7 +147,7 @@ setInterval(() => {
 }, 60000); // Check every minute (60 seconds)
 
 const PORT = process.env.PORT || 3000
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
   console.log(`⏰ Daily indexing scheduler started for ${TZ} timezone`);
 });
