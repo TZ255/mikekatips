@@ -144,7 +144,7 @@ router.post('/auth/logout', (req, res) => {
       console.error('Session destroy error:', err);
       req.flash('error', 'Hitilafu katika kutoka');
     }
-    res.redirect('/');
+    res.redirect('/auth/login');
   });
 });
 
