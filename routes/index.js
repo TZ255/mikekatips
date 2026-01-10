@@ -304,7 +304,6 @@ router.get('/payments/disable', (req, res) => {
 });
 
 router.get('/api/testing', (req, res) => {
-  unconfirmUserSubscription("janjatzblog@gmail.com")
   res.json({ message: 'API is working!' });
 });
 

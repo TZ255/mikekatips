@@ -83,7 +83,7 @@ const sendEmail = async (email, subject, html) => {
             console.log(`❌ ${checkEmail.data.email}.... We didnt bother to mail`)
         }
     } catch (error) {
-        console.log('Error sending email ' + error?.message)
+        console.log('Error sending email ' + error?.message, error)
     }
 }
 
