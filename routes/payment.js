@@ -72,7 +72,7 @@ router.post("/api/pay", async (req, res) => {
             orderRef,
             user: { userId: user._id, email: user.email, name: user.name || user.email.split('@')[0] },
             phoneNumber: phone,
-            amount: email === "janjatzblog@gmail.com" ? 500 : PRICE.monthly
+            amount: email === "janjatzblog@gmail.com" ? 1000 : PRICE.monthly
         };
 
         const bkaziServer = "https://baruakazi-production.up.railway.app/payment/process/mtips"
