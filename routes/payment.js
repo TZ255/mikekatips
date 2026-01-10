@@ -8,7 +8,7 @@ const { sendTelegramNotification } = require('../utils/sendTelegramNotifications
 const { confirmMonthlySubscription } = require('../utils/confirmSubscription');
 
 // helpers
-const generateOrderId = (phone) => `MTIPS${Date.now().toString(36)}${phone}`;
+const generateOrderId = (phone) => `MTIPS${Date.now().toString(36)}`;
 
 // plan → amount + grant key
 const PRICE = {
