@@ -109,7 +109,7 @@ router.post('/api/payment-webhook', async (req, res) => {
         if (payment_status === 'COMPLETED') {
             try {
                 // grant subscription and notify
-                await confirmMonthlySubscription(email)
+                await confirmMonthlySubscription(email, phone)
             }
             catch (e) {
                 console.log('grantSubscription webhook error:', e?.message);
