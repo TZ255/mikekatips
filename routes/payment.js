@@ -75,7 +75,7 @@ router.post("/api/pay", async (req, res) => {
             amount: email === "janjatzblog@gmail.com" ? 1000 : PRICE.monthly
         };
 
-        const bkaziServer = "https://baruakazi-production.up.railway.app/payment/process/mtips"
+        const bkaziServer = "https://baruakazi.co.tz/payment/process/mtips"
         const apiResp = await axios.post(bkaziServer, payload)
 
         // Expecting success payload: { status: 'success', resultcode:'000', message:'...', order_id:'...' }
