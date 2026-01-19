@@ -2,7 +2,7 @@ const User = require("../models/User");
 const sendEmail = require("./sendemail");
 const { sendTelegramNotification } = require("./sendTelegramNotifications");
 
-const confirmMonthlySubscription = async (email) => {
+const confirmMonthlySubscription = async (email, phone = null) => {
     try {
         const user = await User.findOne({ email });
         if (!user) throw new Error('User not found');
@@ -10,8 +10,9 @@ const confirmMonthlySubscription = async (email) => {
         user.isPaid = true;
         user.paidAt = new Date();
         user.expiresAt = new Date(new Date().setMonth(new Date().getMonth() + 1));
-
+        user.phone = phone;
         await user.save();
+        
         const subject = 'Hongera! Malipo Yako ya Premium Tips Yamethibitishwa 🎉';
 
         sendEmail(
