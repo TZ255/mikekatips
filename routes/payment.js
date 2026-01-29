@@ -58,6 +58,12 @@ router.post("/api/pay", async (req, res) => {
             return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Samahani! Malipo kwa Vodacom hayaruhusiwi kwa sasa. Tumia Tigo, Airtel au Halotel.' });
         }
 
+        // restrict halotel temporary
+        if (phoneNumberDetails.telecomCompanyDetails.brand.toLowerCase() === 'halotel') {
+            res.set('HX-Reswap', 'none');
+            return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Samahani! Kuna changamoto ya mtandao kwa Halotel. Tafadhali tumia Tigo au Airtel.' });
+        }
+
         const user = await User.findOne({ email })
         if (!user) {
             res.set('HX-Reswap', 'none');
