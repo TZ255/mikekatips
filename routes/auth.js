@@ -17,7 +17,7 @@ function getGoogleClient(req) {
 router.get('/auth/login', (req, res) => {
   // If already logged in, redirect to home
   if (req.session.user) {
-    return res.redirect('/');
+    return res.redirect('/premium-tips');
   }
   res.render('auth/login');
 });
