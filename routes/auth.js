@@ -162,6 +162,15 @@ router.get('/auth/logout', (req, res) => {
   });
 });
 
+// Header auth fragment (HTMX)
+router.get('/auth/header', (req, res) => {
+  res.set('Cache-Control', 'private, no-store, no-cache, must-revalidate');
+  res.render('zz-fragments/header-auth', {
+    layout: false,
+    user: req.session.user || null
+  });
+});
+
 // Get current user
 router.get('/auth/me', (req, res) => {
   if (req.session.user) {
