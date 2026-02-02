@@ -57,7 +57,7 @@ app.use(expressLayouts);
 app.set('layout', path.join(__dirname, 'views/0-layouts/main'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: '7d', immutable: true}));
 app.use(fileUpload());
 //accept cors from all sites
 app.use(cors());
