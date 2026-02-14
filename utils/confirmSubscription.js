@@ -68,7 +68,7 @@ const confirmMonthlySubscription = async (email, phone = null) => {
   `
         );
 
-        sendTelegramNotification(`✅ MikekaTips - Malipo yamethibitishwa kwa ${email} (auto confirmation)`)
+        sendTelegramNotification(`✅ MikekaTips - Malipo yamethibitishwa kwa mteja: \nEmail: ${email} \n Phone: ${phone || 'N/A'}`)
         return user;
     } catch (error) {
         console.error('Error confirming subscription:', error);
