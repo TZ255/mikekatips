@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const sendEmail = require("./sendemail");
-const { sendTelegramNotification } = require("./sendTelegramNotifications");
+const { sendTelegramNotification, sendTelegramPaymentConfirmed } = require("./sendTelegramNotifications");
 
 const confirmMonthlySubscription = async (email, phone = null) => {
     try {
@@ -68,7 +68,7 @@ const confirmMonthlySubscription = async (email, phone = null) => {
   `
         );
 
-        sendTelegramNotification(`✅ MikekaTips - Malipo yamethibitishwa kwa mteja: \nEmail: ${email} \n Phone: ${phone || 'N/A'}`)
+        sendTelegramPaymentConfirmed(`✅ MikekaTips - Malipo yamethibitishwa kwa mteja: \nEmail: ${email} \n Phone: ${phone || 'N/A'}`)
         return user;
     } catch (error) {
         console.error('Error confirming subscription:', error);
