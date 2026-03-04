@@ -89,10 +89,10 @@ router.post('/api/pay', async (req, res) => {
     }
     console.log("Received the post req:", { ...req.body, email: req.user?.email || req.session?.user?.email })
 
-    try {
-        const email = (req.user?.email || req.session?.user?.email || '').trim();
-        const phone9 = String(req.body.phone9 || '').trim();
+    const email = (req.user?.email || req.session?.user?.email || '').trim();
+    const phone9 = String(req.body.phone9 || '').trim();
 
+    try {
         // basic validation
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             res.set('HX-Reswap', 'none');
@@ -148,6 +148,7 @@ router.post('/api/pay', async (req, res) => {
         } catch (error) {
             let error_message = error?.message || 'Payment API returned unsuccessful response'
             console.error('Error from snippe - failed payment initiation:', error_message);
+            sendTelegramNotification(`❌ MTips Error for ${email}. Failed to initiate payment`, false)
             res.set('HX-Reswap', 'none');
             return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Tumeshindwa anzisha malipo. Tafadhali jaribu tena baadae.' });
         }
