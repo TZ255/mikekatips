@@ -1,24 +1,25 @@
 const User = require("../models/User");
 const sendEmail = require("./sendemail");
+const { sendNEXTSMS } = require("./sendSMS");
 const { sendTelegramNotification, sendTelegramPaymentConfirmed } = require("./sendTelegramNotifications");
 
 const confirmMonthlySubscription = async (email, phone = null) => {
-    try {
-        const user = await User.findOne({ email });
-        if (!user) throw new Error('User not found');
+  try {
+    const user = await User.findOne({ email });
+    if (!user) throw new Error('User not found');
 
-        user.isPaid = true;
-        user.paidAt = new Date();
-        user.expiresAt = new Date(new Date().setMonth(new Date().getMonth() + 1));
-        user.phone = phone;
-        await user.save();
-        
-        const subject = 'Hongera! Malipo Yako ya Premium Tips Yamethibitishwa 🎉';
+    user.isPaid = true;
+    user.paidAt = new Date();
+    user.expiresAt = new Date(new Date().setMonth(new Date().getMonth() + 1));
+    user.phone = phone;
+    await user.save();
 
-        sendEmail(
-            email,
-            subject,
-            `
+    const subject = 'Hongera! Malipo Yako ya Premium Tips Yamethibitishwa 🎉';
+
+    sendEmail(
+      email,
+      subject,
+      `
   <div style="font-family: Arial, sans-serif; background-color: #f5f7fa; padding: 20px;">
     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 20px 24px;">
       <h1 style="color: #1a1a1a; font-size: 22px; margin-top: 0;">
@@ -66,33 +67,38 @@ const confirmMonthlySubscription = async (email, phone = null) => {
     </div>
   </div>
   `
-        );
+    );
 
-        sendTelegramPaymentConfirmed(`✅ MikekaTips - Malipo yamethibitishwa kwa mteja: \nEmail: ${email} \n Phone: ${phone || 'N/A'}`)
-        return user;
-    } catch (error) {
-        console.error('Error confirming subscription:', error);
-        throw error;
+    //send SMS
+    if (phone) {
+      sendNEXTSMS(phone, `Hongera! Malipo yako ya MikekaTips Premium yamethibitishwa kikamilifu kwa muda wa mwezi mmoja.`)
     }
+
+    sendTelegramPaymentConfirmed(`✅ MikekaTips - Malipo yamethibitishwa kwa mteja: \nEmail: ${email} \n Phone: ${phone || 'N/A'}`)
+    return user;
+  } catch (error) {
+    console.error('Error confirming subscription:', error);
+    throw error;
+  }
 };
 
 //unconfirme user subscription
 const unconfirmUserSubscription = async (email) => {
-    try {
-        const user = await User.findOne({ email });
-        if (!user) console.log('User not found');
+  try {
+    const user = await User.findOne({ email });
+    if (!user) console.log('User not found');
 
-        user.isPaid = false;
-        user.paidAt = null;
-        user.expiresAt = null;
+    user.isPaid = false;
+    user.paidAt = null;
+    user.expiresAt = null;
 
-        await user.save();
-        sendTelegramNotification(`❌ MikekaTips - Subscription revoked for ${email} (manual)`)
-        return user;
-    } catch (error) {
-        console.error('Error unconfirming subscription:', error);
-        sendTelegramNotification(`⚠️ MikekaTips - Error unconfirming subscription for ${email} (manual): ${error.message}`)
-    }
+    await user.save();
+    sendTelegramNotification(`❌ MikekaTips - Subscription revoked for ${email} (manual)`)
+    return user;
+  } catch (error) {
+    console.error('Error unconfirming subscription:', error);
+    sendTelegramNotification(`⚠️ MikekaTips - Error unconfirming subscription for ${email} (manual): ${error.message}`)
+  }
 }
 
 module.exports = { confirmMonthlySubscription, unconfirmUserSubscription }
