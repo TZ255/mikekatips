@@ -37,7 +37,7 @@ const indexRoutes = require('./routes/index');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 const predictionRoutes = require('./routes/prediction');
-const paymentRoutes = require('./routes/payment-snippe');
+const paymentRoutes = require('./routes/payment');
 const htmxRoutes = require('./routes/htmx');
 
 const app = express()
