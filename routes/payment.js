@@ -82,7 +82,9 @@ router.post("/api/pay", async (req, res) => {
         };
 
         const bkaziServer = "https://baruakazi.co.tz/payment/process/mtips"
-        const apiResp = await axios.post(bkaziServer, payload)
+        const apiResp = await axios.post(bkaziServer, payload, {
+            headers: { "x-webhook-secret": process.env.PASS_USER }
+        })
 
         // Expecting success payload: { status: 'success', resultcode:'000', message:'...', order_id:'...' }
         if (!apiResp) {
