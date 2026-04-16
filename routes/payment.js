@@ -15,6 +15,19 @@ const PRICE = {
     monthly: 9000
 };
 
+function normalizePhone(phone9 = '') {
+    //if (!isValidPhoneNumber(`255${phone9.trim()}`)) return null;
+
+    const phoneString = String(phone9).trim();
+
+    // Ensure it starts with 6 or 7 and is followed by exactly 8 digits
+    if (!/^[67]\d{8}$/.test(phoneString)) {
+        return null;
+    }
+
+    return `255${phoneString}`;
+}
+
 // POST /api/pay
 // Serve the HTMX payment form (to be loaded inside the modal)
 router.get('/api/pay-form', async (req, res) => {
@@ -46,14 +59,14 @@ router.post("/api/pay", async (req, res) => {
             return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Namba ya simu si sahihi. Weka tarakimu 9 bila kuanza na 0' });
         }
 
-        const phone = `255${phone9}`;
-        if (!isValidPhoneNumber(phone)) {
+        const phone = normalizePhone(phone9);
+        if (!phone) {
             res.set('HX-Reswap', 'none');
-            return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Namba ya simu si sahihi. Weka namba sahihi bila kuanza na 0' });
+            return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Namba ya simu si sahihi. Weka tarakimu 9 bila kuanza na 0' });
         }
 
         const phoneNumberDetails = getPhoneNumberDetails(phone);
-        if (phoneNumberDetails.telecomCompanyDetails.brand.toLowerCase() === 'vodacom') {
+        if (phoneNumberDetails?.telecomCompanyDetails?.brand?.toLowerCase() === 'vodacom') {
             res.set('HX-Reswap', 'none');
             return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Samahani! Malipo kwa Vodacom hayaruhusiwi kwa sasa. Tumia Tigo, Airtel au Halotel.' });
         }
@@ -74,7 +87,6 @@ router.post("/api/pay", async (req, res) => {
 
         // build payment payload
         const payload = {
-            SECRET: process.env.PASS_USER,
             orderRef,
             user: { userId: user._id, email: user.email, name: user.name || user.email.split('@')[0] },
             phoneNumber: phone,
@@ -82,19 +94,31 @@ router.post("/api/pay", async (req, res) => {
         };
 
         const bkaziServer = "https://baruakazi.co.tz/payment/process/mtips"
-        const apiResp = await axios.post(bkaziServer, payload, {
-            headers: { "x-webhook-secret": process.env.PASS_USER }
-        })
 
-        // Expecting success payload: { status: 'success', resultcode:'000', message:'...', order_id:'...' }
-        if (!apiResp) {
-            res.set('HX-Reswap', 'none');
-            return res.render('zz-fragments/payment-form-error', { layout: false, message: apiResp?.message || 'Imeshindikana kuanzisha malipo. Jaribu tena.' });
-        }
+        try {
+            await axios.post(bkaziServer, payload, {
+                headers: { "x-webhook-secret": process.env.PASS_USER }
+            });
+        } catch (error) {
+            let message = 'Imeshindikana kuanzisha malipo. Jaribu tena baadaye.';
 
-        if (apiResp && apiResp.data?.success !== true) {
-            res.set('HX-Reswap', 'none');
-            return res.render('zz-fragments/payment-form-error', { layout: false, message: apiResp.data?.message || 'Imeshindikana kuanzisha malipo. Jaribu tena baadaye.' });
+            if (error?.response) {
+                // Server responded (4xx / 5xx)
+                message = error.response.data?.message || message;
+            } else if (error?.request) {
+                // Request sent but no response
+                message = 'Hakuna majibu kutoka server. Angalia internet yako au jaribu tena.';
+            } else {
+                // Something else
+                message = error.message;
+            }
+
+            console.error('Payment initiation error:', message);
+
+            return res.render('zz-fragments/payment-error', {
+                layout: false,
+                message
+            });
         }
 
         //send initiating message
@@ -108,11 +132,13 @@ router.post("/api/pay", async (req, res) => {
     }
 });
 
-// POST /api/zenopay-webhook
 router.post('/api/payment-webhook', async (req, res) => {
     try {
-        const { order_id, payment_status, email, phone, reference, SECRET } = req.body || {};
-        if (!order_id || SECRET !== process.env.PASS_USER) return res.sendStatus(200);
+        const { order_id, payment_status, email, phone, reference } = req.body || {};
+
+        const secret = req.headers['x-webhook-secret'];
+
+        if (!order_id || secret !== process.env.PASS_USER) return res.status(200).json({ message: 'Invalid webhook call. No orderId or valid secret' });
 
         if (payment_status === 'COMPLETED') {
             try {
