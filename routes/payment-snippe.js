@@ -162,7 +162,7 @@ router.post('/api/pay', async (req, res) => {
         }
 
         //send initiating message
-        sendTelegramNotification(`💰 ${email} initiated payment for monthly plan - MTips`, false)
+        sendTelegramNotification(`💰 ${email}, ${phone} initiated payment for monthly plan - MTips`, false)
 
         return res.render('zz-fragments/payment-initiated', { layout: false, orderId: orderRef, phone });
     } catch (error) {
