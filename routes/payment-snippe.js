@@ -74,6 +74,19 @@ function normalizeName(name) {
     return { firstName, lastName };
 }
 
+function normalizePhone(phone9 = '') {
+    //if (!isValidPhoneNumber(`255${phone9.trim()}`)) return null;
+
+    const phoneString = String(phone9).trim();
+
+    // Ensure it starts with 6 or 7 and is followed by exactly 8 digits
+    if (!/^[67]\d{8}$/.test(phoneString)) {
+        return null;
+    }
+
+    return `255${phoneString}`;
+}
+
 router.get('/api/pay-form', async (req, res) => {
     try {
         return res.render('premium/extras/htmx-form', { layout: false });
@@ -99,13 +112,8 @@ router.post('/api/pay', async (req, res) => {
             return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Barua pepe si sahihi. Tafadhali login upya.' });
         }
 
-        if (!/^([1-9][0-9]{8})$/.test(phone9)) {
-            res.set('HX-Reswap', 'none');
-            return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Namba ya simu si sahihi. Weka tarakimu 9 bila kuanza na 0' });
-        }
-
-        const phone = `255${phone9}`;
-        if (!isValidPhoneNumber(phone)) {
+        const phone = normalizePhone(phone9);
+        if (!phone) {
             res.set('HX-Reswap', 'none');
             return res.render('zz-fragments/payment-form-error', { layout: false, message: 'Namba ya simu si sahihi. Weka namba sahihi bila kuanza na 0' });
         }
@@ -125,7 +133,7 @@ router.post('/api/pay', async (req, res) => {
         const payload = {
             "payment_type": "mobile",
             "details": {
-                "amount": email === "janjatzblog@gmail.com" ? 1000 : PRICE.monthly,
+                "amount": email === "janjatzblog@gmail.com" ? 500 : PRICE.monthly,
                 "currency": "TZS"
             },
             "phone_number": phone,
@@ -134,7 +142,7 @@ router.post('/api/pay', async (req, res) => {
                 "lastname": normalizeName(user?.name || null).lastName,
                 "email": `${user._id}@tanzabyte.com`
             },
-            "webhook_url": "https://mikekatips.co.tz/webhook/snippe",
+            "webhook_url": "https://baruakazi.co.tz/payment/webhook/snippe/mtips",
             "metadata": {
                 "order_id": orderRef
             }
