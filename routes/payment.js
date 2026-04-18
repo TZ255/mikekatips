@@ -12,7 +12,7 @@ const generateOrderId = (phone) => `MTIPS${Date.now().toString(36)}`;
 
 // plan → amount + grant key
 const PRICE = {
-    monthly: 9000
+    monthly: 8920
 };
 
 function normalizePhone(phone9 = '') {
