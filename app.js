@@ -22,15 +22,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 const connectDB = require('./config/database');
-const dayjs = require('dayjs');
-const utc = require('dayjs/plugin/utc');
-const timezone = require("dayjs/plugin/timezone");
-const { notifyGoogle } = require('./utils/googleIndexing');
-
-// Extend dayjs
-dayjs.extend(utc);
-dayjs.extend(timezone);
-const TZ = 'Africa/Nairobi';
+const { startCronjobs } = require('./cronjobs');
 
 // Routes
 const indexRoutes = require('./routes/index');
@@ -126,28 +118,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Daily indexing schedule - Check every minute for 00:00 EAT
-setInterval(() => {
-  const currentTime = dayjs().tz(TZ);
-  const hour = currentTime.hour();
-  const minute = currentTime.minute();
-  
-  // If it's exactly 00:00 EAT
-  if (hour === 0 && minute === 0 && process.env.NODE_ENV == 'production') {
-    console.log('🕛 Midnight detected - Notifying Google for new day content');
-    
-    notifyGoogle('https://mikekatips.co.tz')
-      .then(() => {
-        console.log('✅ Successfully notified Google about homepage update');
-      })
-      .catch(error => {
-        console.error('❌ Failed to notify Google:', error.message);
-      });
-  }
-}, 60000); // Check every minute (60 seconds)
-
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
-  console.log(`⏰ Daily indexing scheduler started for ${TZ} timezone`);
+  startCronjobs();
 });

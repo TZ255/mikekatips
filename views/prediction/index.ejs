@@ -4,96 +4,250 @@
 <% keywords = keywords %>
 <% page = 'prediction' %>
 <% page_url = 'https://mikekatips.co.tz/prediction' %>
+<%
+    const totalLeagues = leagues?.length || 0;
+    const totalCountries = [...new Set((leagues || []).map((league) => league.country).filter(Boolean))].length;
+    const totalCurrentFixtures = (leagues || []).reduce((sum, league) => sum + (league.currentCount || 0), 0);
 
-<main>
-    <!-- Hero Section -->
-    <div class="bg-gradient-primary py-5">
-        <div class="container text-center text-white">
-            <h1 class="display-4 fw-bold mb-3">
-                <i class="fa-solid fa-chart-line me-3"></i>
-                Utabiri wa Mechi za Leo na Uchambuzi
-            </h1>
-            <p class="lead fs-5">Pata uchambuzi wa kina wa mechi za leo kutoka kwa wataalamu wetu</p>
-        </div>
-    </div>
+    const collectionSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: title,
+        description,
+        url: page_url,
+        inLanguage: 'sw',
+        isPartOf: {
+            '@type': 'WebSite',
+            name: 'MikekaTips',
+            url: 'https://mikekatips.co.tz'
+        },
+        mainEntity: {
+            '@type': 'ItemList',
+            numberOfItems: totalLeagues,
+            itemListElement: (leagues || []).map((league, index) => ({
+                '@type': 'ListItem',
+                position: index + 1,
+                name: league.title,
+                url: `https://mikekatips.co.tz/prediction/${league.leagueId}`
+            }))
+        }
+    };
+%>
 
-    <!-- Main Content -->
-    <div class="container py-5">
-        <!-- Flash Messages -->
-        <%- include('../0-partials/flashMessages') %>
+<script type="application/ld+json"><%- JSON.stringify(collectionSchema) %></script>
 
-        <% if (predictions && predictions.length > 0) { %>
-            <div class="row g-4">
-                <% predictions.forEach(prediction => { %>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <a href="/prediction/<%= prediction.slug %>" class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative" style="cursor: pointer; text-decoration: none;">
-                            <!-- League Badge -->
-                            <div class="position-absolute top-0 start-0 m-3">
-                                <span class="badge bg-success px-3 py-2 rounded-pill">
-                                    <%= prediction.league %>
-                                </span>
+<main class="bg-body-tertiary">
+    <section class="py-4 py-lg-5">
+        <div class="container">
+            <div class="rounded-5 overflow-hidden shadow-sm text-white" style="background: linear-gradient(135deg, #0f172a 0%, #16324f 46%, #1f6f5d 100%);">
+                <div class="row g-0 align-items-stretch">
+                    <div class="col-12 col-xl-7">
+                        <div class="h-100 p-4 p-md-5 p-xl-5 d-flex flex-column justify-content-center">
+                            <div class="d-inline-flex align-items-center gap-2 rounded-pill px-3 py-2 mb-3 small fw-semibold text-uppercase border border-light border-opacity-25" style="width: fit-content; background: rgba(255,255,255,0.08); letter-spacing: 0.08em;">
+                                <i class="fa-solid fa-chart-line text-warning"></i>
+                                Kituo cha Prediction
                             </div>
-                            
-                            <!-- Date Badge -->
-                            <div class="position-absolute top-0 end-0 m-3">
-                                <span class="badge bg-dark px-3 py-2 rounded-pill">
-                                    <%= new Date(prediction.date).toLocaleDateString('sw-TZ', { 
-                                        day: '2-digit', 
-                                        month: 'short' 
-                                    }) %> <%= prediction.time %>
-                                </span>
-                            </div>
+                            <h1 class="display-5 fw-bold lh-sm mb-3" style="max-width: 12ch; text-wrap: balance;">
+                                Utabiri na Tips za ligi kubwa za soka
+                            </h1>
+                            <p class="lead mb-4 text-white text-opacity-75" style="max-width: 60ch;">
+                                Kwa wapenzi wa mikeka Tanzania: chagua ligi unayotaka kufuatilia, fungua ukurasa wake, kisha pitia current round, next round, previous rounds, tips, matokeo na standings (league table) kwenye mpangilio mmoja unaosomika vizuri kwenye simu na desktop.
+                            </p>
 
-                            <!-- Icon Header -->
-                            <div class="text-center py-4 bg-gradient-primary">
-                                <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle" style="width: 80px; height: 80px;">
-                                    <i class="fa-solid fa-chart-line display-6 text-primary"></i>
-                                </div>
+                            <div class="d-flex flex-column flex-sm-row gap-3">
+                                <a href="#leagues-grid" class="btn btn-warning btn-lg px-4 fw-semibold">
+                                    Angalia ligi
+                                </a>
+                                <a href="/" class="btn btn-outline-light btn-lg px-4">
+                                    Rudi nyumbani
+                                </a>
                             </div>
-
-                            <div class="card-body p-4 d-flex flex-column">
-                                <!-- Title -->
-                                <h5 class="card-title fw-bold text-dark mb-3">
-                                    <%= prediction.title %>
-                                </h5>
-                                
-                                <!-- Snippet -->
-                                <p class="card-text text-muted mb-4 flex-grow-1">
-                                    <%= prediction.description %>
-                                </p>
-                                
-                                <!-- Footer -->
-                                <div class="d-flex justify-content-between align-items-center mt-auto p-3 border rounded-3 bg-light bg-opacity-50">
-                                    <!-- Odds -->
-                                    <div class="text-center">
-                                        <small class="text-muted d-block">Odds:</small>
-                                        <span class="fw-bold text-primary fs-4"><%= prediction.odds %></span>
-                                    </div>
-                                    
-                                    <!-- View Button -->
-                                    <div class="d-flex align-items-center">
-                                        <button class="btn btn-primary btn-sm px-3 py-2 rounded-pill fw-semibold">
-                                            <i class="fa-solid fa-eye me-1"></i>
-                                            Angalia utabiri
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
+                        </div>
                     </div>
-                <% }); %>
+
+                    <div class="col-12 col-xl-5">
+                        <div class="h-100 p-4 p-md-5">
+                            <div class="row g-3 h-100 align-content-start">
+                                <div class="col-6">
+                                    <div class="h-100 rounded-4 border border-light border-opacity-25 p-3 p-md-4" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);">
+                                        <div class="text-uppercase small fw-semibold text-white text-opacity-75 mb-2">Ligi</div>
+                                        <div class="display-6 fw-bold mb-1"><%= totalLeagues %></div>
+                                        <div class="small text-white text-opacity-75">zilizo tayari kusomwa</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="h-100 rounded-4 border border-light border-opacity-25 p-3 p-md-4" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);">
+                                        <div class="text-uppercase small fw-semibold text-white text-opacity-75 mb-2">Nchi</div>
+                                        <div class="display-6 fw-bold mb-1"><%= totalCountries %></div>
+                                        <div class="small text-white text-opacity-75">zinawakilishwa</div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="rounded-4 border border-light border-opacity-25 p-3 p-md-4" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);">
+                                        <div class="text-uppercase small fw-semibold text-white text-opacity-75 mb-2">Round za sasa</div>
+                                        <div class="h2 fw-bold mb-2"><%= totalCurrentFixtures %> mechi</div>
+                                        <p class="mb-0 text-white text-opacity-75">
+                                            Kila kadi inakupeleka moja kwa moja kwenye ukurasa wa “<span class="fw-semibold text-white">Utabiri wa Country na League</span>” wenye tips, matokeo na standings (msimamo) wa ligi.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="rounded-4 p-3 p-md-4 bg-warning text-dark shadow-sm">
+                                        <div class="fw-bold mb-1">Muundo wa kila ligi</div>
+                                        <div class="small">
+                                            Kila ligi ipo kwenye ukurasa mmoja: current round, next round, previous rounds na standings (league table).
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        <% } else { %>
-            <!-- No Predictions -->
-            <div class="text-center py-5">
-                <i class="fa-solid fa-chart-line display-1 text-muted opacity-50"></i>
-                <h3 class="text-muted mt-4">Hakuna predictions kwa sasa</h3>
-                <p class="text-muted">Rudi baadaye kuona predictions mpya</p>
-                <a href="/" class="btn btn-primary mt-3">
-                    <i class="fa-solid fa-house me-2"></i>
-                    Rudi Nyumbani
-                </a>
+        </div>
+    </section>
+
+    <section class="pb-5">
+        <div class="container">
+            <div class="row g-3 g-lg-4 mb-4">
+                <div class="col-12 col-md-4">
+                    <div class="h-100 rounded-4 border bg-white p-4 shadow-sm">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
+                                <i class="fa-solid fa-list-check"></i>
+                            </div>
+                            <h2 class="h5 mb-0">Muonekano ulio wazi</h2>
+                        </div>
+                        <p class="text-secondary mb-0">
+                            Kila ligi ina meza fupi na rahisi kusoma: tarehe/saa, mechi, tip na matokeo bila vitu vya ziada vinavyochanganya.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="h-100 rounded-4 border bg-white p-4 shadow-sm">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="rounded-circle bg-success bg-opacity-10 text-success d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
+                                <i class="fa-solid fa-rotate"></i>
+                            </div>
+                            <h2 class="h5 mb-0">Data zinazosasishwa</h2>
+                        </div>
+                        <p class="text-secondary mb-0">
+                            Fixtures, tips na standings huchukuliwa kutoka API-Football kisha zinawekwa kwenye mpangilio mmoja unaoeleweka.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="h-100 rounded-4 border bg-white p-4 shadow-sm">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="rounded-circle bg-warning bg-opacity-25 text-dark d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                            </div>
+                            <h2 class="h5 mb-0">Inasomeka kwenye simu</h2>
+                        </div>
+                        <p class="text-secondary mb-0">
+                            Mpangilio ni responsive, hivyo meza zinasomeka vizuri kwenye simu, tablet na desktop.
+                        </p>
+                    </div>
+                </div>
             </div>
-        <% } %>
-    </div>
+
+            <header id="leagues-grid" class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4" style="scroll-margin-top: 6rem;">
+                <div>
+                    <span class="badge text-bg-dark rounded-pill px-3 py-2 mb-2">Ligi</span>
+                    <h2 class="display-6 fw-bold mb-2">Chagua ligi ya kufuatilia</h2>
+                    <p class="text-secondary mb-0" style="max-width: 62ch;">
+                        Fungua kadi ya ligi husika uone “Utabiri wa <span class="fw-semibold">Country na League</span>” pamoja na meza za rounds, tips na standings zake.
+                    </p>
+                </div>
+                <div class="text-secondary small">
+                    <span class="fw-semibold text-dark"><%= totalLeagues %></span> ligi zimeandaliwa
+                </div>
+            </header>
+
+            <%- include('../0-partials/flashMessages') %>
+
+            <% if (leagues && leagues.length > 0) { %>
+                <div class="row g-4">
+                    <% leagues.forEach((league, index) => { %>
+                        <div class="col-12 col-md-6 col-xl-4">
+                            <article class="card h-100 border-0 shadow-sm rounded-5 overflow-hidden">
+                                <div class="p-3 text-white" style="background: linear-gradient(135deg, <%= index % 3 === 0 ? '#123524, #1d4d40' : index % 3 === 1 ? '#102542, #1f4c73' : '#302b27, #5c4b3b' %>);">
+                                    <div class="d-flex align-items-start justify-content-between gap-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <% if (league.logo) { %>
+                                                <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 3.5rem; height: 3.5rem;">
+                                                    <img src="<%= league.logo %>" alt="<%= league.name %> logo" class="img-fluid" width="38" height="38" loading="lazy" decoding="async" style="max-width: 2.4rem; max-height: 2.4rem; object-fit: contain;">
+                                                </div>
+                                            <% } %>
+                                            <div>
+                                                <div class="small text-uppercase fw-semibold text-white text-opacity-75"><%= league.country %></div>
+                                                <h3 class="h4 mb-0"><%= league.name %></h3>
+                                            </div>
+                                        </div>
+                                        <span class="badge rounded-pill text-bg-light">Msimu <%= league.seasonLabel || `${league.season}/${Number(league.season) + 1}` %></span>
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-4 d-flex flex-column">
+                                    <p class="text-secondary mb-4">
+                                        <span class="fw-semibold text-dark"><%= league.title %></span> inajumuisha round ya sasa, round inayofuata, rounds zilizopita na msimamo wa ligi.
+                                    </p>
+
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-12 col-sm-6">
+                                            <div class="h-100 rounded-4 border bg-body-tertiary p-3">
+                                                <div class="small text-uppercase text-secondary fw-semibold mb-2">Round ya sasa</div>
+                                                <div class="fw-semibold text-dark"><%= league.rounds?.current?.name || 'Bado haijajulikana' %></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-6">
+                                            <div class="h-100 rounded-4 border bg-body-tertiary p-3">
+                                                <div class="small text-uppercase text-secondary fw-semibold mb-2">Round inayofuata</div>
+                                                <div class="fw-semibold text-dark"><%= league.rounds?.next?.name || 'Hakuna' %></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row row-cols-2 g-3 mb-4">
+                                        <div class="col">
+                                            <div class="rounded-4 border p-3 text-center">
+                                                <div class="small text-secondary text-uppercase fw-semibold mb-1">Sasa</div>
+                                                <div class="h3 fw-bold mb-0"><%= league.currentCount %></div>
+                                                <div class="small text-secondary">mechi</div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="rounded-4 border p-3 text-center">
+                                                <div class="small text-secondary text-uppercase fw-semibold mb-1">Ijayo</div>
+                                                <div class="h3 fw-bold mb-0"><%= league.nextCount %></div>
+                                                <div class="small text-secondary">mechi</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-auto d-grid">
+                                        <a href="/prediction/<%= league.leagueId %>" class="btn btn-dark btn-lg rounded-pill">
+                                            Fungua <span class="d-none d-sm-inline"><%= league.country %> <%= league.name %></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <section class="rounded-5 border bg-white shadow-sm p-4 p-md-5 text-center">
+                    <div class="rounded-circle bg-body-tertiary text-secondary d-inline-flex align-items-center justify-content-center mb-3" style="width: 4.5rem; height: 4.5rem;">
+                        <i class="fa-solid fa-trophy fs-3"></i>
+                    </div>
+                    <h2 class="h3 mb-3">Hakuna ligi zilizoandaliwa kwa sasa</h2>
+                    <p class="text-secondary mb-0">
+                        Washa sync ya API-Football au rudi baadaye ili kuona ligi zilizochaguliwa na meza zake za utabiri.
+                    </p>
+                </section>
+            <% } %>
+        </div>
+    </section>
 </main>

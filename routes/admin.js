@@ -2,10 +2,12 @@ const express = require('express');
 const dayjs = require('dayjs');
 const Tip = require('../models/Tip');
 const Prediction = require('../models/Prediction');
+const League = require('../models/League');
 const { authMiddleware, adminMiddleware } = require('../middleware/auth');
 const { processTipsForDate } = require('../utils/tipsProcessor');
 const { notifyMultipleUrls, submitToIndexNow } = require('../utils/googleIndexing');
 const { GeneratePredictionWithAI } = require('../utils/predictionGPT');
+const { syncLeagueDataNow } = require('../cronjobs');
 
 const router = express.Router();
 
@@ -13,10 +15,17 @@ const router = express.Router();
 router.get('/admin', adminMiddleware, async (req, res) => {
   try {
     const today = dayjs().format('YYYY-MM-DD');
-    const tips = await Tip.find({ date: today }).sort({ time: 1 });
+    const [tips, latestLeagueSync] = await Promise.all([
+      Tip.find({ date: today }).sort({ time: 1 }),
+      League.findOne({ 'sync.lastSuccessfulSyncAt': { $ne: null } })
+        .sort({ 'sync.lastSuccessfulSyncAt': -1 })
+        .select('sync')
+        .lean()
+    ]);
     
     res.render('admin/dashboard', {
       tips,
+      latestLeagueSyncAt: latestLeagueSync?.sync?.lastSuccessfulSyncAt || null,
       title: 'Admin Dashboard - MikekaTips',
       currentDate: today,
       user: req.user
@@ -24,6 +33,38 @@ router.get('/admin', adminMiddleware, async (req, res) => {
   } catch (error) {
     console.error('Admin dashboard error:', error);
     res.status(500).render('500', { title: 'Server Error' });
+  }
+});
+
+router.post('/admin/sync-leagues', adminMiddleware, async (req, res) => {
+  try {
+    const syncResult = await syncLeagueDataNow('admin');
+    const total = syncResult?.results?.length || 0;
+    const successful = syncResult?.results?.filter((result) => result.success).length || 0;
+    const failed = total - successful;
+
+    res.render('zz-fragments/admin-league-sync-result', {
+      layout: false,
+      success: Boolean(syncResult?.success),
+      message: syncResult?.message || null,
+      total,
+      successful,
+      failed,
+      results: syncResult?.results || [],
+      syncedAt: new Date()
+    });
+  } catch (error) {
+    console.error('Manual league sync error:', error);
+    res.status(200).render('zz-fragments/admin-league-sync-result', {
+      layout: false,
+      success: false,
+      message: error.message,
+      total: 0,
+      successful: 0,
+      failed: 1,
+      results: [],
+      syncedAt: new Date()
+    });
   }
 });
 

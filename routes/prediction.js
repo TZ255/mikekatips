@@ -1,72 +1,167 @@
 const express = require('express');
+const League = require('../models/League');
+const LeaguePrediction = require('../models/LeaguePrediction');
 const Prediction = require('../models/Prediction');
 const { parseMarkdown } = require('../utils/mdParser');
 const { freshUserInfo } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Predictions index page - show 7 predictions
+function groupPreviousRounds(fixtures, currentRoundNumber) {
+  const grouped = new Map();
+
+  fixtures.forEach((fixture) => {
+    if (
+      !Number.isFinite(fixture.round?.number) ||
+      !Number.isFinite(currentRoundNumber) ||
+      fixture.round.number >= currentRoundNumber
+    ) {
+      return;
+    }
+
+    if (!grouped.has(fixture.round.number)) {
+      grouped.set(fixture.round.number, {
+        roundName: fixture.round.name,
+        roundNumber: fixture.round.number,
+        fixtures: []
+      });
+    }
+
+    grouped.get(fixture.round.number).fixtures.push(fixture);
+  });
+
+  return [...grouped.values()].sort((left, right) => right.roundNumber - left.roundNumber);
+}
+
+async function renderLegacyPrediction(req, res) {
+  const prediction = await Prediction.findOne({
+    slug: req.params.leagueRef,
+    status: 'published'
+  }).lean();
+
+  if (!prediction) {
+    return res.status(404).render('404', {
+      title: 'Prediction Haijapatikana - MikekaTips'
+    });
+  }
+
+  const otherPredictions = await Prediction.find({
+    date: prediction.date,
+    status: 'published',
+    slug: { $ne: req.params.leagueRef }
+  })
+    .select('title slug match date time')
+    .sort('time')
+    .lean();
+
+  const parsedContent = await parseMarkdown(prediction.body);
+
+  return res.render('prediction/prediction-details', {
+    other_predictions: otherPredictions,
+    title: `${prediction.title} - MikekaTips`,
+    description: prediction.description,
+    keywords: prediction.keywords,
+    tip: prediction.prediction,
+    odds: prediction.odds,
+    match: prediction.match,
+    league: prediction.league,
+    date: prediction.date,
+    time: prediction.time,
+    contentHtml: parsedContent,
+    slug: prediction.slug,
+    affiliate: prediction.affiliate
+  });
+}
+
 router.get('/prediction', freshUserInfo, async (req, res) => {
   try {
-    const predictions = await Prediction.find({ status: 'published' })
-      .sort({ createdAt: -1 })
-      .limit(7);
-    
+    const leagues = await League.find({ isActive: true })
+      .sort({ displayOrder: 1, name: 1 })
+      .lean();
+
+    const cards = await Promise.all(
+      leagues.map(async (league) => {
+        const [currentCount, nextCount] = await Promise.all([
+          league.rounds?.current?.name
+            ? LeaguePrediction.countDocuments({
+                leagueId: league.leagueId,
+                season: league.season,
+                'round.name': league.rounds.current.name
+              })
+            : 0,
+          league.rounds?.next?.name
+            ? LeaguePrediction.countDocuments({
+                leagueId: league.leagueId,
+                season: league.season,
+                'round.name': league.rounds.next.name
+              })
+            : 0
+        ]);
+
+        return {
+          ...league,
+          currentCount,
+          nextCount
+        };
+      })
+    );
+
+    res.set('Cache-Control', 'public, max-age=3600');
     res.render('prediction/index', {
-      predictions,
-      title: 'Predictions za Mchezo - MikekaTips',
-      description: 'Pata predictions za hali ya juu za michezo ya mpira wa miguu kutoka kwa wataalamu.',
-      keywords: 'predictions, mchezo wa mpira, soka, tanzania, betting predictions'
+      leagues: cards,
+      title: 'Ligi za Utabiri - MikekaTips',
+      description: 'Chagua ligi unayotaka kuona utabiri wa round ya sasa, round inayofuata, matokeo ya rounds zilizopita na msimamo wa ligi.',
+      keywords: 'utabiri wa ligi, predictions za soka, premier league, la liga, serie a, bundesliga, ligue 1'
     });
   } catch (error) {
-    console.error('Predictions route error:', error);
+    console.error('Prediction leagues route error:', error);
     res.status(500).render('500', { title: 'Server Error' });
   }
 });
 
-// Prediction details page
-router.get('/prediction/:slug', freshUserInfo, async (req, res) => {
+router.get('/prediction/:leagueRef', freshUserInfo, async (req, res) => {
   try {
-    const prediction = await Prediction.findOne({ 
-      slug: req.params.slug,
-      status: 'published' 
-    });
-    
-    if (!prediction) {
+    const leagueId = Number(req.params.leagueRef);
+
+    if (!Number.isInteger(leagueId)) {
+      return renderLegacyPrediction(req, res);
+    }
+
+    const league = await League.findOne({ leagueId, isActive: true }).lean();
+    if (!league) {
       return res.status(404).render('404', {
-        title: 'Prediction Haijapatikana - MikekaTips'
+        title: 'Ligi Haijapatikana - MikekaTips'
       });
     }
 
-    //todays date in yyyy-mm-dd tanzania timezone
-    const date = new Date().toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Africa/Nairobi' });
+    const fixtures = await LeaguePrediction.find({
+      leagueId: league.leagueId,
+      season: league.season
+    })
+      .sort({ 'round.number': 1, kickoffAt: 1 })
+      .lean();
 
-    //get todays predictions, exclude current slug
-    const other_predictions = await Prediction.find({ 
-      date: prediction.date,
-      status: 'published',
-      slug: { $ne: req.params.slug }
-    }).select('title slug match date time').sort('time');
+    const currentRoundName = league.rounds?.current?.name || null;
+    const nextRoundName = league.rounds?.next?.name || null;
+    const currentRoundNumber = league.rounds?.current?.number;
 
-    const parsedContent = await parseMarkdown(prediction.body)
-    
-    res.render('prediction/prediction-details', {
-      other_predictions,
-      title: prediction.title + ' - MikekaTips',
-      description: prediction.description,
-      keywords: prediction.keywords,
-      tip: prediction.prediction,
-      odds: prediction.odds,
-      match: prediction.match,
-      league: prediction.league,
-      date: prediction.date,
-      time: prediction.time,
-      contentHtml: parsedContent,
-      slug: prediction.slug,
-      affiliate: prediction.affiliate
+    const currentRoundFixtures = fixtures.filter((fixture) => fixture.round?.name === currentRoundName);
+    const nextRoundFixtures = fixtures.filter((fixture) => fixture.round?.name === nextRoundName);
+    const previousRounds = groupPreviousRounds(fixtures, currentRoundNumber);
+
+    res.set('Cache-Control', 'public, max-age=3600');
+    res.render('prediction/league-details', {
+      league,
+      currentRoundFixtures,
+      nextRoundFixtures,
+      previousRounds,
+      standings: league.standings?.rows || [],
+      title: `${league.title} - MikekaTips`,
+      description: `${league.title}. Ona meza ya round ya sasa, round inayofuata, matokeo ya rounds zilizopita na msimamo wa ligi.`,
+      keywords: `${league.country} ${league.name}, utabiri wa ligi, ${league.name} predictions, fixtures, standings`
     });
   } catch (error) {
-    console.error('Prediction details route error:', error);
+    console.error('League prediction details route error:', error);
     res.status(500).render('500', { title: 'Server Error' });
   }
 });

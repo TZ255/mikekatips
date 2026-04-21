@@ -11,6 +11,7 @@ const { processTipsForDate } = require('../utils/tipsProcessor');
 const { LinkToRedirect } = require('../utils/affLinktoRedirect');
 const { unconfirmUserSubscription } = require('../utils/confirmSubscription');
 const sendEmail = require('../utils/sendemail');
+const { syncSeasonPredictionsForLeagueTemporarily } = require('../utils/tempLeaguePredictionSync');
 
 const router = express.Router();
 
@@ -303,8 +304,27 @@ router.get('/payments/disable', (req, res) => {
   res.end()
 });
 
-router.get('/api/testing', (req, res) => {
-  res.json({ message: 'API is working!' });
+router.get('/api/testing', async (req, res) => {
+  try {
+    const leagueId = Number.parseInt(req.query.leagueId || '567', 10);
+
+    if (!Number.isInteger(leagueId) || leagueId <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'leagueId must be a positive integer'
+      });
+    }
+
+    const result = await syncSeasonPredictionsForLeagueTemporarily(leagueId);
+    res.set('Cache-Control', 'no-store');
+    return res.json(result);
+  } catch (error) {
+    console.error('Testing league prediction sync error:', error);
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
 });
 
 module.exports = router;

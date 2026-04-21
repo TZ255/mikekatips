@@ -1,0 +1,453 @@
+<!-- Variables -->
+<% title = title %>
+<% description = description %>
+<% keywords = keywords %>
+<% page = 'prediction' %>
+<% page_url = `https://mikekatips.co.tz/prediction/${league.leagueId}` %>
+<%
+    const timezone = 'Africa/Nairobi';
+    const formatDate = (value) => new Date(value).toLocaleDateString('sw-TZ', {
+        day: '2-digit',
+        month: 'short',
+        timeZone: timezone
+    });
+    const formatTime = (value) => new Date(value).toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: timezone
+    });
+    const formatFullDate = (value) => new Date(value).toLocaleString('sw-TZ', {
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: timezone
+    });
+    const resultVariant = (fixture) => {
+        if (fixture.result?.tipOutcome === 'won') return 'success';
+        if (fixture.result?.tipOutcome === 'lost') return 'danger';
+        if (fixture.result?.tipOutcome === 'pending') return 'light';
+        if (fixture.result?.tipOutcome === 'void') return 'secondary';
+        return 'secondary';
+    };
+    const standingsUpdatedAt = league.standings?.updatedAt
+        ? new Date(league.standings.updatedAt).toLocaleString('en-GB', { timeZone: timezone })
+        : null;
+    const previousRoundCount = previousRounds?.length || 0;
+    const previousFixturesCount = (previousRounds || []).reduce((sum, roundGroup) => sum + roundGroup.fixtures.length, 0);
+
+    const breadcrumbSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Nyumbani',
+                item: 'https://mikekatips.co.tz/'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Utabiri',
+                item: 'https://mikekatips.co.tz/prediction'
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: league.title,
+                item: page_url
+            }
+        ]
+    };
+
+    const pageSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: title,
+        description,
+        url: page_url,
+        inLanguage: 'sw',
+        about: {
+            '@type': 'SportsOrganization',
+            name: league.name,
+            sport: 'Football',
+            areaServed: league.country
+        }
+    };
+%>
+
+<script type="application/ld+json"><%- JSON.stringify(breadcrumbSchema) %></script>
+<script type="application/ld+json"><%- JSON.stringify(pageSchema) %></script>
+
+<main class="bg-body-tertiary">
+    <section class="py-4 py-lg-5">
+        <div class="container">
+            <div class="rounded-5 overflow-hidden shadow-sm text-white" style="background: linear-gradient(135deg, #102542 0%, #184e77 48%, #1b4332 100%);">
+                <div class="p-4 p-md-5">
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb mb-0 small">
+                            <li class="breadcrumb-item"><a href="/" class="link-light text-decoration-none">Nyumbani</a></li>
+                            <li class="breadcrumb-item"><a href="/prediction" class="link-light text-decoration-none">Utabiri</a></li>
+                            <li class="breadcrumb-item active text-white text-opacity-75" aria-current="page"><%= league.name %></li>
+                        </ol>
+                    </nav>
+
+                    <div class="row g-4 align-items-end">
+                        <div class="col-12 col-xl-7">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <% if (league.logo) { %>
+                                    <div class="rounded-circle bg-white d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 4.5rem; height: 4.5rem;">
+                                        <img src="<%= league.logo %>" alt="<%= league.name %> logo" class="img-fluid" width="48" height="48" loading="lazy" decoding="async" style="max-width: 3rem; max-height: 3rem; object-fit: contain;">
+                                    </div>
+                                <% } %>
+                                <div>
+                                    <div class="small text-uppercase fw-semibold text-white text-opacity-75"><%= league.country %></div>
+                                    <h1 class="display-5 fw-bold mb-0" style="text-wrap: balance;"><%= league.title %></h1>
+                                </div>
+                            </div>
+
+                            <p class="lead mb-4 text-white text-opacity-75" style="max-width: 62ch;">
+                                Hapa utapata tips za mikeka (betting tips) za round ya sasa, round ijayo, rounds zilizopita zenye matokeo, pamoja na standings (msimamo) wa ligi kwa msimu wa sasa.
+                            </p>
+
+                            <div class="d-flex flex-wrap gap-2">
+                                <a href="#current-round" class="btn btn-warning fw-semibold">Round ya sasa</a>
+                                <a href="#next-round" class="btn btn-outline-light">Round ijayo</a>
+                                <a href="#previous-rounds" class="btn btn-outline-light">Rounds zilizopita</a>
+                                <a href="#league-table" class="btn btn-outline-light">Msimamo (Standings)</a>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-5">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="h-100 rounded-4 border border-light border-opacity-25 p-3" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);">
+                                        <div class="small text-uppercase fw-semibold text-white text-opacity-75 mb-2">Msimu</div>
+                                        <div class="fw-bold"><%= league.seasonLabel || `${league.season}/${Number(league.season) + 1}` %></div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="h-100 rounded-4 border border-light border-opacity-25 p-3" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);">
+                                        <div class="small text-uppercase fw-semibold text-white text-opacity-75 mb-2">Standings</div>
+                                        <div class="fw-bold"><%= standings.length %> timu</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="h-100 rounded-4 border border-light border-opacity-25 p-3" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);">
+                                        <div class="small text-uppercase fw-semibold text-white text-opacity-75 mb-2">Round ya sasa</div>
+                                        <div class="fw-bold"><%= currentRoundFixtures.length %> mechi</div>
+                                        <div class="small text-white text-opacity-75 mt-1"><%= league.rounds?.current?.name || 'Bado haijajulikana' %></div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="h-100 rounded-4 border border-light border-opacity-25 p-3" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);">
+                                        <div class="small text-uppercase fw-semibold text-white text-opacity-75 mb-2">Round inayofuata</div>
+                                        <div class="fw-bold"><%= nextRoundFixtures.length %> mechi</div>
+                                        <div class="small text-white text-opacity-75 mt-1"><%= league.rounds?.next?.name || 'Hakuna' %></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pb-5">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-12 col-md-4">
+                    <div class="rounded-4 border bg-white h-100 p-4 shadow-sm">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                            <h2 class="h5 mb-0">Round ya sasa</h2>
+                        </div>
+                        <p class="text-secondary mb-0">
+                            Tips za mechi za round ya sasa zinawekwa mbele ili usipoteze muda kutafuta meza kuu ya leo.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="rounded-4 border bg-white h-100 p-4 shadow-sm">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="rounded-circle bg-warning bg-opacity-25 text-dark d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
+                                <i class="fa-solid fa-forward"></i>
+                            </div>
+                            <h2 class="h5 mb-0">Round ijayo</h2>
+                        </div>
+                        <p class="text-secondary mb-0">
+                            Ratiba (fixtures) ya round ijayo inaonyeshwa mapema ili uweze kuona mechi na tip kabla ya mechi kuchezwa.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="rounded-4 border bg-white h-100 p-4 shadow-sm">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="rounded-circle bg-success bg-opacity-10 text-success d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
+                                <i class="fa-solid fa-table"></i>
+                            </div>
+                            <h2 class="h5 mb-0">Historia na msimamo</h2>
+                        </div>
+                        <p class="text-secondary mb-0">
+                            Rounds zilizopita zinawekwa kwenye accordion, kisha msimamo wa ligi unaoneshwa mwisho wa ukurasa.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-light border rounded-4 d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-2 mb-4 shadow-sm">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-clock text-primary"></i>
+                    <span>Nyakati zote zinaonyeshwa kwa saa za Afrika Mashariki (EAT).</span>
+                </div>
+                <% if (standingsUpdatedAt) { %>
+                    <span class="small text-secondary">Standings zimesasishwa: <span class="fw-semibold text-dark"><%= standingsUpdatedAt %></span></span>
+                <% } %>
+            </div>
+
+            <section id="current-round" class="rounded-5 border bg-white shadow-sm p-3 p-md-4 mb-4" style="scroll-margin-top: 6rem;">
+                <header class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-2 mb-4">
+                    <div>
+                        <span class="badge text-bg-primary rounded-pill px-3 py-2 mb-2">Round ya sasa</span>
+                        <h2 class="h3 mb-1">Round ya sasa</h2>
+                        <p class="text-secondary mb-0">Mechi za round inayoendelea pamoja na tip na matokeo yake.</p>
+                    </div>
+                    <div class="text-secondary small"><%= league.rounds?.current?.name || 'Bado haijajulikana' %></div>
+                </header>
+
+                <% if (currentRoundFixtures.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <caption class="visually-hidden">Fixtures za round ya sasa: <%= league.title %></caption>
+                            <thead class="table-light">
+                                <tr class="text-uppercase small">
+                                    <th scope="col" class="fw-semibold text-secondary">Tarehe/Saa</th>
+                                    <th scope="col" class="fw-semibold text-secondary">Mechi</th>
+                                    <th scope="col" class="fw-semibold text-secondary">Tip</th>
+                                    <th scope="col" class="fw-semibold text-secondary">Matokeo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% currentRoundFixtures.forEach((fixture) => { %>
+                                    <tr>
+                                        <td class="text-nowrap">
+                                            <time datetime="<%= new Date(fixture.kickoffAt).toISOString() %>" title="<%= formatFullDate(fixture.kickoffAt) %>" class="d-block fw-semibold small" style="font-size: 0.84rem;">
+                                                <%= formatDate(fixture.kickoffAt) %>
+                                            </time>
+                                            <div class="small text-secondary"><%= formatTime(fixture.kickoffAt) %></div>
+                                        </td>
+                                        <td>
+                                            <div class="fw-semibold d-none d-md-block"><%= fixture.match %></div>
+                                            <div class="d-md-none">
+                                                <div class="fw-semibold"><%= fixture.homeTeam?.name || fixture.match %></div>
+                                                <div class="small text-secondary"><%= fixture.awayTeam?.name || '' %></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge text-bg-dark rounded-pill px-3 py-2"><%= fixture.tip?.label || '-' %></span>
+                                        </td>
+                                        <td>
+                                            <span class="badge text-bg-<%= resultVariant(fixture) %> rounded-pill px-3 py-2 <% if (resultVariant(fixture) === 'light') { %>text-dark border<% } %>"><%= fixture.result?.display || '-' %></span>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="alert alert-light border rounded-4 mb-0">Hakuna mechi za round ya sasa zilizopo kwenye mfumo bado.</div>
+                <% } %>
+            </section>
+
+            <section id="next-round" class="rounded-5 border bg-white shadow-sm p-3 p-md-4 mb-4" style="scroll-margin-top: 6rem;">
+                <header class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-2 mb-4">
+                    <div>
+                        <span class="badge text-bg-warning rounded-pill px-3 py-2 mb-2 text-dark">Round ijayo</span>
+                        <h2 class="h3 mb-1">Round ijayo</h2>
+                        <p class="text-secondary mb-0">Ratiba inayokuja pamoja na tips zilizopo kwenye mfumo.</p>
+                    </div>
+                    <div class="text-secondary small"><%= league.rounds?.next?.name || 'Hakuna' %></div>
+                </header>
+
+                <% if (nextRoundFixtures.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <caption class="visually-hidden">Fixtures za round ijayo: <%= league.title %></caption>
+                            <thead class="table-light">
+                                <tr class="text-uppercase small">
+                                    <th scope="col" class="fw-semibold text-secondary">Tarehe/Saa</th>
+                                    <th scope="col" class="fw-semibold text-secondary">Mechi</th>
+                                    <th scope="col" class="fw-semibold text-secondary">Tip</th>
+                                    <th scope="col" class="fw-semibold text-secondary">Matokeo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% nextRoundFixtures.forEach((fixture) => { %>
+                                    <tr>
+                                        <td class="text-nowrap">
+                                            <time datetime="<%= new Date(fixture.kickoffAt).toISOString() %>" title="<%= formatFullDate(fixture.kickoffAt) %>" class="d-block fw-semibold small" style="font-size: 0.84rem;">
+                                                <%= formatDate(fixture.kickoffAt) %>
+                                            </time>
+                                            <div class="small text-secondary"><%= formatTime(fixture.kickoffAt) %></div>
+                                        </td>
+                                        <td>
+                                            <div class="fw-semibold d-none d-md-block"><%= fixture.match %></div>
+                                            <div class="d-md-none">
+                                                <div class="fw-semibold"><%= fixture.homeTeam?.name || fixture.match %></div>
+                                                <div class="small text-secondary"><%= fixture.awayTeam?.name || '' %></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge text-bg-dark rounded-pill px-3 py-2"><%= fixture.tip?.label || '-' %></span>
+                                        </td>
+                                        <td>
+                                            <span class="badge text-bg-<%= resultVariant(fixture) %> rounded-pill px-3 py-2 <% if (resultVariant(fixture) === 'light') { %>text-dark border<% } %>"><%= fixture.result?.display || '-' %></span>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="alert alert-light border rounded-4 mb-0">Hakuna mechi za round inayofuata zilizopo kwenye mfumo bado.</div>
+                <% } %>
+            </section>
+
+            <section id="previous-rounds" class="rounded-5 border bg-white shadow-sm p-3 p-md-4 mb-4" style="scroll-margin-top: 6rem;">
+                <header class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-2 mb-4">
+                    <div>
+                        <span class="badge text-bg-success rounded-pill px-3 py-2 mb-2">Rounds zilizopita</span>
+                        <h2 class="h3 mb-1">Rounds zilizopita</h2>
+                        <p class="text-secondary mb-0">Matokeo na tips zote za rounds zilizokamilika zinawekwa hapa chini.</p>
+                    </div>
+                    <div class="text-secondary small">
+                        <span class="fw-semibold text-dark"><%= previousRoundCount %></span> rounds, <span class="fw-semibold text-dark"><%= previousFixturesCount %></span> mechi
+                    </div>
+                </header>
+
+                <% if (previousRounds.length > 0) { %>
+                    <div class="accordion" id="previous-rounds-accordion">
+                        <% previousRounds.forEach((roundGroup, index) => { %>
+                            <div class="accordion-item border rounded-4 overflow-hidden mb-3">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button <%= index === 0 ? '' : 'collapsed' %>" type="button" data-bs-toggle="collapse" data-bs-target="#round-<%= roundGroup.roundNumber %>" aria-expanded="<%= index === 0 ? 'true' : 'false' %>" aria-controls="round-<%= roundGroup.roundNumber %>">
+                                        <span class="d-flex flex-column flex-md-row align-items-md-center gap-1 gap-md-3">
+                                            <span class="fw-semibold"><%= roundGroup.roundName %></span>
+                                            <span class="small text-secondary"><%= roundGroup.fixtures.length %> mechi</span>
+                                        </span>
+                                    </button>
+                                </h3>
+                                <div id="round-<%= roundGroup.roundNumber %>" class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>" data-bs-parent="#previous-rounds-accordion">
+                                    <div class="accordion-body px-0 px-md-0">
+                                        <div class="table-responsive">
+	                                            <table class="table table-hover align-middle mb-0">
+	                                                <caption class="visually-hidden"><%= roundGroup.roundName %> matokeo ya <%= league.title %></caption>
+	                                                <thead class="table-light">
+	                                                    <tr class="text-uppercase small">
+	                                                        <th scope="col" class="fw-semibold text-secondary">Tarehe/Saa</th>
+	                                                        <th scope="col" class="fw-semibold text-secondary">Mechi</th>
+	                                                        <th scope="col" class="fw-semibold text-secondary">Tip</th>
+	                                                        <th scope="col" class="fw-semibold text-secondary">Matokeo</th>
+	                                                    </tr>
+	                                                </thead>
+                                                <tbody>
+                                                    <% roundGroup.fixtures.forEach((fixture) => { %>
+                                                        <tr>
+                                                            <td class="text-nowrap">
+                                                                <time datetime="<%= new Date(fixture.kickoffAt).toISOString() %>" title="<%= formatFullDate(fixture.kickoffAt) %>" class="d-block fw-semibold small" style="font-size: 0.84rem;">
+                                                                    <%= formatDate(fixture.kickoffAt) %>
+                                                                </time>
+                                                                <div class="small text-secondary"><%= formatTime(fixture.kickoffAt) %></div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="fw-semibold d-none d-md-block"><%= fixture.match %></div>
+                                                                <div class="d-md-none">
+                                                                    <div class="fw-semibold"><%= fixture.homeTeam?.name || fixture.match %></div>
+                                                                    <div class="small text-secondary"><%= fixture.awayTeam?.name || '' %></div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge text-bg-dark rounded-pill px-3 py-2"><%= fixture.tip?.label || '-' %></span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge text-bg-<%= resultVariant(fixture) %> rounded-pill px-3 py-2 <% if (resultVariant(fixture) === 'light') { %>text-dark border<% } %>"><%= fixture.result?.display || '-' %></span>
+                                                            </td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } else { %>
+                    <div class="alert alert-light border rounded-4 mb-0">Hakuna rounds zilizopita zilizohifadhiwa bado.</div>
+                <% } %>
+            </section>
+
+            <section id="league-table" class="rounded-5 border bg-white shadow-sm p-3 p-md-4" style="scroll-margin-top: 6rem;">
+                <header class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-2 mb-4">
+                    <div>
+                        <span class="badge text-bg-dark rounded-pill px-3 py-2 mb-2">Standings</span>
+                        <h2 class="h3 mb-1">Msimamo wa ligi (Standings)</h2>
+                        <p class="text-secondary mb-0">Msimamo wa sasa wa ligi kwa msimu huu.</p>
+                    </div>
+                    <% if (standingsUpdatedAt) { %>
+                        <div class="text-secondary small">Imesasishwa <span class="fw-semibold text-dark"><%= standingsUpdatedAt %></span></div>
+                    <% } %>
+                </header>
+
+                <% if (standings.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <caption class="visually-hidden"><%= league.title %> standings (msimamo) wa ligi</caption>
+                            <thead class="table-light">
+                                <tr class="text-uppercase small">
+                                    <th scope="col" class="fw-semibold text-secondary">#</th>
+                                    <th scope="col" class="fw-semibold text-secondary">Timu</th>
+                                    <th scope="col" class="fw-semibold text-secondary">MP</th>
+                                    <th scope="col" class="fw-semibold text-secondary">W</th>
+                                    <th scope="col" class="fw-semibold text-secondary">D</th>
+                                    <th scope="col" class="fw-semibold text-secondary">L</th>
+                                    <th scope="col" class="fw-semibold text-secondary">GD</th>
+                                    <th scope="col" class="fw-semibold text-secondary">Pts</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% standings.forEach((row) => { %>
+                                    <tr>
+                                        <td class="fw-bold text-nowrap"><%= row.rank %></td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <% if (row.teamLogo) { %>
+                                                    <img src="<%= row.teamLogo %>" alt="<%= row.teamName %> logo" width="24" height="24" loading="lazy" decoding="async" style="width: 1.5rem; height: 1.5rem; object-fit: contain; flex-shrink: 0;">
+                                                <% } %>
+                                                <span class="fw-semibold" style="font-size: 0.95rem;"><%= row.teamName %></span>
+                                            </div>
+                                        </td>
+                                        <td><%= row.played %></td>
+                                        <td><%= row.won %></td>
+                                        <td><%= row.drawn %></td>
+                                        <td><%= row.lost %></td>
+                                        <td><%= row.goalDifference %></td>
+                                        <td class="fw-bold"><%= row.points %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="alert alert-light border rounded-4 mb-0">Msimamo wa ligi bado haujapatikana.</div>
+                <% } %>
+            </section>
+        </div>
+    </section>
+</main>
