@@ -85,18 +85,10 @@
                                 <div class="col-12">
                                     <div class="rounded-4 border border-light border-opacity-25 p-3 p-md-4" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);">
                                         <div class="text-uppercase small fw-semibold text-white text-opacity-75 mb-2">Round za sasa</div>
-                                        <div class="h2 fw-bold mb-2"><%= totalCurrentFixtures %> mechi</div>
+                                        <div class="h2 fw-bold mb-2">Mechi <%= totalCurrentFixtures %></div>
                                         <p class="mb-0 text-white text-opacity-75">
-                                            Kila kadi inakupeleka moja kwa moja kwenye ukurasa wa “<span class="fw-semibold text-white">Utabiri wa Country na League</span>” wenye tips, matokeo na standings (msimamo) wa ligi.
+                                            Kila kadi inakupeleka moja kwa moja kwenye ukurasa wa “<span class="fw-semibold text-white">Utabiri wa ligi husika</span>” wenye tips, matokeo na msimamo wake.
                                         </p>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="rounded-4 p-3 p-md-4 bg-warning text-dark shadow-sm">
-                                        <div class="fw-bold mb-1">Muundo wa kila ligi</div>
-                                        <div class="small">
-                                            Kila ligi ipo kwenye ukurasa mmoja: current round, next round, previous rounds na standings (league table).
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -116,10 +108,10 @@
                             <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
                                 <i class="fa-solid fa-list-check"></i>
                             </div>
-                            <h2 class="h5 mb-0">Muonekano ulio wazi</h2>
+                            <h2 class="h5 mb-0">Muonekano wa tabiri</h2>
                         </div>
                         <p class="text-secondary mb-0">
-                            Kila ligi ina meza fupi na rahisi kusoma: tarehe/saa, mechi, tip na matokeo bila vitu vya ziada vinavyochanganya.
+                            Kila ligi ina table fupi na rahisi kusoma: tarehe/saa, mechi, tip na matokeo bila vitu vya ziada vinavyochanganya.
                         </p>
                     </div>
                 </div>
@@ -130,10 +122,10 @@
                             <div class="rounded-circle bg-success bg-opacity-10 text-success d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
                                 <i class="fa-solid fa-rotate"></i>
                             </div>
-                            <h2 class="h5 mb-0">Data zinazosasishwa</h2>
+                            <h2 class="h5 mb-0">Data zilizopo</h2>
                         </div>
                         <p class="text-secondary mb-0">
-                            Fixtures, tips na standings huchukuliwa kutoka API-Football kisha zinawekwa kwenye mpangilio mmoja unaoeleweka.
+                            Ratiba, utabiri na msimamo huchukuliwa na kuchambuliwa kutoka vyanzo sahihi na kuwekwa kwenye mpangilio mmoja unaoeleweka.
                         </p>
                     </div>
                 </div>
@@ -144,10 +136,10 @@
                             <div class="rounded-circle bg-warning bg-opacity-25 text-dark d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
                                 <i class="fa-solid fa-mobile-screen-button"></i>
                             </div>
-                            <h2 class="h5 mb-0">Inasomeka kwenye simu</h2>
+                            <h2 class="h5 mb-0">Mpangilio wa tabiri</h2>
                         </div>
                         <p class="text-secondary mb-0">
-                            Mpangilio ni responsive, hivyo meza zinasomeka vizuri kwenye simu, tablet na desktop.
+                            Mpangilio ni responsive, hivyo tabiri zinasomeka vizuri kwenye simu, tablet na desktop.
                         </p>
                     </div>
                 </div>
@@ -158,11 +150,11 @@
                     <span class="badge text-bg-dark rounded-pill px-3 py-2 mb-2">Ligi</span>
                     <h2 class="display-6 fw-bold mb-2">Chagua ligi ya kufuatilia</h2>
                     <p class="text-secondary mb-0" style="max-width: 62ch;">
-                        Fungua kadi ya ligi husika uone “Utabiri wa <span class="fw-semibold">Country na League</span>” pamoja na meza za rounds, tips na standings zake.
+                        Fungua ligi husika uone “Utabiri wa <span class="fw-semibold">msimu mzima</span>” pamoja na msimamo wa ligi.
                     </p>
                 </div>
                 <div class="text-secondary small">
-                    <span class="fw-semibold text-dark"><%= totalLeagues %></span> ligi zimeandaliwa
+                    <span class="fw-semibold text-dark">Ligi <%= totalLeagues %></span> zimeandaliwa
                 </div>
             </header>
 
@@ -237,16 +229,6 @@
                         </div>
                     <% }) %>
                 </div>
-            <% } else { %>
-                <section class="rounded-5 border bg-white shadow-sm p-4 p-md-5 text-center">
-                    <div class="rounded-circle bg-body-tertiary text-secondary d-inline-flex align-items-center justify-content-center mb-3" style="width: 4.5rem; height: 4.5rem;">
-                        <i class="fa-solid fa-trophy fs-3"></i>
-                    </div>
-                    <h2 class="h3 mb-3">Hakuna ligi zilizoandaliwa kwa sasa</h2>
-                    <p class="text-secondary mb-0">
-                        Washa sync ya API-Football au rudi baadaye ili kuona ligi zilizochaguliwa na meza zake za utabiri.
-                    </p>
-                </section>
             <% } %>
         </div>
     </section>

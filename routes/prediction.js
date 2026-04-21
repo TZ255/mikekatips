@@ -157,7 +157,7 @@ router.get('/prediction/:leagueRef', freshUserInfo, async (req, res) => {
       previousRounds,
       standings: league.standings?.rows || [],
       title: `${league.title} - MikekaTips`,
-      description: `${league.title}. Ona meza ya round ya sasa, round inayofuata, matokeo ya rounds zilizopita na msimamo wa ligi.`,
+      description: `${league.title}. Ona table ya round ya sasa, round inayofuata, matokeo ya rounds zilizopita na msimamo wa ligi.`,
       keywords: `${league.country} ${league.name}, utabiri wa ligi, ${league.name} predictions, fixtures, standings`
     });
   } catch (error) {

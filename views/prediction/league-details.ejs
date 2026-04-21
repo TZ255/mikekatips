@@ -159,62 +159,20 @@
 
     <section class="pb-5">
         <div class="container">
-            <div class="row g-4 mb-4">
-                <div class="col-12 col-md-4">
-                    <div class="rounded-4 border bg-white h-100 p-4 shadow-sm">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
-                                <i class="fa-solid fa-play"></i>
-                            </div>
-                            <h2 class="h5 mb-0">Round ya sasa</h2>
-                        </div>
-                        <p class="text-secondary mb-0">
-                            Tips za mechi za round ya sasa zinawekwa mbele ili usipoteze muda kutafuta meza kuu ya leo.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4">
-                    <div class="rounded-4 border bg-white h-100 p-4 shadow-sm">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="rounded-circle bg-warning bg-opacity-25 text-dark d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
-                                <i class="fa-solid fa-forward"></i>
-                            </div>
-                            <h2 class="h5 mb-0">Round ijayo</h2>
-                        </div>
-                        <p class="text-secondary mb-0">
-                            Ratiba (fixtures) ya round ijayo inaonyeshwa mapema ili uweze kuona mechi na tip kabla ya mechi kuchezwa.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4">
-                    <div class="rounded-4 border bg-white h-100 p-4 shadow-sm">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="rounded-circle bg-success bg-opacity-10 text-success d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
-                                <i class="fa-solid fa-table"></i>
-                            </div>
-                            <h2 class="h5 mb-0">Historia na msimamo</h2>
-                        </div>
-                        <p class="text-secondary mb-0">
-                            Rounds zilizopita zinawekwa kwenye accordion, kisha msimamo wa ligi unaoneshwa mwisho wa ukurasa.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
             <div class="alert alert-light border rounded-4 d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-2 mb-4 shadow-sm">
                 <div class="d-flex align-items-center gap-2">
                     <i class="fa-solid fa-clock text-primary"></i>
-                    <span>Nyakati zote zinaonyeshwa kwa saa za Afrika Mashariki (EAT).</span>
+                    <span>Timezone: Afrika Mashariki (EAT).</span>
                 </div>
                 <% if (standingsUpdatedAt) { %>
-                    <span class="small text-secondary">Standings zimesasishwa: <span class="fw-semibold text-dark"><%= standingsUpdatedAt %></span></span>
+                    <span class="small text-secondary">Imesasishwa: <span class="fw-semibold text-dark"><%= standingsUpdatedAt %></span></span>
                 <% } %>
             </div>
 
             <section id="current-round" class="rounded-5 border bg-white shadow-sm p-3 p-md-4 mb-4" style="scroll-margin-top: 6rem;">
                 <header class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-2 mb-4">
                     <div>
-                        <span class="badge text-bg-primary rounded-pill px-3 py-2 mb-2">Round ya sasa</span>
+                        <span class="badge text-bg-success rounded-pill px-3 py-2 mb-2">Round ya sasa</span>
                         <h2 class="h3 mb-1">Round ya sasa</h2>
                         <p class="text-secondary mb-0">Mechi za round inayoendelea pamoja na tip na matokeo yake.</p>
                     </div>
@@ -227,9 +185,9 @@
                             <caption class="visually-hidden">Fixtures za round ya sasa: <%= league.title %></caption>
                             <thead class="table-light">
                                 <tr class="text-uppercase small">
-                                    <th scope="col" class="fw-semibold text-secondary">Tarehe/Saa</th>
+                                    <th scope="col" class="fw-semibold text-secondary">Muda</th>
                                     <th scope="col" class="fw-semibold text-secondary">Mechi</th>
-                                    <th scope="col" class="fw-semibold text-secondary">Tip</th>
+                                    <th scope="col" class="fw-semibold text-secondary">Utabiri</th>
                                     <th scope="col" class="fw-semibold text-secondary">Matokeo</th>
                                 </tr>
                             </thead>
@@ -261,16 +219,16 @@
                         </table>
                     </div>
                 <% } else { %>
-                    <div class="alert alert-light border rounded-4 mb-0">Hakuna mechi za round ya sasa zilizopo kwenye mfumo bado.</div>
+                    <div class="alert alert-light border rounded-4 mb-0">Hakuna mechi za round ya sasa zilizoandaliwa.</div>
                 <% } %>
             </section>
 
             <section id="next-round" class="rounded-5 border bg-white shadow-sm p-3 p-md-4 mb-4" style="scroll-margin-top: 6rem;">
                 <header class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-2 mb-4">
                     <div>
-                        <span class="badge text-bg-warning rounded-pill px-3 py-2 mb-2 text-dark">Round ijayo</span>
+                        <span class="badge text-bg-primary rounded-pill px-3 py-2 mb-2">Round ijayo</span>
                         <h2 class="h3 mb-1">Round ijayo</h2>
-                        <p class="text-secondary mb-0">Ratiba inayokuja pamoja na tips zilizopo kwenye mfumo.</p>
+                        <p class="text-secondary mb-0">Ratiba inayokuja pamoja na tips zilizoandaliwa.</p>
                     </div>
                     <div class="text-secondary small"><%= league.rounds?.next?.name || 'Hakuna' %></div>
                 </header>
@@ -281,9 +239,9 @@
                             <caption class="visually-hidden">Fixtures za round ijayo: <%= league.title %></caption>
                             <thead class="table-light">
                                 <tr class="text-uppercase small">
-                                    <th scope="col" class="fw-semibold text-secondary">Tarehe/Saa</th>
+                                    <th scope="col" class="fw-semibold text-secondary">Muda</th>
                                     <th scope="col" class="fw-semibold text-secondary">Mechi</th>
-                                    <th scope="col" class="fw-semibold text-secondary">Tip</th>
+                                    <th scope="col" class="fw-semibold text-secondary">Utabiri</th>
                                     <th scope="col" class="fw-semibold text-secondary">Matokeo</th>
                                 </tr>
                             </thead>
@@ -315,14 +273,14 @@
                         </table>
                     </div>
                 <% } else { %>
-                    <div class="alert alert-light border rounded-4 mb-0">Hakuna mechi za round inayofuata zilizopo kwenye mfumo bado.</div>
+                    <div class="alert alert-light border rounded-4 mb-0">Hakuna mechi za round Ijayo</div>
                 <% } %>
             </section>
 
             <section id="previous-rounds" class="rounded-5 border bg-white shadow-sm p-3 p-md-4 mb-4" style="scroll-margin-top: 6rem;">
                 <header class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-2 mb-4">
                     <div>
-                        <span class="badge text-bg-success rounded-pill px-3 py-2 mb-2">Rounds zilizopita</span>
+                        <span class="badge text-bg-secondary rounded-pill px-3 py-2 mb-2">Rounds zilizopita</span>
                         <h2 class="h3 mb-1">Rounds zilizopita</h2>
                         <p class="text-secondary mb-0">Matokeo na tips zote za rounds zilizokamilika zinawekwa hapa chini.</p>
                     </div>
