@@ -5,6 +5,7 @@ const timezone = require("dayjs/plugin/timezone");
 const isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
 const Tip = require('../models/Tip');
 const Prediction = require('../models/Prediction');
+const League = require('../models/League');
 const { freshUserInfo } = require('../middleware/auth');
 const { scrapeTips } = require('../utils/tipsScraper');
 const { processTipsForDate } = require('../utils/tipsProcessor');
@@ -72,18 +73,21 @@ router.get('/', async (req, res) => {
     
     // Generate navigation data
     const navData = generateDateNavigation(currentDate, '/');
-    
-  // Fetch free tips (limit to first 50)
-  const freeTips = await Tip.find({
-    date: dateStr,
-    isPremium: false
-  }).sort({ time: 1 }).limit(50).cache(600);
-  
-  // Fetch recent predictions (last 3)
-  const predictions = await Prediction.find({ 
-    date: dateStr,
-    status: 'published' 
-    }).cache(600);
+
+    const [freeTips, predictions, availableLeagues] = await Promise.all([
+      Tip.find({
+        date: dateStr,
+        isPremium: false
+      }).sort({ time: 1 }).limit(50).cache(600),
+      Prediction.find({
+        date: dateStr,
+        status: 'published'
+      }).cache(600),
+      League.find({ isActive: true })
+        .select('leagueId country name title logo displayOrder')
+        .sort({ displayOrder: 1, name: 1 })
+        .lean()
+    ]);
 
     //add leo to the swahiliday
     navData.swahiliDay = `Leo, ${navData.swahiliDay}`
@@ -100,6 +104,7 @@ router.get('/', async (req, res) => {
       page: 'index',
       freeTips,
       predictions,
+      availableLeagues,
       currentDate: dateStr,
       modifiedDate,
       ...navData
@@ -149,18 +154,21 @@ router.get('/utabiri-wa-mechi-za-jana', async (req, res) => {
     
     // Generate navigation data
     const navData = generateDateNavigation(currentDate, '/utabiri-wa-mechi-za-jana');
-    
-  // Fetch free tips
-  const freeTips = await Tip.find({
-    date: dateStr,
-    isPremium: false
-  }).sort({ time: 1 }).limit(50).cache(600);
-  
-  // Fetch recent predictions
-  const predictions = await Prediction.find({ 
-    date: dateStr,
-    status: 'published'
-    }).select('-body').cache(600); // Exclude body for listing
+
+    const [freeTips, predictions, availableLeagues] = await Promise.all([
+      Tip.find({
+        date: dateStr,
+        isPremium: false
+      }).sort({ time: 1 }).limit(50).cache(600),
+      Prediction.find({
+        date: dateStr,
+        status: 'published'
+      }).select('-body').cache(600),
+      League.find({ isActive: true })
+        .select('leagueId country name title logo displayOrder')
+        .sort({ displayOrder: 1, name: 1 })
+        .lean()
+    ]);
 
     //add jana to the swahiliday  
     navData.swahiliDay = `Jana, ${navData.swahiliDay}`
@@ -175,6 +183,7 @@ router.get('/utabiri-wa-mechi-za-jana', async (req, res) => {
       page: 'index-jana',
       freeTips,
       predictions,
+      availableLeagues,
       currentDate: dateStr,
       modifiedDate,
       ...navData
@@ -205,18 +214,21 @@ router.get('/utabiri-wa-mechi-za-kesho', freshUserInfo, async (req, res) => {
     
     // Generate navigation data
     const navData = generateDateNavigation(currentDate, '/utabiri-wa-mechi-za-kesho');
-    
-  // Fetch free tips
-  const freeTips = await Tip.find({
-    date: dateStr,
-    isPremium: false
-  }).sort({ time: 1 }).limit(50).cache(600);
-  
-  // Fetch recent predictions
-  const predictions = await Prediction.find({ 
-    date: dateStr,
-    status: 'published' 
-    }).cache(600);
+
+    const [freeTips, predictions, availableLeagues] = await Promise.all([
+      Tip.find({
+        date: dateStr,
+        isPremium: false
+      }).sort({ time: 1 }).limit(50).cache(600),
+      Prediction.find({
+        date: dateStr,
+        status: 'published'
+      }).cache(600),
+      League.find({ isActive: true })
+        .select('leagueId country name title logo displayOrder')
+        .sort({ displayOrder: 1, name: 1 })
+        .lean()
+    ]);
 
     //add kesho to the swahiliday  
     navData.swahiliDay = `Kesho, ${navData.swahiliDay}`
@@ -231,6 +243,7 @@ router.get('/utabiri-wa-mechi-za-kesho', freshUserInfo, async (req, res) => {
       page: 'index-kesho',
       freeTips,
       predictions,
+      availableLeagues,
       currentDate: dateStr,
       modifiedDate,
       ...navData

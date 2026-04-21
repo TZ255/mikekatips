@@ -136,6 +136,54 @@
     </div>
 </div>
 
+<!-- Tabiri za ligi list goes here -->
+<% if (['index', 'index-jana', 'index-kesho'].includes(page) && availableLeagues && availableLeagues.length > 0) { %>
+<section class="mt-5">
+    <div class="card border-0 shadow-sm overflow-hidden">
+        <div class="card-body p-3 p-md-4 p-lg-5">
+            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+                <div>
+                    <span class="badge text-bg-dark rounded-pill px-3 py-2 mb-2">Leagues</span>
+                    <h2 class="h2 text-dark fw-bold mb-2">Tabiri za ligi maarufu za msimu mzima</h2>
+                    <p class="text-secondary mb-0">
+                        Fungua ligi unayotaka kufuatilia uone utabiri wa msimu, msimamo, ratiba na matokeo kwenye ukurasa mmoja.
+                    </p>
+                </div>
+                <a href="/prediction" class="btn btn-outline-dark rounded-pill px-4">
+                    Ligi zote
+                </a>
+            </div>
+
+            <div class="list-group list-group-flush">
+                <% availableLeagues.forEach((league) => { %>
+                    <a href="/prediction/<%= league.leagueId %>" class="list-group-item list-group-item-action border rounded-4 px-3 px-md-4 py-3 mb-3 shadow-sm">
+                        <div class="row align-items-center g-3">
+                            <div class="col-auto">
+                                <div class="bg-white border rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 3rem; height: 3rem;">
+                                    <% if (league.logo) { %>
+                                        <img src="<%= league.logo %>" alt="<%= league.name %> logo" width="32" height="32" loading="lazy" decoding="async" style="width: 2rem; height: 2rem; object-fit: contain;">
+                                    <% } else { %>
+                                        <i class="fa-solid fa-trophy text-warning"></i>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="fw-bold text-dark mb-1"><%= league.name %></div>
+                                <div class="text-dark-emphasis fw-semibold">Utabiri wa <%= league.country %> <%= league.name %></div>
+                                <div class="small text-secondary">Angalia tabiri za msimu mzima, msimamo, ratiba na matokeo</div>
+                            </div>
+                            <div class="col-12 col-md-auto">
+                                <span class="btn btn-sm btn-dark rounded-pill px-3">Fungua</span>
+                            </div>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</section>
+<% } %>
+
 <!-- Additional SEO Content Section -->
 <div class="row mt-5">
     <div class="col-12">
