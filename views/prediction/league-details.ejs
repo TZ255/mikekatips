@@ -82,12 +82,6 @@
 <script type="application/ld+json"><%- JSON.stringify(breadcrumbSchema) %></script>
 <script type="application/ld+json"><%- JSON.stringify(pageSchema) %></script>
 
-<style>
-    .table-responsive.table-responsive-visible-y {
-        overflow-y: hidden;
-    }
-</style>
-
 <main class="bg-body-tertiary">
     <section class="py-4 py-lg-5">
         <div class="container">
@@ -186,7 +180,7 @@
                 </header>
 
                 <% if (currentRoundFixtures.length > 0) { %>
-                    <div class="table-responsive table-responsive-visible-y">
+                    <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
                             <caption class="visually-hidden">Fixtures za round ya sasa: <%= league.title %></caption>
                             <thead class="table-light">
