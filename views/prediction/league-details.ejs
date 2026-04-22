@@ -82,6 +82,12 @@
 <script type="application/ld+json"><%- JSON.stringify(breadcrumbSchema) %></script>
 <script type="application/ld+json"><%- JSON.stringify(pageSchema) %></script>
 
+<style>
+    .table-responsive.table-responsive-visible-y {
+        overflow-y: visible;
+    }
+</style>
+
 <main class="bg-body-tertiary">
     <section class="py-4 py-lg-5">
         <div class="container">
@@ -180,7 +186,7 @@
                 </header>
 
                 <% if (currentRoundFixtures.length > 0) { %>
-                    <div class="table-responsive">
+                    <div class="table-responsive table-responsive-visible-y">
                         <table class="table table-hover align-middle mb-0">
                             <caption class="visually-hidden">Fixtures za round ya sasa: <%= league.title %></caption>
                             <thead class="table-light">
@@ -188,7 +194,11 @@
                                     <th scope="col" class="fw-semibold text-secondary">Muda</th>
                                     <th scope="col" class="fw-semibold text-secondary">Mechi</th>
                                     <th scope="col" class="fw-semibold text-secondary">Utabiri</th>
-                                    <th scope="col" class="fw-semibold text-secondary">Matokeo</th>
+                                    <th scope="col" class="fw-semibold text-secondary text-center">
+                                        <span class="d-none d-md-inline">Matokeo</span>
+                                        <span class="d-inline d-md-none" aria-hidden="true"><i class="fa-regular fa-futbol"></i></span>
+                                        <span class="visually-hidden d-md-none">Matokeo</span>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -210,8 +220,8 @@
                                         <td>
                                             <span class="badge text-bg-dark rounded-pill px-3 py-2"><%= fixture.tip?.label || '-' %></span>
                                         </td>
-                                        <td>
-                                            <span class="badge text-bg-<%= resultVariant(fixture) %> rounded-pill px-3 py-2 <% if (resultVariant(fixture) === 'light') { %>text-dark border<% } %>"><%= fixture.result?.display || '-' %></span>
+                                        <td class="text-center">
+                                            <span class="badge d-inline-flex justify-content-center text-bg-<%= resultVariant(fixture) %> rounded-pill px-3 py-2 <% if (resultVariant(fixture) === 'light') { %>text-dark border<% } %>"><%= fixture.result?.display || '-' %></span>
                                         </td>
                                     </tr>
                                 <% }) %>
@@ -234,7 +244,7 @@
                 </header>
 
                 <% if (nextRoundFixtures.length > 0) { %>
-                    <div class="table-responsive">
+                    <div class="table-responsive table-responsive-visible-y">
                         <table class="table table-hover align-middle mb-0">
                             <caption class="visually-hidden">Fixtures za round ijayo: <%= league.title %></caption>
                             <thead class="table-light">
@@ -242,7 +252,11 @@
                                     <th scope="col" class="fw-semibold text-secondary">Muda</th>
                                     <th scope="col" class="fw-semibold text-secondary">Mechi</th>
                                     <th scope="col" class="fw-semibold text-secondary">Utabiri</th>
-                                    <th scope="col" class="fw-semibold text-secondary">Matokeo</th>
+                                    <th scope="col" class="fw-semibold text-secondary text-center">
+                                        <span class="d-none d-md-inline">Matokeo</span>
+                                        <span class="d-inline d-md-none" aria-hidden="true"><i class="fa-regular fa-futbol"></i></span>
+                                        <span class="visually-hidden d-md-none">Matokeo</span>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -264,8 +278,8 @@
                                         <td>
                                             <span class="badge text-bg-dark rounded-pill px-3 py-2"><%= fixture.tip?.label || '-' %></span>
                                         </td>
-                                        <td>
-                                            <span class="badge text-bg-<%= resultVariant(fixture) %> rounded-pill px-3 py-2 <% if (resultVariant(fixture) === 'light') { %>text-dark border<% } %>"><%= fixture.result?.display || '-' %></span>
+                                        <td class="text-center">
+                                            <span class="badge d-inline-flex justify-content-center text-bg-<%= resultVariant(fixture) %> rounded-pill px-3 py-2 <% if (resultVariant(fixture) === 'light') { %>text-dark border<% } %>"><%= fixture.result?.display || '-' %></span>
                                         </td>
                                     </tr>
                                 <% }) %>
@@ -303,15 +317,19 @@
                                 </h3>
                                 <div id="round-<%= roundGroup.roundNumber %>" class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>" data-bs-parent="#previous-rounds-accordion">
                                     <div class="accordion-body px-0 px-md-0">
-                                        <div class="table-responsive">
+                                        <div class="table-responsive table-responsive-visible-y">
 	                                            <table class="table table-hover align-middle mb-0">
 	                                                <caption class="visually-hidden"><%= roundGroup.roundName %> matokeo ya <%= league.title %></caption>
 	                                                <thead class="table-light">
 	                                                    <tr class="text-uppercase small">
-	                                                        <th scope="col" class="fw-semibold text-secondary">Tarehe/Saa</th>
+	                                                        <th scope="col" class="fw-semibold text-secondary">Muda</th>
 	                                                        <th scope="col" class="fw-semibold text-secondary">Mechi</th>
-	                                                        <th scope="col" class="fw-semibold text-secondary">Tip</th>
-	                                                        <th scope="col" class="fw-semibold text-secondary">Matokeo</th>
+	                                                        <th scope="col" class="fw-semibold text-secondary">Utabiri</th>
+	                                                        <th scope="col" class="fw-semibold text-secondary text-center">
+	                                                            <span class="d-none d-md-inline">Matokeo</span>
+	                                                            <span class="d-inline d-md-none" aria-hidden="true"><i class="fa-regular fa-futbol"></i></span>
+	                                                            <span class="visually-hidden d-md-none">Matokeo</span>
+	                                                        </th>
 	                                                    </tr>
 	                                                </thead>
                                                 <tbody>
@@ -333,8 +351,8 @@
                                                             <td>
                                                                 <span class="badge text-bg-dark rounded-pill px-3 py-2"><%= fixture.tip?.label || '-' %></span>
                                                             </td>
-                                                            <td>
-                                                                <span class="badge text-bg-<%= resultVariant(fixture) %> rounded-pill px-3 py-2 <% if (resultVariant(fixture) === 'light') { %>text-dark border<% } %>"><%= fixture.result?.display || '-' %></span>
+                                                            <td class="text-center">
+                                                                <span class="badge d-inline-flex justify-content-center text-bg-<%= resultVariant(fixture) %> rounded-pill px-3 py-2 <% if (resultVariant(fixture) === 'light') { %>text-dark border<% } %>"><%= fixture.result?.display || '-' %></span>
                                                             </td>
                                                         </tr>
                                                     <% }) %>
@@ -364,7 +382,7 @@
                 </header>
 
                 <% if (standings.length > 0) { %>
-                    <div class="table-responsive">
+                    <div class="table-responsive table-responsive-visible-y">
                         <table class="table table-hover align-middle mb-0">
                             <caption class="visually-hidden"><%= league.title %> standings (msimamo) wa ligi</caption>
                             <thead class="table-light">

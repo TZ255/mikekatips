@@ -27,7 +27,7 @@ function sortRounds(rounds = []) {
 }
 
 function buildLeagueTitle(country, leagueName) {
-  return `Utabiri wa ${country} ${leagueName}`;
+  return `Utabiri wa Mechi za ${country} ${leagueName}`;
 }
 
 function buildMatchLabel(homeName, awayName) {

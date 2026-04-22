@@ -127,7 +127,7 @@ router.get('/prediction/:leagueRef', freshUserInfo, async (req, res) => {
       return renderLegacyPrediction(req, res);
     }
 
-    const league = await League.findOne({ leagueId, isActive: true }).lean();
+    const league = await League.findOne({ leagueId }).lean();
     if (!league) {
       return res.status(404).render('404', {
         title: 'Ligi Haijapatikana - MikekaTips'
@@ -157,8 +157,8 @@ router.get('/prediction/:leagueRef', freshUserInfo, async (req, res) => {
       previousRounds,
       standings: league.standings?.rows || [],
       title: `${league.title} - MikekaTips`,
-      description: `${league.title}. Ona table ya round ya sasa, round inayofuata, matokeo ya rounds zilizopita na msimamo wa ligi.`,
-      keywords: `${league.country} ${league.name}, utabiri wa ligi, ${league.name} predictions, fixtures, standings`
+      description: `${league.title}. Ona utabiri wa round ya sasa, round inayofuata, matokeo ya rounds zilizopita na msimamo wa ligi.`,
+      keywords: `${league.country} ${league.name}, utabiri wa mechi zote za ligi, ${league.name} predictions, fixtures, standings`
     });
   } catch (error) {
     console.error('League prediction details route error:', error);
