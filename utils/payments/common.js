@@ -65,7 +65,12 @@ function getNetworkBrand(phone = '') {
     return NETWORK_BY_PREFIX[prefix] || 'unknown';
 }
 
-function selectPaymentGateway(networkBrand = 'unknown') {
+function selectPaymentGateway(networkBrand = 'unknown', phone = '') {
+    // if prefix 70 gateway is snippe
+    if (String(phone).startsWith('25570')) {
+        return 'snippe';
+    }
+
     return SNIPPE_NETWORKS.has(String(networkBrand).toLowerCase()) ? 'snippe' : 'clickpesa';
 }
 
